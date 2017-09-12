@@ -1,0 +1,6 @@
+framework module Pods_QYTechnicalStatistics {
+  umbrella header "Pods-QYTechnicalStatistics-umbrella.h"
+
+  export *
+  module * { export * }
+}
