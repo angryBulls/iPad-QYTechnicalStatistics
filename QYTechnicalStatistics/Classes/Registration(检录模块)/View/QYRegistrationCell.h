@@ -7,8 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Player.h"
-@interface QYRegistrationCell : UICollectionViewCell
-@property (nonatomic ,strong)Player *p;
+#import "TSPlayerModel.h"
+@protocol QYRegistrationCellDelegate <NSObject>
+-(void)BackPlayerWithPlayer:(TSPlayerModel *)p andSection:(NSInteger )section andRow:(NSInteger)row;
+@end
 
+@interface QYRegistrationCell : UICollectionViewCell
+@property (nonatomic ,strong)TSPlayerModel *p;
+@property (nonatomic ,assign)NSInteger section;
+@property (nonatomic ,assign)NSInteger row;
+@property (nonatomic ,weak) id <QYRegistrationCellDelegate>delegate;
 @end

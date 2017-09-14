@@ -23,7 +23,7 @@
 @property (nonatomic, assign) BOOL isGaming;
 
 // 尺寸参数为PX
-+ (instancetype)createPlayerViewWithImage:(NSString *)image
++ (instancetype)createPlayerViewWithTitle:(NSString *)title
                                   bgImage:(NSString *)bjImage
                                    frameX:(CGFloat)frameX
                                    frameY:(CGFloat)frameY;

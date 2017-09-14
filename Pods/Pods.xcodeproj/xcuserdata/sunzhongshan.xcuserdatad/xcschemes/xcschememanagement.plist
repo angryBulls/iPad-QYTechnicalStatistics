@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>FMDB.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>LCActionSheet.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -59,6 +64,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>YTKKeyValueStore.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -67,7 +77,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>23CF27B2BA6AC7125EFFEDA8C5AA819F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>29DD99664D189A7CA206368F493B1E0B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>29E1F0CCCF3F77C7599D339F7E99B3C1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -82,17 +102,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>30E3EA4F8A026B0E23169514A314A3A3</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>47DC8B96492C6C1521EC559B5B599936</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>4C119C9E77B4DEF50C19C4B977A68D7D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>73B3DD3B4CDEF870E19F7318CDB958F0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -102,17 +117,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7DC810AEE6610ED007E4B60DB2E00511</key>
+		<key>A2EFAA6E30B8731E5C6A42667700D862</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CB5616327D8F8DF399FFEF1E5C98CF76</key>
+		<key>B087A27786831EDF2742BBCF05FC3462</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F00A61810438F3A80A1DE8CB5F38C43B</key>
+		<key>D0CC613144CAB1E3F2CAB029891B47ED</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F462AA7D664D4F80241F2E9B7527E82F</key>
 		<dict>
 			<key>primary</key>
 			<true/>

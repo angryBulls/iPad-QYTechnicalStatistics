@@ -9,6 +9,7 @@
 #import "QYRegistrationCell.h"
 //#import <UIImageView+WebCache.h>
 
+
 @interface QYRegistrationCell ()<UITextFieldDelegate>
 
 @property (strong, nonatomic) UIImageView * bjImageView;
@@ -41,55 +42,56 @@
     
     if (self = [super initWithFrame:frame]) {
         
+        [self.bjImageView scaleFrameMake:0 :0 :300 :226];
+        [self.enterFieldBtn scaleFrameMake:0 :CGScaleGetMaxY(self.bjImageView.frame)+10 :300 :50];
+        [self.playerImageView scaleFrameMake:0 :0 :158 :226];
+        [self.lineView_01 scaleFrameMake:CGScaleGetMaxX(self.playerImageView.frame)
+                                        :CGScaleGetHeight(self.bjImageView.frame)/2
+                                        :CGScaleGetWidth(self.bjImageView.frame)/2
+                                        :2];
+        [self.lineView_02 scaleFrameMake:74+CGScaleGetMaxX(self.playerImageView.frame)
+                                        :31
+                                        :2
+                                        :50];
+        [self.lineView_03 scaleFrameMake:CGScaleGetMinX(self.lineView_02.frame)
+                                        :62+CGScaleGetMaxY(self.lineView_02.frame)
+                                        :2
+                                        :50];
+        [self.matchNumLabel scaleFrameMake:CGScaleGetMaxX(self.playerImageView.frame)+22
+                                          :34
+                                          :74-22
+                                          :113-38-34];
+        [self.modificationNumLabel scaleFrameMake:CGScaleGetMinX(self.matchNumLabel.frame)
+                                                 :CGScaleGetMaxY(self.lineView_01.frame)+34
+                                                 :CGScaleGetWidth(self.matchNumLabel.frame)
+                                                 :CGScaleGetHeight(self.matchNumLabel.frame)];
+        
+        [self.matchLabel scaleFrameMake:7+CGScaleGetMinX(self.lineView_02.frame)
+                                       :30
+                                       :66-14
+                                       :113-60];
+        [self.modificationButton scaleFrameMake:CGScaleGetMinX(self.matchLabel.frame)
+                                               :30+CGScaleGetMaxY(self.lineView_01.frame)
+                                               :CGScaleGetWidth(self.matchLabel.frame)
+                                               :CGScaleGetHeight(self.matchLabel.frame)];
+        
+
+        
     }
     return self;
 }
 
-- (void)layoutSubviews {
-    
-    [super layoutSubviews];
-    
-    
-    [self.bjImageView scaleFrameMake:0 :0 :300 :226];
-    [self.enterFieldBtn scaleFrameMake:0 :CGScaleGetMaxY(self.bjImageView.frame)+10 :300 :50];
-    [self.playerImageView scaleFrameMake:0 :0 :158 :226];
-    [self.lineView_01 scaleFrameMake:CGScaleGetMaxX(self.playerImageView.frame)
-                                    :CGScaleGetHeight(self.bjImageView.frame)/2
-                                    :CGScaleGetWidth(self.bjImageView.frame)/2
-                                    :2];
-    [self.lineView_02 scaleFrameMake:74+CGScaleGetMaxX(self.playerImageView.frame)
-                                    :31
-                                    :2
-                                    :50];
-    [self.lineView_03 scaleFrameMake:CGScaleGetMinX(self.lineView_02.frame)
-                                    :62+CGScaleGetMaxY(self.lineView_02.frame)
-                                    :2
-                                    :50];
-    [self.matchNumLabel scaleFrameMake:CGScaleGetMaxX(self.playerImageView.frame)+22
-                                      :34
-                                      :74-22
-                                      :113-38-34];
-    [self.modificationNumLabel scaleFrameMake:CGScaleGetMinX(self.matchNumLabel.frame)
-                                             :CGScaleGetMaxY(self.lineView_01.frame)+34
-                                             :CGScaleGetWidth(self.matchNumLabel.frame)
-                                             :CGScaleGetHeight(self.matchNumLabel.frame)];
-    
-    [self.matchLabel scaleFrameMake:7+CGScaleGetMinX(self.lineView_02.frame)
-                                   :30
-                                   :66-14
-                                   :113-60];
-    [self.modificationButton scaleFrameMake:CGScaleGetMinX(self.matchLabel.frame)
-                                           :30+CGScaleGetMaxY(self.lineView_01.frame)
-                                           :CGScaleGetWidth(self.matchLabel.frame)
-                                           :CGScaleGetHeight(self.matchLabel.frame)];
-    
 
-    
-}
-
--(void)setP:(Player *)p{
+-(void)setP:(TSPlayerModel *)p{
     _p = p;
+    [_playerImageView sd_setImageWithURL:[NSURL URLWithString:p.photo] placeholderImage:[UIImage imageNamed:@"测试球员图片01"] options:0 completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+       
+    }];
+    self.enterFieldBtn.selected = [p.isStartPlayer isEqualToString:@"是"];
     
+    _matchNumLabel.text = p.playerNumber;
+    
+    _modificationNumLabel.text = p.gameNum;
     
     
 }
@@ -99,6 +101,12 @@
 - (void)enterFieldClick:(UIButton *)nterFieldBtn {
     
     self.enterFieldBtn.selected = !self.enterFieldBtn.selected;
+    _p.isStartPlayer =  self.enterFieldBtn.selected?@"是":@"否";
+    
+        if (self.delegate && [_delegate respondsToSelector:@selector(BackPlayerWithPlayer:andSection:andRow:)]) {
+            [_delegate BackPlayerWithPlayer:_p andSection:_section andRow:_row];
+        
+    }
 }
 
 
@@ -140,8 +148,7 @@
 - (UIImageView *)playerImageView {
     
     if (!_playerImageView) {
-        _playerImageView = [[UIImageView alloc] initWithImage:
-                            [UIImage imageNamed:@"测试球员图片01"]];
+        _playerImageView = [[UIImageView alloc] init];
         _playerImageView.layer.cornerRadius = kSCALE_NUM(5);
         _playerImageView.layer.masksToBounds = YES;
         [self.bjImageView addSubview:_playerImageView];
@@ -216,9 +223,9 @@
         
         _matchNumLabel = [[UILabel alloc] init];
         _matchNumLabel.textColor = [UIColor colorWithHexRGB:@"#333333" andAlpha:1.0f];
-        _matchNumLabel.text = @"3";
+        _matchNumLabel.font = kSCALE_FONT(20);
         
-        _matchNumLabel.font = [UIFont systemFontOfSize:scaleX_ByPx(56)];
+        _matchNumLabel.font = [UIFont systemFontOfSize:scaleX_ByPx(44)];
         [self.bjImageView addSubview:_matchNumLabel];
     }
     return _matchNumLabel;
@@ -231,7 +238,7 @@
         _modificationNumLabel = [[UITextField alloc] init];
         _modificationNumLabel.textColor = [UIColor colorWithHexRGB:@"#333333" andAlpha:1.0f];
 //        _modificationNumLabel.text = @"4";
-        _modificationNumLabel.font = kSCALE_FONT(28);
+        _modificationNumLabel.font = kSCALE_FONT(20);
         _modificationNumLabel.keyboardType = UIKeyboardTypeNumberPad;
         [self.bjImageView addSubview:_modificationNumLabel];
         _modificationNumLabel.delegate = self;
@@ -241,29 +248,24 @@
 
 -(void)changeNumber{
     
-    if (_modificationNumLabel.text.length<2) {
-        _matchNumLabel.font = [UIFont systemFontOfSize:scaleX_ByPx(56)];
-    }else if (_modificationNumLabel.text.length == 2){
-        _matchNumLabel.font = [UIFont systemFontOfSize:scaleX_ByPx(28)];
-    }else if (_modificationNumLabel.text.length == 3){
-        _matchNumLabel.font = [UIFont systemFontOfSize:scaleX_ByPx(14)];
-    }
+
     _matchNumLabel.text = _modificationNumLabel.text;
+    _p.gameNum = _matchNumLabel.text;
+    _p.playerNumber = _matchNumLabel.text;
+    
+    
+    if (self.delegate && [_delegate respondsToSelector:@selector(BackPlayerWithPlayer:andSection:andRow:)]) {
+        
+        [_delegate BackPlayerWithPlayer:_p andSection:_section andRow:_row];
+        
+    }
+
     
 }
 
 
 
--(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    if (textField.text.length<1) {
-        textField.font = [UIFont systemFontOfSize:scaleX_ByPx(56)];
-    }else if (textField.text.length == 1){
-        textField.font = [UIFont systemFontOfSize:scaleX_ByPx(28)];
-    }else if (textField.text.length == 2){
-        textField.font = [UIFont systemFontOfSize:scaleX_ByPx(14)];
-    }
-    return YES;
-}
+
 
 
 @end

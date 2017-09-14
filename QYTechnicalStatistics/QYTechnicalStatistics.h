@@ -16,12 +16,12 @@
 #define QYLog(...)
 
 #endif
-
+#import "AppDelegate.h"
 #import "UIView+ScaleFrame.h"
 #import "UIColor+QYHexRGB.h"
 
 // network
-#import "QY_URL_Header.h"
+#import "TS_URL_Header.h"
 #import "AFNetworking.h"
 #import "QYNetworkManger.h"
 
@@ -34,13 +34,15 @@
 #import "QYToolsMethod.h"
 
 #import "QYUserInfoModel.h"
-//#import "HPGrowingTextView.h"
-//#import "WXApi.h"
 #import "LCActionSheet.h"
 #import "AuditButton.h"
 //category
 #import "UIView+ScaleFrame.h"
 #import "UIColor+QYHexRGB.h"
+
+//FMDB
+#import "TS_URL_Header.h"
+#import "TSDBManager.h"
 
 typedef enum {
     GameFinish,
@@ -58,7 +60,8 @@ typedef enum {
     Host,
     Guest
 }TeamHostOrGuest;
-
+#define ACCOUNT @"ACCOUNT"
+#define PWD @"PWD"
 
 #define W(float) SCREEN_WIDTH / 1024 * (float)
 #define H(float) SCREEN_HEIGHT / 768 * (float)

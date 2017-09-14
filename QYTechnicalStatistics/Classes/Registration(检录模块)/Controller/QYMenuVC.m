@@ -35,12 +35,6 @@
     
 }
 #pragma mark -lazy
--(NSMutableArray *)dataSouce{
-    if (_dataSouce == nil) {
-        _dataSouce = [NSMutableArray array];
-    }
-    return _dataSouce;
-}
 
 
 #pragma mark - < UITableViewDataSource >
@@ -82,12 +76,23 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [self tableView:tableView
                       cellForRowAtIndexPath:indexPath];
     self.clickBlock(cell.textLabel.text);
-    
-    if (_buttonTag == 1) {
+    if (_buttonTag == 0) {
+        
+        [QYNetworkManger getTeamInfoFinalMatch:nil responseSuccess:^(id responseObject) {
+            
+            self.dataSouce =  [QYJsonPasser getTeamInfoByDic:responseObject];
+            self.teamBlock(self.dataSouce);
+            [self dismissViewControllerAnimated:YES completion:nil];
+        } responseFailed:^(NSError *error) {
+            
+        }];
+
+    }
+   else if (_buttonTag == 1) {
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
         [dic setValue:cell.textLabel.text forKey:@"zoneName"];
         [QYNetworkManger getTeamInfoByZone:dic responseSuccess:^(id responseObject) {
-            NSLog(@"%@",responseObject);
+            
             self.dataSouce =  [QYJsonPasser getTeamInfoByDic:responseObject];
             self.teamBlock(self.dataSouce);
             [self dismissViewControllerAnimated:YES completion:nil];
@@ -101,7 +106,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         
         
         [ QYNetworkManger getTeamInfoByProvence:dic responseSuccess:^(id responseObject) {
-            NSLog(@"%@",responseObject);
             
             self.dataSouce =  [QYJsonPasser getTeamInfoByDic:responseObject];
             
@@ -117,9 +121,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
         QYTeam *team = _dataSouce[indexPath.row];
         dic[@"teamId"] = team.tID;
+        
         [QYNetworkManger queryPlayByTeam:dic responseSuccess:^(id responseObject) {
             
-            self.dataSouce =  [QYJsonPasser queryPlayByTeam:responseObject];
+            self.dataSouce =  [QYJsonPasser queryPlayByTeam:responseObject andTeamID:[NSString stringWithFormat:@"%@", team.tID]];
+            
             self.teamBlock(self.dataSouce);
             [self dismissViewControllerAnimated:YES completion:nil];
             
@@ -134,7 +140,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         dic[@"teamId"] = team.tID;
         [QYNetworkManger queryPlayByTeam:dic responseSuccess:^(id responseObject) {
             
-            self.dataSouce =  [QYJsonPasser queryPlayByTeam:responseObject];
+            self.dataSouce =  [QYJsonPasser queryPlayByTeam:responseObject andTeamID:[NSString stringWithFormat:@"%@", team.tID]];
+            
             self.teamBlock(self.dataSouce);
             [self dismissViewControllerAnimated:YES completion:nil];
             
@@ -142,9 +149,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
             
         }];
         
-        
     }
-    
     
     
     else{

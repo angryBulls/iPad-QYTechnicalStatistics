@@ -15,6 +15,9 @@
 		433FF9401F5E782B008DB472 /* QYUserInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 433FF93C1F5E782B008DB472 /* QYUserInfoModel.m */; };
 		433FF9431F5E7A07008DB472 /* AuditButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 433FF9421F5E7A07008DB472 /* AuditButton.m */; };
 		433FF9461F5EB1DD008DB472 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 433FF9451F5EB1DD008DB472 /* Player.m */; };
+		43D7324C1F67DF28009CF1E6 /* TSDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D7324B1F67DF28009CF1E6 /* TSDBManager.m */; };
+		43D732501F67EF8C009CF1E6 /* TSPlayerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D7324F1F67EF8C009CF1E6 /* TSPlayerModel.m */; };
+		43D732531F67F0F5009CF1E6 /* TSCheckModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D732521F67F0F5009CF1E6 /* TSCheckModel.m */; };
 		43D75B551F60D7DD001A1413 /* QYChangeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D75B541F60D7DD001A1413 /* QYChangeVC.m */; };
 		43D75B591F60D812001A1413 /* PlayerDataCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D75B571F60D812001A1413 /* PlayerDataCell.m */; };
 		43D75B5A1F60D812001A1413 /* PlayerDataCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43D75B581F60D812001A1413 /* PlayerDataCell.xib */; };
@@ -24,6 +27,10 @@
 		43E740551F662F09007D9B6B /* ViewModelClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E740541F662F09007D9B6B /* ViewModelClass.m */; };
 		43E740581F66692B007D9B6B /* QYJsonPasser.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E740571F66692B007D9B6B /* QYJsonPasser.m */; };
 		43E7405B1F666AA8007D9B6B /* QYTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E7405A1F666AA8007D9B6B /* QYTeam.m */; };
+		43EC3D431F68CA0F00181D6D /* PlayerCheckViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EC3D421F68CA0F00181D6D /* PlayerCheckViewModel.m */; };
+		43EC3D461F6940CA00181D6D /* TSCalculationTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EC3D451F6940CA00181D6D /* TSCalculationTool.m */; };
+		43EC3D491F69415000181D6D /* TSManagerPlayerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EC3D481F69415000181D6D /* TSManagerPlayerModel.m */; };
+		43EC3D4C1F6941A100181D6D /* TSGameModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EC3D4B1F6941A100181D6D /* TSGameModel.m */; };
 		4CA87F7BA2440D3AA313A893 /* Pods_QYTechnicalStatistics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BB1CC47730C9792FF1D3C0A /* Pods_QYTechnicalStatistics.framework */; };
 		97035D841EFCB918006BFAA9 /* QYRegistrationMinView.m in Sources */ = {isa = PBXBuildFile; fileRef = 97035D831EFCB918006BFAA9 /* QYRegistrationMinView.m */; };
 		97035D871EFCC0BD006BFAA9 /* QYTeamOperationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 97035D861EFCC0BD006BFAA9 /* QYTeamOperationView.m */; };
@@ -81,6 +88,13 @@
 		433FF9421F5E7A07008DB472 /* AuditButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuditButton.m; sourceTree = "<group>"; };
 		433FF9441F5EB1DD008DB472 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		433FF9451F5EB1DD008DB472 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
+		43D7324A1F67DF28009CF1E6 /* TSDBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSDBManager.h; sourceTree = "<group>"; };
+		43D7324B1F67DF28009CF1E6 /* TSDBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSDBManager.m; sourceTree = "<group>"; };
+		43D7324D1F67E0C0009CF1E6 /* TS_URL_Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TS_URL_Header.h; path = ../TS_URL_Header.h; sourceTree = "<group>"; };
+		43D7324E1F67EF8C009CF1E6 /* TSPlayerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSPlayerModel.h; sourceTree = "<group>"; };
+		43D7324F1F67EF8C009CF1E6 /* TSPlayerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSPlayerModel.m; sourceTree = "<group>"; };
+		43D732511F67F0F5009CF1E6 /* TSCheckModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSCheckModel.h; sourceTree = "<group>"; };
+		43D732521F67F0F5009CF1E6 /* TSCheckModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSCheckModel.m; sourceTree = "<group>"; };
 		43D75B531F60D7DD001A1413 /* QYChangeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QYChangeVC.h; sourceTree = "<group>"; };
 		43D75B541F60D7DD001A1413 /* QYChangeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QYChangeVC.m; sourceTree = "<group>"; };
 		43D75B561F60D812001A1413 /* PlayerDataCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerDataCell.h; sourceTree = "<group>"; };
@@ -98,6 +112,14 @@
 		43E740571F66692B007D9B6B /* QYJsonPasser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QYJsonPasser.m; sourceTree = "<group>"; };
 		43E740591F666AA8007D9B6B /* QYTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QYTeam.h; sourceTree = "<group>"; };
 		43E7405A1F666AA8007D9B6B /* QYTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QYTeam.m; sourceTree = "<group>"; };
+		43EC3D411F68CA0F00181D6D /* PlayerCheckViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerCheckViewModel.h; sourceTree = "<group>"; };
+		43EC3D421F68CA0F00181D6D /* PlayerCheckViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerCheckViewModel.m; sourceTree = "<group>"; };
+		43EC3D441F6940CA00181D6D /* TSCalculationTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSCalculationTool.h; sourceTree = "<group>"; };
+		43EC3D451F6940CA00181D6D /* TSCalculationTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSCalculationTool.m; sourceTree = "<group>"; };
+		43EC3D471F69415000181D6D /* TSManagerPlayerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSManagerPlayerModel.h; sourceTree = "<group>"; };
+		43EC3D481F69415000181D6D /* TSManagerPlayerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSManagerPlayerModel.m; sourceTree = "<group>"; };
+		43EC3D4A1F6941A100181D6D /* TSGameModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSGameModel.h; sourceTree = "<group>"; };
+		43EC3D4B1F6941A100181D6D /* TSGameModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSGameModel.m; sourceTree = "<group>"; };
 		97035D821EFCB918006BFAA9 /* QYRegistrationMinView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QYRegistrationMinView.h; sourceTree = "<group>"; };
 		97035D831EFCB918006BFAA9 /* QYRegistrationMinView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QYRegistrationMinView.m; sourceTree = "<group>"; };
 		97035D851EFCC0BD006BFAA9 /* QYTeamOperationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QYTeamOperationView.h; sourceTree = "<group>"; };
@@ -256,6 +278,12 @@
 		977BA29F1EF371C100516ED9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				43EC3D411F68CA0F00181D6D /* PlayerCheckViewModel.h */,
+				43EC3D421F68CA0F00181D6D /* PlayerCheckViewModel.m */,
+				43D732511F67F0F5009CF1E6 /* TSCheckModel.h */,
+				43D732521F67F0F5009CF1E6 /* TSCheckModel.m */,
+				43D7324E1F67EF8C009CF1E6 /* TSPlayerModel.h */,
+				43D7324F1F67EF8C009CF1E6 /* TSPlayerModel.m */,
 				43E740501F662E86007D9B6B /* LoginViewModel.h */,
 				43E740511F662E86007D9B6B /* LoginViewModel.m */,
 				43E740591F666AA8007D9B6B /* QYTeam.h */,
@@ -305,6 +333,10 @@
 		977BA2AF1EF371C100516ED9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				43EC3D4A1F6941A100181D6D /* TSGameModel.h */,
+				43EC3D4B1F6941A100181D6D /* TSGameModel.m */,
+				43EC3D471F69415000181D6D /* TSManagerPlayerModel.h */,
+				43EC3D481F69415000181D6D /* TSManagerPlayerModel.m */,
 				433FF9441F5EB1DD008DB472 /* Player.h */,
 				433FF9451F5EB1DD008DB472 /* Player.m */,
 			);
@@ -437,6 +469,7 @@
 		97A556471EE0036100536E31 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				43D7324D1F67E0C0009CF1E6 /* TS_URL_Header.h */,
 				97A556761EE00F6800536E31 /* Main.storyboard */,
 				97A556531EE0036100536E31 /* Assets.xcassets */,
 				97A556551EE0036100536E31 /* LaunchScreen.storyboard */,
@@ -497,6 +530,10 @@
 		97A556671EE0041A00536E31 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				43EC3D441F6940CA00181D6D /* TSCalculationTool.h */,
+				43EC3D451F6940CA00181D6D /* TSCalculationTool.m */,
+				43D7324A1F67DF28009CF1E6 /* TSDBManager.h */,
+				43D7324B1F67DF28009CF1E6 /* TSDBManager.m */,
 				43E740531F662F09007D9B6B /* ViewModelClass.h */,
 				43E740541F662F09007D9B6B /* ViewModelClass.m */,
 				433FF9411F5E7A07008DB472 /* AuditButton.h */,
@@ -689,7 +726,9 @@
 				970C6A4F1EE8F30C0073C650 /* QYMovieCoveringView.m in Sources */,
 				9746D9171EFA49AD001EDF9F /* QYRegistrationScoreLabel.m in Sources */,
 				97035D871EFCC0BD006BFAA9 /* QYTeamOperationView.m in Sources */,
+				43D732501F67EF8C009CF1E6 /* TSPlayerModel.m in Sources */,
 				977BA2B11EF371C100516ED9 /* QYMenuVC.m in Sources */,
+				43EC3D491F69415000181D6D /* TSManagerPlayerModel.m in Sources */,
 				97E59F3A1F14C774004B0018 /* QYReplacePlayerView.m in Sources */,
 				977BA2D11EF3D0D900516ED9 /* QYInputView.m in Sources */,
 				97958C561EF7951D00596400 /* QYInputTextField.m in Sources */,
@@ -698,23 +737,28 @@
 				43E740551F662F09007D9B6B /* ViewModelClass.m in Sources */,
 				977BA2B21EF371C100516ED9 /* QYRegistrationVC.m in Sources */,
 				433FF93E1F5E782B008DB472 /* QYMuDuNetworkManger.m in Sources */,
+				43D7324C1F67DF28009CF1E6 /* TSDBManager.m in Sources */,
 				97EC2E151F034625005437DB /* QYTeamMidView.m in Sources */,
 				975A86541F0E1B8C00BF512A /* QYReplacePlayerVC.m in Sources */,
 				433FF93F1F5E782B008DB472 /* QYToolsMethod.m in Sources */,
 				43D75B551F60D7DD001A1413 /* QYChangeVC.m in Sources */,
 				97A556491EE0036100536E31 /* main.m in Sources */,
 				43D75B591F60D812001A1413 /* PlayerDataCell.m in Sources */,
+				43EC3D431F68CA0F00181D6D /* PlayerCheckViewModel.m in Sources */,
 				433FF91A1F5E4FB4008DB472 /* UserEntity.m in Sources */,
 				9746D9141EFA4023001EDF9F /* QYRegistrationTitleView.m in Sources */,
 				43E7405B1F666AA8007D9B6B /* QYTeam.m in Sources */,
+				43D732531F67F0F5009CF1E6 /* TSCheckModel.m in Sources */,
 				433FF93D1F5E782B008DB472 /* QY404TagSign.m in Sources */,
 				433FF9461F5EB1DD008DB472 /* Player.m in Sources */,
 				977BA2B31EF371C100516ED9 /* QYRegistrationCell.m in Sources */,
+				43EC3D461F6940CA00181D6D /* TSCalculationTool.m in Sources */,
 				971FEC661EF90F4A00B38E03 /* QYStatisticsVC.m in Sources */,
 				433FF9341F5E77FB008DB472 /* QYNetworkManger.m in Sources */,
 				970C6A481EE8F2CF0073C650 /* QYLoginViewController.m in Sources */,
 				43E740581F66692B007D9B6B /* QYJsonPasser.m in Sources */,
 				43D75B611F612C91001A1413 /* QYFinishCell.m in Sources */,
+				43EC3D4C1F6941A100181D6D /* TSGameModel.m in Sources */,
 				970C6A4C1EE8F2F90073C650 /* QYLoginMovieVC.m in Sources */,
 				970E8DE91F0648DD000859BE /* QYRegistrationSelectButton.m in Sources */,
 				97A675361F09E45F0030F274 /* QYRegistrationNameLabel.m in Sources */,

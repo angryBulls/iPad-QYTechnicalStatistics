@@ -10,6 +10,7 @@
 
 @interface QYStatisticsVC : UIViewController
 
-
+@property (nonatomic ,strong)NSMutableArray *hostDataSouce;
+@property (nonatomic ,strong)NSMutableArray *guestDataSouce;
 
 @end

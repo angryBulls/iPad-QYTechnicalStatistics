@@ -17,5 +17,5 @@ pod 'RBBAnimation', '0.4.0'
 pod 'LCActionSheet','~> 2.5.1'
 pod 'MJRefresh'
 pod 'SDCycleScrollView'
-
+pod 'YTKKeyValueStore'
 end

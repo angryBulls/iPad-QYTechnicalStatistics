@@ -17,5 +17,5 @@
 /**
  *获得球队球员
  */
-+(NSMutableArray *)queryPlayByTeam:(NSDictionary *)dic;
++(NSMutableArray *)queryPlayByTeam:(NSDictionary *)dic andTeamID:(NSString *)teamID;
 @end

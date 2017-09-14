@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Player.h"
+#import "TSGameModel.h"
 @class QYStadiumView;
 
 @protocol QYStadiumViewDelegate <NSObject>
@@ -27,7 +28,9 @@
 @interface QYStadiumView : UIView
 @property(nonatomic,assign) BOOL quarterEnd;;
 @property (nonatomic, weak) id<QYStadiumViewDelegate> delegate;
-
+@property (nonatomic ,strong)NSMutableArray *hostDataSouce;
+@property (nonatomic ,strong)NSMutableArray *guestDataSouce;
+@property (nonatomic ,strong) TSGameModel *gameModel;
 
 + (instancetype)createStadiumView;
 

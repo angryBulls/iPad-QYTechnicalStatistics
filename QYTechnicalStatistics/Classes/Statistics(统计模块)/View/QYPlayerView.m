@@ -29,7 +29,7 @@
 
 - (void)show {/** 目的调用懒加载··· */}
 
-+ (instancetype)createPlayerViewWithImage:(NSString *)image
++ (instancetype)createPlayerViewWithTitle:(NSString *)title
                                   bgImage:(NSString *)bjImage
                                    frameX:(CGFloat)frameX
                                    frameY:(CGFloat)frameY {
@@ -37,7 +37,10 @@
     
     QYPlayerView * playerView = [[QYPlayerView alloc] init];
     playerView.initialFrame = CGRectMake(frameX, frameY, 218, 218);
-    [playerView setPlayerButton:playerView.playerBtn withImage:image backgroundImage:bjImage];
+    [playerView setPlayerButton:playerView.playerBtn withTitle:title backgroundImage:bjImage];
+    
+    
+    
     playerView.scaleW = 218;
     playerView.scaleH = 218;
     playerView.scaleX = frameX;
@@ -89,10 +92,11 @@
 }
 
 - (void)setPlayerButton:(UIButton *)playerBtn
-              withImage:(NSString *)image
+              withTitle:(NSString *)title
         backgroundImage:(NSString *)backgroundImage {
     
-    [playerBtn setImage:[UIImage imageNamed:image] forState:UIControlStateNormal];
+//    [playerBtn setImage:[UIImage imageNamed:image] forState:UIControlStateNormal];
+    [playerBtn setTitle:title forState:UIControlStateNormal];
     
     
     [playerBtn setBackgroundImage:[UIImage imageNamed:backgroundImage]

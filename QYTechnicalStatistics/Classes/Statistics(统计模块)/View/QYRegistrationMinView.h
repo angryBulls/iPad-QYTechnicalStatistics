@@ -10,7 +10,7 @@
 
 #import "QYTeamOperationView.h"
 #import "QYTeamMidView.h"
-
+#import "TSGameModel.h"
 @protocol QYRegistrationMinViewDelegate <NSObject>
 @optional
 -(void)startGaming;
@@ -30,6 +30,8 @@
 @property (strong, nonatomic) QYTeamMidView * midBjView;
 
 @property (nonatomic,weak) id <QYRegistrationMinViewDelegate>delegate;
+
+@property (nonatomic ,strong)TSGameModel *gameModel;
 
 + (instancetype)createRegistrationMinView;
 

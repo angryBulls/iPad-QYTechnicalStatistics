@@ -14,12 +14,12 @@
 @interface QYBaseViewController : UIViewController<UICollectionViewDataSource, UICollectionViewDelegate>
 
 {
-    __weak UICollectionView * _collectionView;
+     UICollectionView * _collectionView;
 }
 
 /**
  *  球员数据视图（子类重写getter方法，完成布局与创建）
  */
-@property (nonatomic, weak) UICollectionView * collectionView;
+@property (nonatomic, strong) UICollectionView * collectionView;
 
 @end

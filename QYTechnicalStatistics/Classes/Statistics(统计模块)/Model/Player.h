@@ -19,6 +19,11 @@
 @property (nonatomic , copy) NSString *positional;
 @property (nonatomic , copy) NSString *birthday;
 @property (nonatomic , copy) NSString *height;
-@property (nonatomic, strong)NSNumber *playerNumber;
+@property (nonatomic, strong)NSNumber *playerNumber;//注册号码
+// loacal new add property
+@property (nonatomic, copy) NSString *gameNum; // 本场号码
 @property (nonatomic , copy) NSString *weight;
+@property (nonatomic , copy) NSString *playingTimes;
+@property (nonatomic, assign) BOOL isOn;
+@property (nonatomic , copy) NSString *teamID;
 @end

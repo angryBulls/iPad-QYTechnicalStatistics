@@ -7,8 +7,10 @@
 //
 
 #import "QYBaseViewController.h"
-
+#import "TSCheckModel.h"
 @interface QYRegistrationVC : QYBaseViewController
+
+@property (nonatomic, strong) TSCheckModel *checkModel;
 
 /** initialization func */
 + (instancetype)getRegistrationVC;

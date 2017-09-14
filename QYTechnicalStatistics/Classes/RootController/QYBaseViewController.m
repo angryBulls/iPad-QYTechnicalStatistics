@@ -43,49 +43,19 @@ static NSString * const secHeaderView = @"secHeaderView";
     [self.collectionView registerClass:[QYRegistrationSecHeaderV class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                    withReuseIdentifier:secHeaderView];
+    
+    // register
+    [self.collectionView registerClass:[UICollectionReusableView class]
+            forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                   withReuseIdentifier:@"secFooterView"];
+    
 }
 
 
 #pragma mark <UICollectionViewDataSource>
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    
-    return 2;
-}
 
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView
-     numberOfItemsInSection:(NSInteger)section {
-    
-    return 15;
-}
-
-
-- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
-                           cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    return nil;
-}
-
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
-           viewForSupplementaryElementOfKind:(NSString *)kind
-                                 atIndexPath:(NSIndexPath *)indexPath {
-    
-    // 创建分组头视图
-    QYRegistrationSecHeaderV *  secHeadView =
-    [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                                       withReuseIdentifier:secHeaderView
-                                              forIndexPath:indexPath];
-    
-    // 设置分组头视图
-    [secHeadView settingWithIndexPath:indexPath];
-    return secHeadView;
-}
-
-- (void)didReceiveMemoryWarning {
-    
-    [super didReceiveMemoryWarning];
-}
 
 
 @end

@@ -213,10 +213,11 @@
 - (QYPlayerView *)hostPlayer_One {
     
     if (!_hostPlayer_One) {
-        _hostPlayer_One = [QYPlayerView createPlayerViewWithImage:@"3" bgImage:@"红-主队" frameX:160 frameY:98];
-        Player *p = [[Player alloc] init];
-        p.pid = @"3";
-        p.team = 0;
+        
+        Player *p = _hostDataSouce[0];
+        p.team = Host;
+        _hostPlayer_One = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"红-主队" frameX:160 frameY:98];
+        
         _hostPlayer_One.p = p;
         _hostPlayer_One.delegate = self;
         
@@ -228,11 +229,11 @@
 - (QYPlayerView *)hostPlayer_Two {
     
     if (!_hostPlayer_Two) {
-        _hostPlayer_Two = [QYPlayerView createPlayerViewWithImage:@"5" bgImage:@"红-主队" frameX:286 frameY:458];
-        Player *p = [[Player alloc] init];
-        p.pid = @"5";
-        p.team = 0;
-        _hostPlayer_Two.p = p;
+        Player *p = _hostDataSouce[1];
+        p.team = Host;
+
+        _hostPlayer_Two = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"红-主队" frameX:286 frameY:458];
+                _hostPlayer_Two.p = p;
         _hostPlayer_Two.delegate = self;
         [self addSubview:_hostPlayer_Two];
     }
@@ -242,11 +243,11 @@
 - (QYPlayerView *)hostPlayer_Three {
     
     if (!_hostPlayer_Three) {
-        _hostPlayer_Three = [QYPlayerView createPlayerViewWithImage:@"7" bgImage:@"红-主队" frameX:184 frameY:1130-112-218];
         
-        Player *p = [[Player alloc] init];
-        p.pid = @"7";
-        p.team = 0;
+        Player *p = _hostDataSouce[2];
+        p.team = Host;
+        _hostPlayer_Three = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"红-主队" frameX:184 frameY:1130-112-218];
+        
         _hostPlayer_Three.p = p;
         _hostPlayer_Three.delegate = self;
         
@@ -258,11 +259,12 @@
 - (QYPlayerView *)hostPlayer_Four {
     
     if (!_hostPlayer_Four) {
-        _hostPlayer_Four = [QYPlayerView createPlayerViewWithImage:@"1" bgImage:@"红-主队" frameX:632 frameY:284];
         
-        Player *p = [[Player alloc] init];
-        p.pid = @"1";
-        p.team = 0;
+        Player *p = _hostDataSouce[3];
+        p.team = Host;
+        _hostPlayer_Four = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"红-主队" frameX:632 frameY:284];
+        
+        
         _hostPlayer_Four.p = p;
         
         _hostPlayer_Four.delegate = self;
@@ -274,11 +276,11 @@
 - (QYPlayerView *)hostPlayer_Five {
     
     if (!_hostPlayer_Five) {
-        _hostPlayer_Five = [QYPlayerView createPlayerViewWithImage:@"2" bgImage:@"红-主队" frameX:626 frameY:158+284+218];
+        Player *p = _hostDataSouce[4];
+        p.team = Host;
+        _hostPlayer_Five = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"红-主队" frameX:626 frameY:158+284+218];
         
-        Player *p = [[Player alloc] init];
-        p.pid = @"2";
-        p.team = 0;
+        
         _hostPlayer_Five.p = p;
         _hostPlayer_Five.delegate = self;
         [self addSubview:_hostPlayer_Five];
@@ -289,10 +291,10 @@
 - (QYPlayerView *)guestPlayer_One {
     
     if (!_guestPlayer_One) {
-        _guestPlayer_One = [QYPlayerView createPlayerViewWithImage:@"6" bgImage:@"绿-客队" frameX:2048-218-154 frameY:94];
-        Player *p = [[Player alloc] init];
-        p.pid = @"6";
-        p.team = 1;
+        Player *p = _guestDataSouce[0];
+        p.team = Guest;
+        _guestPlayer_One = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"绿-客队" frameX:2048-218-154 frameY:94];
+        
         _guestPlayer_One.p = p;
         _guestPlayer_One.delegate  = self;
         
@@ -305,10 +307,10 @@
 - (QYPlayerView *)guestPlayer_Two {
     
     if (!_guestPlayer_Two) {
-        _guestPlayer_Two = [QYPlayerView createPlayerViewWithImage:@"9" bgImage:@"绿-客队" frameX:2048-218-286 frameY:464];
-        Player *p = [[Player alloc] init];
-        p.pid = @"9";
-        p.team = 1;
+        Player *p = _guestDataSouce[1];
+        p.team = Guest;
+        _guestPlayer_Two = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"绿-客队" frameX:2048-218-286 frameY:464];
+        
         _guestPlayer_Two.p = p;
         _guestPlayer_Two.delegate = self;
         [self addSubview:_guestPlayer_Two];
@@ -319,10 +321,10 @@
 - (QYPlayerView *)guestPlayer_Three {
     
     if (!_guestPlayer_Three) {
-        _guestPlayer_Three = [QYPlayerView createPlayerViewWithImage:@"4" bgImage:@"绿-客队" frameX:2048-218-154 frameY:1130-218-100];
-        Player *p = [[Player alloc] init];
-        p.pid = @"4";
-        p.team = 1;
+        Player *p = _guestDataSouce[2];
+        p.team = Guest;
+        _guestPlayer_Three = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"绿-客队" frameX:2048-218-154 frameY:1130-218-100];
+        
         _guestPlayer_Three.p = p;
         _guestPlayer_Three.delegate = self;
         
@@ -334,11 +336,11 @@
 - (QYPlayerView *)guestPlayer_Four {
     
     if (!_guestPlayer_Four) {
-        _guestPlayer_Four = [QYPlayerView createPlayerViewWithImage:@"8" bgImage:@"绿-客队" frameX:2048-218-638 frameY:270];
+        Player *p = _guestDataSouce[3];
+        p.team = Guest;
+        _guestPlayer_Four = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"绿-客队" frameX:2048-218-638 frameY:270];
         
-        Player *p = [[Player alloc] init];
-        p.pid = @"8";
-        p.team = 1;
+        
         _guestPlayer_Four.p = p;
         _guestPlayer_Four.delegate  = self;
         [self addSubview:_guestPlayer_Four];
@@ -349,11 +351,12 @@
 - (QYPlayerView *)guestPlayer_Five {
     
     if (!_guestPlayer_Five) {
-        _guestPlayer_Five = [QYPlayerView createPlayerViewWithImage:@"0" bgImage:@"绿-客队" frameX:2048-218-640 frameY:270+162+218];
+        Player *p = _guestDataSouce[4];
+        p.team = Guest;
         
-        Player *p = [[Player alloc] init];
-        p.pid = @"8";
-        p.team = 1;
+        _guestPlayer_Five = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"绿-客队" frameX:2048-218-640 frameY:270+162+218];
+        
+        
         _guestPlayer_Five.p = p;
         _guestPlayer_Five.delegate = self;
         [self addSubview:_guestPlayer_Five];

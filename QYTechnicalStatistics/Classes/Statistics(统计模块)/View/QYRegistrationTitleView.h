@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "QYRegistrationScoreLabel.h"
+#import "TSGameModel.h"
 @interface QYRegistrationTitleView : UIView
 
 @property (nonatomic, strong) QYRegistrationScoreLabel * totalHostTeamLabel;
@@ -15,6 +16,8 @@
 
 @property (nonatomic, strong) QYRegistrationScoreLabel * hostTeamScoreLabel;
 @property (nonatomic, strong) QYRegistrationScoreLabel * guestTeamScoreLabel;
+
+@property (nonatomic ,strong)TSGameModel *gameModel;
 
 + (instancetype)createRegistrationTitleView;
 

@@ -10,7 +10,8 @@
 #import "QYLoginMovieVC.h"
 #import "UIColor+QYHexRGB.h"
 #import "QYMovieCoveringView.h"
-
+#import "QYLoginViewController.h"
+#import "QYStatisticsVC.h"
 @interface AppDelegate ()
 
 @end
@@ -19,13 +20,55 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.rootViewController = [QYLoginMovieVC loadLoginMovieWithResourceName:@"LaunchMovie"];
-    [self.window makeKeyAndVisible];
+    [self p_switchWindowView];
+    
+//    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+//    self.window.rootViewController = [QYLoginMovieVC loadLoginMovieWithResourceName:@"LaunchMovie"];
+//    [self.window makeKeyAndVisible];
     
     // 解决控制器跳转隐藏导航条瞬间黑色问题
     self.window.backgroundColor = [UIColor colorWithHexRGB:@"#326BFE" andAlpha:1.0f];
     return YES;
+}
+
+- (void)p_switchWindowView {
+    NSString *documentsPath = nil;
+    NSArray *appArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    if ([appArray count] > 0) {
+        documentsPath = [appArray objectAtIndex:0];
+    }
+    NSLog(@"%@",documentsPath);
+    NSString *tsdbPath = [documentsPath stringByAppendingString:[NSString stringWithFormat:@"/%@", TSDBName]];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:tsdbPath]) {
+        [self setVoicePageBeRootView];
+    } else {
+        [self setGuidPageBeRootView];
+    }
+}
+
+
+
+- (void)setGuidPageBeRootView {
+    UINavigationController *rootNav = [[UINavigationController alloc] initWithRootViewController:[QYLoginMovieVC loadLoginMovieWithResourceName:@"LaunchMovie"]];
+    rootNav.navigationBar.hidden = YES;
+    [self setCurrentPageBeRootView:rootNav];
+}
+
+- (void)setVoicePageBeRootView {
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[QYStatisticsVC alloc] init]];
+    nav.navigationBar.hidden = YES;
+    [self setCurrentPageBeRootView:nav];
+}
+
+- (void)setCurrentPageBeRootView:(UIViewController *)viewController {
+    if ([self.window.rootViewController isKindOfClass:[UINavigationController class]]) {
+        [QYToolsMethod restoreRootViewController:viewController];
+    } else {
+        self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        self.window.rootViewController = viewController;
+        [self.window makeKeyAndVisible];
+    }
 }
 
 

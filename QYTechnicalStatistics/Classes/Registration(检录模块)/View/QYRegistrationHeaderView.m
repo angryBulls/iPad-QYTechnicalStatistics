@@ -16,25 +16,22 @@
 
 /** 背景图片 */
 @property (strong, nonatomic) UIImageView * bjImageView;
-@property (strong, nonatomic) QYRegistrationSelectButton * competitionLevelButton;
-@property (strong, nonatomic) QYRegistrationSelectButton * competitionAreaButton;
-@property (strong, nonatomic) QYRegistrationSelectButton * provinceAndCityButton;
+
 @property (strong, nonatomic) UILabel * hostButtonLabel;    
-@property (strong, nonatomic) QYRegistrationSelectButton * hostTeamButton;
+
 @property (strong, nonatomic) UILabel * guestButtonLabel;
-@property (strong, nonatomic) QYRegistrationSelectButton * guestTeamButton;
+
 /** ------ */
 @property (strong, nonatomic) UILabel * mainRefereelabel;
-@property (strong, nonatomic) UITextField * mainRefereeNameLabel;
+
 @property (strong, nonatomic) UILabel * firstDeputyRefereelabel;
-@property (strong, nonatomic) UITextField * firstDeputyRefereeNameLabel;
+
 @property (strong, nonatomic) UILabel * secondDeputyRefereelabel;
-@property (strong, nonatomic) UITextField * secondDeputyRefereeNameLabel;
+
 @property (strong, nonatomic) UILabel * technicalRepresentativeLabel;
-@property (strong, nonatomic) UITextField * technicalRepresentativeNameLabel;
+
 @property (strong, nonatomic) UILabel * technicalStatisticsLabel;
-@property (strong, nonatomic) UITextField * technicalStatisticsNameLabel_01;
-@property (strong, nonatomic) UITextField * technicalStatisticsNameLabel_02;
+
 
 @property (nonatomic ,strong)NSArray *teamDataSouce;
 @property (nonatomic ,strong)NSArray *palyDataSouce;
@@ -58,13 +55,14 @@
     
     UIButton * btn = (UIButton *)sender;//这个通过通知传过来的按钮。用来确定弹出控制器出现的位置
     self.currentClickBtn = btn;
-//    __weak typeof(self) weakself = self;;
+    
     QYMenuVC * menuVC = [QYMenuVC createMenuWithClickBlock:^(NSString *title) {
          // 创建菜单
             [btn setTitle:title forState:(UIControlStateNormal)];
             btn.selected = !btn.selected;
     } AndTeamBlock:^(NSArray *teamArr) {
         if (teamArr.count>0) {
+            
             id team = teamArr[0];
             if ([team isKindOfClass:[QYTeam class]]) {
                 _teamDataSouce = teamArr;
@@ -73,14 +71,12 @@
             else{
                 _palyDataSouce = teamArr;
                 if (btn.tag == 3) {
-                    if (self.delegate && [self.delegate performSelector:@selector(backPlayInfosByArr:andTeam:)]) {
+
                         [_delegate backPlayInfosByArr:teamArr andTeam:Host];
-                    }
                 }
                 else{
-                    if (self.delegate && [self.delegate performSelector:@selector(backPlayInfosByArr:andTeam:)]) {
                         [_delegate backPlayInfosByArr:teamArr andTeam:Guest];
-                    }
+
                     
                 }
             }
@@ -273,6 +269,7 @@
     if (!_competitionLevelButton) {
         _competitionLevelButton = [[QYRegistrationSelectButton alloc] init];
         _competitionLevelButton.tag = 0;
+        
         [_competitionLevelButton setTitle:@"选择赛事级别" forState:(UIControlStateNormal)];
         [_competitionLevelButton addTarget:self action:@selector(competitionLevelClick:)
                           forControlEvents:(UIControlEventTouchUpInside)];
@@ -287,6 +284,10 @@
     levelbtn.selected = !levelbtn.selected;
     [_competitionAreaButton setTitle:@"选择赛区" forState:(UIControlStateNormal)];
     [_provinceAndCityButton setTitle:@"市辖区" forState:(UIControlStateNormal)];
+    [_hostTeamButton setTitle:@"球队" forState:UIControlStateNormal];
+    [_guestTeamButton setTitle:@"球队" forState:UIControlStateNormal];
+    
+    
     [self competitionRankBtn:levelbtn AndArr:GameLevelArray];
 }
 

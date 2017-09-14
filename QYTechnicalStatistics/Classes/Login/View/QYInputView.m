@@ -66,13 +66,19 @@
                                :92 * 2 + CGScaleGetHeight(self.titleLabel.frame)
                                :564
                                :82];
-    self.account.text = @"wpc";
+    
+   
     
     [self.pwd scaleFrameMake:CGScaleGetMinX(self.account.frame)
                             :CGScaleGetMaxY(self.account.frame)+58
                             :CGScaleGetWidth(self.account.frame)
                             :CGScaleGetHeight(self.account.frame)];
-    self.pwd.text = @"123456";
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:ACCOUNT] !=nil) {
+        self.account.text = [[NSUserDefaults standardUserDefaults] objectForKey:ACCOUNT];
+        self.pwd.text = [[NSUserDefaults standardUserDefaults] objectForKey:PWD];
+    }
+    
+    
     [self creatShengMingView];
     
     
@@ -89,7 +95,7 @@
     [_shengMingBtn setImage:[UIImage imageNamed:@"圆形"] forState:UIControlStateNormal];
     [_shengMingBtn setImage:[UIImage imageNamed:@"圆形-h"] forState:UIControlStateSelected];
     [_shengMingBtn addTarget: self action:@selector(shengMingBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-    
+    _shengMingBtn.selected = 1;
     UILabel *shengMingL = [[UILabel alloc] initWithFrame:scaleFrameMake(10+32, 3.5, 564-(61+10+32), 25)];
     shengMingL.text = @"我已详细阅读并同意免责声明";
     shengMingL.font = [UIFont fontWithName:@"PingFang-SC-Medium" size:scaleX_ByPx(25)];
@@ -106,7 +112,7 @@
     [_remberBtn setImage:[UIImage imageNamed:@"圆形"] forState:UIControlStateNormal];
     [_remberBtn setImage:[UIImage imageNamed:@"圆形-h"] forState:UIControlStateSelected];
     [_remberBtn addTarget: self action:@selector(remberBtnBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-    
+    _remberBtn.selected = 1;
     UILabel *shengMingL = [[UILabel alloc] initWithFrame:scaleFrameMake(10+32, 3.5, 564-(61+10+32), 25)];
     shengMingL.text = @"记住密码";
     shengMingL.font = [UIFont fontWithName:@"PingFang-SC-Medium" size:scaleX_ByPx(25)];
@@ -205,13 +211,22 @@
     [_account resignFirstResponder];
     [_pwd resignFirstResponder];
     
+    if (_remberBtn.selected) {
+        [[NSUserDefaults standardUserDefaults] setObject:_account.text forKey:ACCOUNT];
+        [[NSUserDefaults standardUserDefaults] setObject:_pwd.text forKey:PWD];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    else{
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:ACCOUNT];
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:PWD];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+    }
+    
+    
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     dic[@"loginname"] = _account.text;
     dic[@"password"] = _pwd.text;
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    NSString *deviceToken = [defaults objectForKey:@"deviceToken"];
-//    dic[@"device_token"] = deviceToken;
-//    dic[@"channel"] = @2;
     
     QYUserInfoModel *userInfo = [QYToolsMethod fetchUserInfoModel];
     userInfo.phone = _account.text;
@@ -246,6 +261,8 @@
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
+   
+    
     
     [UIView animateWithDuration:0.25f animations:^{
         

@@ -12,5 +12,9 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
+- (void)setGuidPageBeRootView;
+- (void)setVoicePageBeRootView;
+
+
 @end
 
