@@ -23,6 +23,10 @@
 		43D75B5A1F60D812001A1413 /* PlayerDataCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43D75B581F60D812001A1413 /* PlayerDataCell.xib */; };
 		43D75B5D1F6128D3001A1413 /* QYFinishMatchVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D75B5C1F6128D3001A1413 /* QYFinishMatchVC.m */; };
 		43D75B611F612C91001A1413 /* QYFinishCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D75B5F1F612C91001A1413 /* QYFinishCell.m */; };
+		43E2A9391F6A549B00DAEBA3 /* TSSpeechRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E2A9381F6A549B00DAEBA3 /* TSSpeechRecognizer.m */; };
+		43E2A93C1F6A574500DAEBA3 /* TSToolsMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E2A93B1F6A574500DAEBA3 /* TSToolsMethod.m */; };
+		43E2A9411F6A592C00DAEBA3 /* TSUserInfoModelBCBC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E2A93E1F6A592C00DAEBA3 /* TSUserInfoModelBCBC.m */; };
+		43E2A9421F6A592C00DAEBA3 /* TSUserInfoModelNormal.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E2A9401F6A592C00DAEBA3 /* TSUserInfoModelNormal.m */; };
 		43E740521F662E86007D9B6B /* LoginViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E740511F662E86007D9B6B /* LoginViewModel.m */; };
 		43E740551F662F09007D9B6B /* ViewModelClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E740541F662F09007D9B6B /* ViewModelClass.m */; };
 		43E740581F66692B007D9B6B /* QYJsonPasser.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E740571F66692B007D9B6B /* QYJsonPasser.m */; };
@@ -104,6 +108,14 @@
 		43D75B5C1F6128D3001A1413 /* QYFinishMatchVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QYFinishMatchVC.m; sourceTree = "<group>"; };
 		43D75B5E1F612C91001A1413 /* QYFinishCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QYFinishCell.h; sourceTree = "<group>"; };
 		43D75B5F1F612C91001A1413 /* QYFinishCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QYFinishCell.m; sourceTree = "<group>"; };
+		43E2A9371F6A549B00DAEBA3 /* TSSpeechRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSpeechRecognizer.h; sourceTree = "<group>"; };
+		43E2A9381F6A549B00DAEBA3 /* TSSpeechRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSpeechRecognizer.m; sourceTree = "<group>"; };
+		43E2A93A1F6A574500DAEBA3 /* TSToolsMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSToolsMethod.h; sourceTree = "<group>"; };
+		43E2A93B1F6A574500DAEBA3 /* TSToolsMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSToolsMethod.m; sourceTree = "<group>"; };
+		43E2A93D1F6A592C00DAEBA3 /* TSUserInfoModelBCBC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSUserInfoModelBCBC.h; sourceTree = "<group>"; };
+		43E2A93E1F6A592C00DAEBA3 /* TSUserInfoModelBCBC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSUserInfoModelBCBC.m; sourceTree = "<group>"; };
+		43E2A93F1F6A592C00DAEBA3 /* TSUserInfoModelNormal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSUserInfoModelNormal.h; sourceTree = "<group>"; };
+		43E2A9401F6A592C00DAEBA3 /* TSUserInfoModelNormal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSUserInfoModelNormal.m; sourceTree = "<group>"; };
 		43E740501F662E86007D9B6B /* LoginViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewModel.h; sourceTree = "<group>"; };
 		43E740511F662E86007D9B6B /* LoginViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewModel.m; sourceTree = "<group>"; };
 		43E740531F662F09007D9B6B /* ViewModelClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewModelClass.h; sourceTree = "<group>"; };
@@ -333,6 +345,10 @@
 		977BA2AF1EF371C100516ED9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				43E2A93D1F6A592C00DAEBA3 /* TSUserInfoModelBCBC.h */,
+				43E2A93E1F6A592C00DAEBA3 /* TSUserInfoModelBCBC.m */,
+				43E2A93F1F6A592C00DAEBA3 /* TSUserInfoModelNormal.h */,
+				43E2A9401F6A592C00DAEBA3 /* TSUserInfoModelNormal.m */,
 				43EC3D4A1F6941A100181D6D /* TSGameModel.h */,
 				43EC3D4B1F6941A100181D6D /* TSGameModel.m */,
 				43EC3D471F69415000181D6D /* TSManagerPlayerModel.h */,
@@ -530,6 +546,10 @@
 		97A556671EE0041A00536E31 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				43E2A93A1F6A574500DAEBA3 /* TSToolsMethod.h */,
+				43E2A93B1F6A574500DAEBA3 /* TSToolsMethod.m */,
+				43E2A9371F6A549B00DAEBA3 /* TSSpeechRecognizer.h */,
+				43E2A9381F6A549B00DAEBA3 /* TSSpeechRecognizer.m */,
 				43EC3D441F6940CA00181D6D /* TSCalculationTool.h */,
 				43EC3D451F6940CA00181D6D /* TSCalculationTool.m */,
 				43D7324A1F67DF28009CF1E6 /* TSDBManager.h */,
@@ -711,12 +731,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43E2A9391F6A549B00DAEBA3 /* TSSpeechRecognizer.m in Sources */,
 				97E59F371F14AE7D004B0018 /* QYReplacementPlayersView.m in Sources */,
 				97EC2E181F0371E0005437DB /* QYStadiumView.m in Sources */,
 				43E740521F662E86007D9B6B /* LoginViewModel.m in Sources */,
 				977BA2C51EF37EE400516ED9 /* QYBaseViewController.m in Sources */,
 				97A5567B1EE0FBB700536E31 /* QYNavigationController.m in Sources */,
 				43D75B5D1F6128D3001A1413 /* QYFinishMatchVC.m in Sources */,
+				43E2A93C1F6A574500DAEBA3 /* TSToolsMethod.m in Sources */,
 				9776DE4B1F04946200292C14 /* QYPlayerView.m in Sources */,
 				977BA2B91EF371C100516ED9 /* QYRegistrationSecHeaderV.m in Sources */,
 				97A556681EE0041A00536E31 /* AppDelegate.m in Sources */,
@@ -746,6 +768,7 @@
 				43D75B591F60D812001A1413 /* PlayerDataCell.m in Sources */,
 				43EC3D431F68CA0F00181D6D /* PlayerCheckViewModel.m in Sources */,
 				433FF91A1F5E4FB4008DB472 /* UserEntity.m in Sources */,
+				43E2A9411F6A592C00DAEBA3 /* TSUserInfoModelBCBC.m in Sources */,
 				9746D9141EFA4023001EDF9F /* QYRegistrationTitleView.m in Sources */,
 				43E7405B1F666AA8007D9B6B /* QYTeam.m in Sources */,
 				43D732531F67F0F5009CF1E6 /* TSCheckModel.m in Sources */,
@@ -758,6 +781,7 @@
 				970C6A481EE8F2CF0073C650 /* QYLoginViewController.m in Sources */,
 				43E740581F66692B007D9B6B /* QYJsonPasser.m in Sources */,
 				43D75B611F612C91001A1413 /* QYFinishCell.m in Sources */,
+				43E2A9421F6A592C00DAEBA3 /* TSUserInfoModelNormal.m in Sources */,
 				43EC3D4C1F6941A100181D6D /* TSGameModel.m in Sources */,
 				970C6A4C1EE8F2F90073C650 /* QYLoginMovieVC.m in Sources */,
 				970E8DE91F0648DD000859BE /* QYRegistrationSelectButton.m in Sources */,

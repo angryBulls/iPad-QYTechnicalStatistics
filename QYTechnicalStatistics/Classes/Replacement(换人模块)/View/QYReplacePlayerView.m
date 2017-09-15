@@ -14,8 +14,12 @@
 @property (strong, nonatomic) UIView * coverView;
 // 球员头像
 @property (strong, nonatomic) UIImageView * iconView;
+
+@property (nonatomic ,strong) UIView *infoView;
 // 姓名Label
 @property (strong, nonatomic) UILabel * nameLabel;
+// 号码
+@property (nonatomic ,strong) UILabel * numLabel;
 // 上下场标识Label(Button)
 @property (strong, nonatomic) UIButton * switchoverBtn;
 
@@ -52,6 +56,15 @@
     // 设置球员icon尺寸
     [self.iconView scaleFrameMake:0 :0 :CGScaleGetWidth(self.frame) :226];
     
+    // 设置球员信息尺寸
+    
+    [self.infoView scaleFrameMake:0 :226-50 :CGScaleGetWidth(self.frame) :50];
+    // 号码
+    [self.numLabel scaleFrameMake:16 :11 :30 :30];
+    self.numLabel.text = @"8";
+    // 名字
+    [self.nameLabel scaleFrameMake:52 :11 :CGScaleGetWidth(self.frame)-52 :30];
+    self.nameLabel.text = @"wwww";
     // 设置上下场标识按钮尺寸
     [self.switchoverBtn scaleFrameMake:0
                                       :CGScaleGetMaxY(self.iconView.frame)+10
@@ -98,6 +111,48 @@
         [self addSubview:_iconView];
     }
     return _iconView;
+}
+
+-(UIView *)infoView{
+    if (_infoView == nil) {
+        _infoView = [[UIView alloc] init ];
+        [self.iconView addSubview:_infoView];
+        _infoView.backgroundColor = [UIColor blackColor];
+        _infoView.alpha = .65;
+    }
+    
+    return _infoView;
+}
+
+-(UILabel *)nameLabel{
+    if (_nameLabel == nil) {
+        _nameLabel = [[UILabel alloc] init];
+        _nameLabel.backgroundColor = [UIColor clearColor];
+        _nameLabel.textColor = [UIColor whiteColor];
+        _nameLabel.font = [UIFont systemFontOfSize:scaleX_ByPx(24)];
+        
+        [self.infoView addSubview:_nameLabel];
+    }
+    
+    return _nameLabel;
+}
+
+-(UILabel *)numLabel{
+    if (_numLabel == nil) {
+        _numLabel = [[UILabel alloc] init];
+        _numLabel.layer.cornerRadius = scaleX_ByPx(15);
+        _numLabel.clipsToBounds = YES;
+        _numLabel.layer.borderWidth = scaleX_ByPx(1);
+        _numLabel.textAlignment = NSTextAlignmentCenter;
+        _numLabel.font  = [UIFont systemFontOfSize:scaleX_ByPx(24)];
+        _numLabel.layer.borderColor = [UIColor colorWithHexRGB:@"#FFFFFF" andAlpha:1].CGColor;
+        _numLabel.backgroundColor = [UIColor clearColor];
+        _numLabel.textColor  = [UIColor whiteColor];
+        
+        [self.infoView addSubview:_numLabel];
+    }
+    
+    return _numLabel;
 }
 
 - (UIButton *)switchoverBtn {

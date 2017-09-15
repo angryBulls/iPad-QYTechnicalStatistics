@@ -20,7 +20,7 @@
 
 
 @property (strong, nonatomic) UIImageView * pauseScoreBjImg;
-
+@property (nonatomic ,strong)TSDBManager *tsDBManager;
 @end
 
 @implementation QYTeamOperationView
@@ -82,7 +82,31 @@
 }
 
 
+-(void)setGameModel:(TSGameModel *)gameModel{
+    _gameModel = gameModel;
+    if (_isGuest) {
+        _pauseScoreLabel.text = gameModel.timeOutStageG;
+        _foulScoreLabel.text = gameModel.foulsStageG;
+        
+    }
+    else{
+        
+        _pauseScoreLabel.text = gameModel.timeOutStageH;
+        _foulScoreLabel.text = gameModel.foulsStageH;
+        
+    }
+    
+}
+
+
 #pragma mark - lazy
+
+-(TSDBManager *)tsDBManager{
+    if (_tsDBManager == nil) {
+        _tsDBManager = [[TSDBManager alloc] init];
+    }
+    return _tsDBManager;
+}
 
 - (UIImageView *)teamImageView {
     
@@ -144,7 +168,7 @@
         self.foulScoreBjImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"底框"]];
         _foulScoreLabel = [[UILabel alloc] init];
         _foulScoreLabel.textAlignment = NSTextAlignmentCenter;
-        _foulScoreLabel.text = @"0";
+        
         _foulScoreLabel.font = kSCALE_FONT(23);
         [self addSubview:_foulScoreBjImg];
         [self addSubview:_foulScoreLabel];
@@ -161,7 +185,6 @@
         
         _pauseScoreLabel = [[UILabel alloc] init];
         _pauseScoreLabel.textAlignment = NSTextAlignmentCenter;
-        _pauseScoreLabel.text = @"0";
         _pauseScoreLabel.font = kSCALE_FONT(23);
         [self addSubview:_pauseScoreBjImg];
         [self addSubview:_pauseScoreLabel];
@@ -202,10 +225,16 @@
     NSInteger i = [_pauseScoreLabel.text integerValue];
     i++;
     _pauseScoreLabel.text = [NSString stringWithFormat:@"%ld",i];
+
     
+   
     
-    if (self.delegate && [self.delegate performSelector:@selector(updataPauseStatus:)]) {
-        [_delegate updataPauseStatus:1];
+    NSMutableDictionary *resultDic = [NSMutableDictionary dictionary];
+    resultDic[BnfBehaviorType] =@"0";
+    
+    resultDic[BnfTeameType] = [NSString stringWithFormat:@"%d",_isGuest];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(backResultDic:andStatus:)]) {
+        [_delegate backResultDic:resultDic andStatus:1];
     }
     
 }

@@ -12,11 +12,11 @@
 
 @interface TSCalculationTool : NSObject
 @property (nonatomic, strong) TSGameModel *gameModel;
-// 计算主队本场的数据（包括：本场得分、本场犯规）
+// 计算主/客队本场的数据（包括：本场得分、本场犯规）
 - (void)calculationHostTotalScoreFouls;
 - (void)calculationGuestTotalScoreFouls;
 
-// 计算主队单节的数据（包括：本节得分、本节犯规）
+// 计算主/客队单节的数据（包括：本节得分、本节犯规）
 - (void)calculationHostStageScoreFouls;
 - (void)calculationGuestStageScoreFouls;
 

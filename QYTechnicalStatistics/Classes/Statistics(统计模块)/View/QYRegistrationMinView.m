@@ -39,8 +39,15 @@
     [self.guestOperationView scaleFrameMake:30+CGScaleGetMaxX(self.midBjView.frame) :0 :690 :CGScaleGetHeight(self.frame)];
     
     
+    
 }
-
+-(void)setGameModel:(TSGameModel *)gameModel{
+    _gameModel = gameModel;
+    self.hostOperationView.gameModel = gameModel;
+    self.guestOperationView.gameModel = gameModel;
+    self.midBjView.gameModel = gameModel;
+    
+}
     
 #pragma mark - lazy
 
@@ -48,6 +55,7 @@
     
     if (!_hostOperationView) {
         _hostOperationView = [QYTeamOperationView createTeamOperationViewWithTitleImg:@"主队"];
+        _hostOperationView.gameModel = _gameModel;
         _hostOperationView.delegate = self;
         [self addSubview:_hostOperationView];
     }
@@ -58,6 +66,8 @@
     
     if (!_guestOperationView) {
         _guestOperationView = [QYTeamOperationView createTeamOperationViewWithTitleImg:@"客队"];
+        _guestOperationView.isGuest  = 1;
+        _guestOperationView.gameModel = _gameModel;
         _guestOperationView.delegate = self;
         [self addSubview:_guestOperationView];
     }
@@ -69,6 +79,8 @@
     if (!_midBjView) {
         _midBjView = [QYTeamMidView new];
         _midBjView.delegate = self;
+        
+        _midBjView.gameModel = _gameModel;
         _midBjView.layer.cornerRadius = kSCALE_NUM(5);
         _midBjView.backgroundColor = [UIColor colorWithHexRGB:@"#e8e8e8" andAlpha:1.0f];
         [self addSubview:_midBjView];
@@ -102,7 +114,8 @@
     }
 }
 
--(void)updataPauseStatus:(BOOL)status{
+
+-(void)backResultDic:(NSMutableDictionary *)dic andStatus:(NSInteger)status{
     
     _midBjView.isPausIng = 1;
     _guestOperationView.pauseAddBnt.enabled = 0;
@@ -110,10 +123,12 @@
     _midBjView.startingBtn.enabled = 1;
     _midBjView.pauseBtn.enabled = 0;
     _midBjView.currentSecond = [_midBjView.minLabel.text intValue] *60 +[_midBjView.secLabel.text intValue];
-
+    
     [_midBjView.toolsMethod stopGCDTimer];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(updateResultDic:andStatus:)]) {
+        [_delegate updateResultDic:dic andStatus:status];
+    }
     
 }
-
 
 @end

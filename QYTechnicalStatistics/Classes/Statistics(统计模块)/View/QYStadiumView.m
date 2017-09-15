@@ -8,7 +8,7 @@
 
 #import "QYStadiumView.h"
 #import "QYPlayerView.h"
-
+#import "TSPlayerModel.h"
 @interface QYStadiumView ()<QYPlayerViewDelegate>
 
 // 球场背景图片
@@ -28,6 +28,12 @@
 @property (strong, nonatomic) QYPlayerView * guestPlayer_Three;
 @property (strong, nonatomic) QYPlayerView * guestPlayer_Four;
 @property (strong, nonatomic) QYPlayerView * guestPlayer_Five;
+
+@property (nonatomic ,strong) NSMutableArray *hostNumbArray;
+@property (nonatomic ,strong) NSMutableArray *guestNumbArray;
+
+@property (nonatomic ,strong)NSMutableArray *p_hostPlayingNumArray;
+@property (nonatomic ,strong)NSMutableArray *p_guestPlayingNumArray;
 
 @end
 
@@ -54,8 +60,7 @@
 - (void)layoutSubviews {
     
     [super layoutSubviews];
-    
-    
+
     // 布局子控件
     [self.stadiumBjView scaleFrameMake:0
                                       :0
@@ -74,19 +79,76 @@
                                     :CGScaleGetMinY(self.modificationOfSectionBtn.frame)
                                     :CGScaleGetWidth(self.modificationOfSectionBtn.frame)
                                     :CGScaleGetHeight(self.modificationOfSectionBtn.frame)];
+    // add host player number view
+    [self updatePlayersStatus];
     
+
     [self.hostPlayer_One show];
     [self.hostPlayer_Two show];
     [self.hostPlayer_Three show];
     [self.hostPlayer_Four show];
     [self.hostPlayer_Five show];
-    
+
     [self.guestPlayer_One show];
     [self.guestPlayer_Two show];
     [self.guestPlayer_Three show];
     [self.guestPlayer_Four show];
     [self.guestPlayer_Five show];
+
+    
 }
+- (void)updatePlayersStatus {
+    // 取出主客队所有球员检录信息
+    TSDBManager *tSDBManager = [[TSDBManager alloc] init];
+    NSArray *playerCheckArrayH = [tSDBManager getObjectById:TeamCheckID_H fromTable:TSCheckTable];
+    // 设置主队在场球员的号码
+    NSMutableArray *hostPlayingNumArray = [NSMutableArray array];
+    _hostDataSouce = [NSMutableArray array];
+    [playerCheckArrayH enumerateObjectsUsingBlock:^(NSDictionary *subDict, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        if (1 == [subDict[@"playingStatus"] intValue]) {
+            [hostPlayingNumArray addObject:[NSString stringWithFormat:@"%@", subDict[@"gameNum"]]];
+            TSPlayerModel *playmodel = [TSPlayerModel new];
+            playmodel.isStartPlayer = subDict[@"isStartPlayer"];
+            playmodel.ID = subDict[@"id"];
+            playmodel.gameNum = subDict[@"gameNum"];
+            playmodel.playingTimes = subDict[@"playingTimes"];
+            playmodel.playingStatus = subDict[@"playingStatus"];
+            playmodel.photo = subDict[@"photo"];
+            playmodel.playerNumber = subDict[@"playerNumber"];
+            playmodel.name = subDict[@"name"];
+            [_hostDataSouce addObject:playmodel];
+            
+        }
+    }];
+    
+    _p_hostPlayingNumArray = hostPlayingNumArray;
+    // 设置客队在场球员的号码
+    NSArray *playerCheckArrayG = [tSDBManager getObjectById:TeamCheckID_G fromTable:TSCheckTable];
+    _guestDataSouce = [NSMutableArray array];
+    NSMutableArray *guestPlayingNumArray = [NSMutableArray array];
+    [playerCheckArrayG enumerateObjectsUsingBlock:^(NSDictionary *subDict, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (1 == [subDict[@"playingStatus"] intValue]) {
+            [guestPlayingNumArray addObject:[NSString stringWithFormat:@"%@", subDict[@"gameNum"]]];
+            TSPlayerModel *playmodel = [TSPlayerModel new];
+            playmodel.isStartPlayer = subDict[@"isStartPlayer"];
+            playmodel.ID = subDict[@"id"];
+            playmodel.gameNum = subDict[@"gameNum"];
+            playmodel.playingTimes = subDict[@"playingTimes"];
+            playmodel.playingStatus = subDict[@"playingStatus"];
+            playmodel.photo = subDict[@"photo"];
+            playmodel.playerNumber = subDict[@"playerNumber"];
+            playmodel.name = subDict[@"name"];
+            [_guestDataSouce addObject:playmodel];
+            
+        }
+    }];
+    
+    _p_guestPlayingNumArray = guestPlayingNumArray;
+
+
+}
+
 
 #pragma mark - lazy
 
@@ -111,9 +173,21 @@
         [_returnBtn setBackgroundImage:[UIImage imageNamed:@"篮球场上按钮-选中"]
                               forState:(UIControlStateHighlighted)];
         [_returnBtn setTitle:@"返回上一次操作" forState:(UIControlStateNormal)];
+        
+        [_returnBtn addTarget:self action:@selector(p_revokeBtnClick) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_returnBtn];
     }
     return _returnBtn;
+}
+
+-(void)p_revokeBtnClick{
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(p_revokeBtnClick)]) {
+        
+        [self.delegate p_revokeBtnClick];
+        
+    }
+    
 }
 
 - (UIButton *)substitutionBtn {
@@ -145,7 +219,6 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(changeInfoOfMatch)]) {
         [self.delegate changeInfoOfMatch];
     }
-    
 }
 -(void)creatQuarterData:(UIButton *)btn{
 //    if (_quarterEnd) {
@@ -206,19 +279,11 @@
     return _generateBtn;
 }
 
-
-
-
-
 - (QYPlayerView *)hostPlayer_One {
     
     if (!_hostPlayer_One) {
-        
-        Player *p = _hostDataSouce[0];
-        p.team = Host;
-        _hostPlayer_One = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"红-主队" frameX:160 frameY:98];
-        
-        _hostPlayer_One.p = p;
+        _hostPlayer_One = [QYPlayerView createPlayerViewWithTitle:_p_hostPlayingNumArray[0] bgImage:@"红-主队" frameX:160 frameY:98];
+         _hostPlayer_One.playerModel = _hostDataSouce[0];
         _hostPlayer_One.delegate = self;
         
         [self addSubview:_hostPlayer_One];
@@ -229,11 +294,8 @@
 - (QYPlayerView *)hostPlayer_Two {
     
     if (!_hostPlayer_Two) {
-        Player *p = _hostDataSouce[1];
-        p.team = Host;
-
-        _hostPlayer_Two = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"红-主队" frameX:286 frameY:458];
-                _hostPlayer_Two.p = p;
+        _hostPlayer_Two = [QYPlayerView createPlayerViewWithTitle:_p_hostPlayingNumArray[1] bgImage:@"红-主队" frameX:286 frameY:458];
+        _hostPlayer_Two.playerModel = _hostDataSouce[1];
         _hostPlayer_Two.delegate = self;
         [self addSubview:_hostPlayer_Two];
     }
@@ -243,12 +305,8 @@
 - (QYPlayerView *)hostPlayer_Three {
     
     if (!_hostPlayer_Three) {
-        
-        Player *p = _hostDataSouce[2];
-        p.team = Host;
-        _hostPlayer_Three = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"红-主队" frameX:184 frameY:1130-112-218];
-        
-        _hostPlayer_Three.p = p;
+        _hostPlayer_Three = [QYPlayerView createPlayerViewWithTitle:_p_hostPlayingNumArray[2] bgImage:@"红-主队" frameX:184 frameY:1130-112-218];
+        _hostPlayer_Three.playerModel = _hostDataSouce[2];
         _hostPlayer_Three.delegate = self;
         
         [self addSubview:_hostPlayer_Three];
@@ -259,14 +317,8 @@
 - (QYPlayerView *)hostPlayer_Four {
     
     if (!_hostPlayer_Four) {
-        
-        Player *p = _hostDataSouce[3];
-        p.team = Host;
-        _hostPlayer_Four = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"红-主队" frameX:632 frameY:284];
-        
-        
-        _hostPlayer_Four.p = p;
-        
+        _hostPlayer_Four = [QYPlayerView createPlayerViewWithTitle:_p_hostPlayingNumArray[3] bgImage:@"红-主队" frameX:632 frameY:284];
+        _hostPlayer_Four.playerModel = _hostDataSouce[3];
         _hostPlayer_Four.delegate = self;
         [self addSubview:_hostPlayer_Four];
     }
@@ -276,13 +328,10 @@
 - (QYPlayerView *)hostPlayer_Five {
     
     if (!_hostPlayer_Five) {
-        Player *p = _hostDataSouce[4];
-        p.team = Host;
-        _hostPlayer_Five = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"红-主队" frameX:626 frameY:158+284+218];
-        
-        
-        _hostPlayer_Five.p = p;
+       _hostPlayer_Five = [QYPlayerView createPlayerViewWithTitle:_p_hostPlayingNumArray[4] bgImage:@"红-主队" frameX:626 frameY:158+284+218];
+        _hostPlayer_Five.playerModel = _hostDataSouce[4];
         _hostPlayer_Five.delegate = self;
+        
         [self addSubview:_hostPlayer_Five];
     }
     return _hostPlayer_Five;
@@ -291,11 +340,10 @@
 - (QYPlayerView *)guestPlayer_One {
     
     if (!_guestPlayer_One) {
-        Player *p = _guestDataSouce[0];
-        p.team = Guest;
-        _guestPlayer_One = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"绿-客队" frameX:2048-218-154 frameY:94];
         
-        _guestPlayer_One.p = p;
+        _guestPlayer_One = [QYPlayerView createPlayerViewWithTitle:_p_guestPlayingNumArray[0] bgImage:@"绿-客队" frameX:2048-218-154 frameY:94];
+        _guestPlayer_One.playerModel = _guestDataSouce[0];
+        _guestPlayer_One.guest = 1;
         _guestPlayer_One.delegate  = self;
         
         
@@ -307,11 +355,9 @@
 - (QYPlayerView *)guestPlayer_Two {
     
     if (!_guestPlayer_Two) {
-        Player *p = _guestDataSouce[1];
-        p.team = Guest;
-        _guestPlayer_Two = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"绿-客队" frameX:2048-218-286 frameY:464];
-        
-        _guestPlayer_Two.p = p;
+        _guestPlayer_Two = [QYPlayerView createPlayerViewWithTitle:_p_guestPlayingNumArray[1] bgImage:@"绿-客队" frameX:2048-218-286 frameY:464];
+        _guestPlayer_Two.playerModel = _guestDataSouce[1];
+        _guestPlayer_Two.guest = 1;
         _guestPlayer_Two.delegate = self;
         [self addSubview:_guestPlayer_Two];
     }
@@ -321,11 +367,10 @@
 - (QYPlayerView *)guestPlayer_Three {
     
     if (!_guestPlayer_Three) {
-        Player *p = _guestDataSouce[2];
-        p.team = Guest;
-        _guestPlayer_Three = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"绿-客队" frameX:2048-218-154 frameY:1130-218-100];
         
-        _guestPlayer_Three.p = p;
+        _guestPlayer_Three = [QYPlayerView createPlayerViewWithTitle:_p_guestPlayingNumArray[2] bgImage:@"绿-客队" frameX:2048-218-154 frameY:1130-218-100];
+        _guestPlayer_Three.playerModel = _guestDataSouce[2];
+        _guestPlayer_Three.guest = 1;
         _guestPlayer_Three.delegate = self;
         
         [self addSubview:_guestPlayer_Three];
@@ -336,12 +381,9 @@
 - (QYPlayerView *)guestPlayer_Four {
     
     if (!_guestPlayer_Four) {
-        Player *p = _guestDataSouce[3];
-        p.team = Guest;
-        _guestPlayer_Four = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"绿-客队" frameX:2048-218-638 frameY:270];
-        
-        
-        _guestPlayer_Four.p = p;
+        _guestPlayer_Four = [QYPlayerView createPlayerViewWithTitle:_p_guestPlayingNumArray[3] bgImage:@"绿-客队" frameX:2048-218-638 frameY:270];
+        _guestPlayer_Four.playerModel = _guestDataSouce[3];
+        _guestPlayer_Four.guest = 1;
         _guestPlayer_Four.delegate  = self;
         [self addSubview:_guestPlayer_Four];
     }
@@ -351,13 +393,9 @@
 - (QYPlayerView *)guestPlayer_Five {
     
     if (!_guestPlayer_Five) {
-        Player *p = _guestDataSouce[4];
-        p.team = Guest;
-        
-        _guestPlayer_Five = [QYPlayerView createPlayerViewWithTitle:[NSString stringWithFormat:@"%@",p.playerNumber] bgImage:@"绿-客队" frameX:2048-218-640 frameY:270+162+218];
-        
-        
-        _guestPlayer_Five.p = p;
+        _guestPlayer_Five = [QYPlayerView createPlayerViewWithTitle:_p_guestPlayingNumArray[4] bgImage:@"绿-客队" frameX:2048-218-640 frameY:270+162+218];
+        _guestPlayer_Five.playerModel = _guestDataSouce[4];
+        _guestPlayer_Five.guest = 1;
         _guestPlayer_Five.delegate = self;
         [self addSubview:_guestPlayer_Five];
     }
@@ -366,10 +404,16 @@
 
 #pragma mark 代理
 -(void)backPlay:(Player *)p andStatus:(NSInteger)status{
-    
-    [_delegate backStatusWithPlayer:p Status:status];
+    if (self.delegate && [self respondsToSelector:@selector(backPlay:andStatus:)]) {
+        
+        [_delegate backStatusWithPlayer:p Status:status];
+    }
     
 }
-
+-(void)backResultDic:(NSMutableDictionary *)resultDic{
+    if (self.delegate && [self respondsToSelector:@selector(backResultDic:)]) {
+        [_delegate backResult:resultDic];
+    }
+}
 
 @end

@@ -160,4 +160,16 @@
     return _totalColonLabel;
 }
 
+-(void)setGameModel:(TSGameModel *)gameModel{
+    _gameModel = gameModel;
+    _totalHostTeamLabel.score = [gameModel.scoreTotalH integerValue];
+    _totalGuestTeamLabel.score = [gameModel.scoreStageG integerValue];
+    _hostTeamScoreLabel.score = [gameModel.scoreStageH integerValue];
+    _guestTeamScoreLabel.score = [gameModel.scoreStageG integerValue];
+    
+    
+}
+
+
+
 @end

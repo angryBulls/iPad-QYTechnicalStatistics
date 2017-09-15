@@ -32,6 +32,9 @@
 
 // Utility class
 #import "QYToolsMethod.h"
+#import "TSToolsMethod.h"
+#import "TSUserInfoModelBCBC.h"
+#import "TSUserInfoModelNormal.h"
 
 #import "QYUserInfoModel.h"
 #import "LCActionSheet.h"

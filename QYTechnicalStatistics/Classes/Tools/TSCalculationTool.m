@@ -73,6 +73,7 @@
             timeOutStageG = [stageGameDict[@"1"][@"0"] intValue];
         }
         self.gameModel.timeOutStageG = [NSString stringWithFormat:@"%ld", timeOutStageG];
+        
     }
 }
 
@@ -250,7 +251,7 @@
         self.gameModel.foulsOvertime3H = [NSString stringWithFormat:@"%ld", foulsStageH];
     }
     
-//    DDLog(@"host team scoreStage is:%ld --------- host team foulsStage is:%ld", scoreStageH, foulsStageH);
+
 }
 
 // 计算客队某个节次的得分和犯规

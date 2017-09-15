@@ -24,6 +24,8 @@
 @property (nonatomic ,assign) BOOL isGame;
 @property (nonatomic ,assign) BOOL endQuarter;
 
+@property (nonatomic ,strong)NSMutableArray *insertDBDictArray;
+
 #pragma mark 网络
 
 @property (nonatomic ,strong) TSDBManager *tSDBManager;
@@ -35,7 +37,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initialization];
+    // 创建数据库和数据库表
+    NSString *documentsPath = nil;
+    NSArray *appArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    if ([appArray count] > 0) {
+        NSLog(@"ssssss");
+        documentsPath = [appArray objectAtIndex:0];
+    }
     
+    NSLog(@"%ld ----  --  %@",appArray.count,documentsPath);
+    
+    NSArray *allHostTeamPlayerData = [self.tSDBManager getAllHostTeamPlayerData];
+    NSLog(@"allHostTeamPlayerData is:%@", allHostTeamPlayerData);
+    
+    NSArray *allGuestTeamPlayerData = [self.tSDBManager getAllGuestTeamPlayerData];
+    NSLog(@"allGuestTeamPlayerData is:%@", allGuestTeamPlayerData);
     [self p_updateStatisticsData];
 }
 
@@ -90,6 +106,13 @@
 
 #define mark - lazy
 
+-(NSMutableArray *)insertDBDictArray{
+    if (_insertDBDictArray == nil) {
+        _insertDBDictArray = [NSMutableArray array];
+    }
+    return _insertDBDictArray;
+}
+
 -(TSDBManager *)tSDBManager{
     if (_tSDBManager == nil) {
         _tSDBManager = [[TSDBManager alloc] init];
@@ -140,93 +163,139 @@
 
 -(void)backStatusWithPlayer:(Player *)p Status:(NSInteger)status{
     
-    if (_isGame ) {
-        
-        switch (status) {
-            case 0:
-                //助攻
-                break;
-            case 1:
-                //1分
-                if (p.team) {
-                    
-                    _registrationTitleView.guestTeamScoreLabel.score  += 1;
-                    
-                    _registrationTitleView.totalGuestTeamLabel.score += 1;
-                    
-                }
-                else{
-                    
-                    _registrationTitleView.hostTeamScoreLabel.score +=1;
-                    _registrationTitleView.totalHostTeamLabel.score +=1;
-                }
-                
-                break;
-                
-            case 2:
-                //2分
-                if (p.team) {
-                    _registrationTitleView.guestTeamScoreLabel.score  += 2;
-                    
-                    _registrationTitleView.totalGuestTeamLabel.score += 2;
-                    
-                }
-                else{
-                    _registrationTitleView.hostTeamScoreLabel.score +=2;
-                    _registrationTitleView.totalHostTeamLabel.score +=2;
-                    
-                }
-                break;
-                
-            case 3:
-                //3分
-                if (p.team) {
-                    _registrationTitleView.guestTeamScoreLabel.score  += 3;
-                    
-                    _registrationTitleView.totalGuestTeamLabel.score += 3;
-                    
-                }
-                else{
-                    
-                    _registrationTitleView.hostTeamScoreLabel.score +=3;
-                    _registrationTitleView.totalHostTeamLabel.score +=3;
-                    
-                }
-                break;
-                
-            case 4:
-                //盖帽
-                break;
-                
-            case 5:
-                //犯规
-                if (p.team) {
-                    NSInteger scroe =   [_registrationMinView.guestOperationView.foulScoreLabel.text integerValue];
-                    scroe +=1;
-                    
-                    _registrationMinView.guestOperationView.foulScoreLabel.text  = [NSString stringWithFormat:@"%ld",scroe];
-                    
-                }
-                else{
-                    NSInteger scroe =   [_registrationMinView.hostOperationView.foulScoreLabel.text integerValue];
-                    scroe +=1;
-                    
-                    _registrationMinView.hostOperationView.foulScoreLabel.text  = [NSString stringWithFormat:@"%ld",scroe];
-                    
-                }
-                break;
-                
-            case 6:
-                //篮板
-                break;
-                
-            default:
-                break;
-                
-        }
+//    if (_isGame ) {
+//        
+//        switch (status) {
+//            case 0:
+//                //助攻
+//                break;
+//            case 1:
+//                //1分
+//                if (p.team) {
+//                    
+//                    _registrationTitleView.guestTeamScoreLabel.score  += 1;
+//                    
+//                    _registrationTitleView.totalGuestTeamLabel.score += 1;
+//                    
+//                }
+//                else{
+//                    
+//                    _registrationTitleView.hostTeamScoreLabel.score +=1;
+//                    _registrationTitleView.totalHostTeamLabel.score +=1;
+//                }
+//                
+//                break;
+//                
+//            case 2:
+//                //2分
+//                if (p.team) {
+//                    _registrationTitleView.guestTeamScoreLabel.score  += 2;
+//                    
+//                    _registrationTitleView.totalGuestTeamLabel.score += 2;
+//                    
+//                }
+//                else{
+//                    _registrationTitleView.hostTeamScoreLabel.score +=2;
+//                    _registrationTitleView.totalHostTeamLabel.score +=2;
+//                    
+//                }
+//                break;
+//                
+//            case 3:
+//                //3分
+//                if (p.team) {
+//                    _registrationTitleView.guestTeamScoreLabel.score  += 3;
+//                    
+//                    _registrationTitleView.totalGuestTeamLabel.score += 3;
+//                    
+//                }
+//                else{
+//                    
+//                    _registrationTitleView.hostTeamScoreLabel.score +=3;
+//                    _registrationTitleView.totalHostTeamLabel.score +=3;
+//                    
+//                }
+//                break;
+//                
+//            case 4:
+//                //盖帽
+//                break;
+//                
+//            case 5:
+//                //犯规
+//                if (p.team) {
+//                    NSInteger scroe =   [_registrationMinView.guestOperationView.foulScoreLabel.text integerValue];
+//                    scroe +=1;
+//                    
+//                    _registrationMinView.guestOperationView.foulScoreLabel.text  = [NSString stringWithFormat:@"%ld",scroe];
+//                    
+//                }
+//                else{
+//                    NSInteger scroe =   [_registrationMinView.hostOperationView.foulScoreLabel.text integerValue];
+//                    scroe +=1;
+//                    
+//                    _registrationMinView.hostOperationView.foulScoreLabel.text  = [NSString stringWithFormat:@"%ld",scroe];
+//                    
+//                }
+//                break;
+//                
+//            case 6:
+//                //篮板
+//                break;
+//                
+//            default:
+//                break;
+//                
+//        }
+//
+//    }
+    
+}
 
-    }
+-(void)backResult:(NSMutableDictionary *)resultDic{
+    
+    [self.insertDBDictArray addObject:resultDic];
+    
+    [_tSDBManager saveOneResultDataWithDict:resultDic saveDBStatusSuccessBlock:^(NSDictionary *insertDBDict) {
         
+    } saveDBStatusFailBlock:^(NSString *error) {
+        
+    }];
+    
+    [self p_updateStatisticsData];
+    
+}
+-(void)updateResultDic:(NSMutableDictionary *)dic andStatus:(NSInteger)staus{
+    
+    [self.insertDBDictArray addObject:dic];
+    
+    [_tSDBManager saveOneResultDataWithDict:dic saveDBStatusSuccessBlock:^(NSDictionary *insertDBDict) {
+        
+    } saveDBStatusFailBlock:^(NSString *error) {
+        
+    }];
+    
+    [self p_updateStatisticsData];
+}
+
+//撤销
+- (void)p_revokeBtnClick {
+    if (0 == self.insertDBDictArray.count) {
+        return;
+    }
+    
+    if (self.insertDBDictArray.count) {
+        [self.tSDBManager deleteObjectByInsertDBDict:[self.insertDBDictArray lastObject]];
+        
+        NSDictionary *insertDBDict = [self.insertDBDictArray lastObject];
+        if ((11 == [insertDBDict[BnfBehaviorType] intValue]) || (12 == [insertDBDict[BnfBehaviorType] intValue])) { // 换人语音识别
+            // [self.voicePlayersView updatePlayersStatus];
+        }
+        
+        [self.insertDBDictArray removeLastObject];
+        
+        [self p_updateStatisticsData];
+    }
 }
 
 
@@ -283,12 +352,18 @@
         [calculationTool calculationHostStageScoreFouls];
         [calculationTool calculationGuestStageScoreFouls];
         
+        
         [calculationTool calculationTimeOutSatgeData];
         
 
         _registrationTitleView.gameModel = calculationTool.gameModel;
         _registrationMinView.gameModel = calculationTool.gameModel;
         _stadiumView.gameModel = calculationTool.gameModel;
+        
+        NSDictionary *insertDBDict = [self.insertDBDictArray lastObject];
+        if ((11 == [insertDBDict[BnfBehaviorType] intValue]) || (12 == [insertDBDict[BnfBehaviorType] intValue])) { // 换人语音识别
+//            [self.voicePlayersView updatePlayersStatus];  
+        }
         
     });
 }
@@ -304,89 +379,8 @@
 }
 
 
+
 #pragma mark - 提交本节数据到BCBC服务器
-- (void)p_sendCurrentStageData {
-    [SVProgressHUD show];
-    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
-    
-    NSString *stageCount = [self.tSDBManager getObjectById:GameId fromTable:GameTable][CurrentStage];
-    
-    
-    NSMutableDictionary *paramsDict = [NSMutableDictionary dictionary];
-    
-//    TSVoiceViewModel *voiceViewModel = [[TSVoiceViewModel alloc] initWithPramasDict:paramsDict];
-//    [voiceViewModel setBlockWithReturnBlock:^(id returnValue) {
-//        DDLog(@"up load data returnValue is:%@", returnValue);
-//        if (returnValue[@"entity"][@"matchInfoId"]) {
-//            NSMutableDictionary *gameTableDict = [[self.tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
-//            gameTableDict[@"matchInfoId"] = returnValue[@"entity"][@"matchInfoId"];
-//            [self.tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
-//        }
-//        [self p_updateCurrentStageIfSendDataSuccess];
-//        
-//        [self.dataShowArray removeAllObjects];
-//        [self.insertDBDictArray removeAllObjects];
-//        [self.tableView reloadData];
-//        
-//        // 每节数据提交成功后，初始化所有球员的上场时间
-//        [self.tSDBManager initPlayingTimesOnce];
-//        [SVProgressHUD showInfoWithStatus:@"提交成功"];
-//    } WithErrorBlock:^(id errorCode) {
-//        [SVProgressHUD showInfoWithStatus:errorCode];
-//    } WithFailureBlock:^{
-//        [SVProgressHUD dismiss];
-//    }];
-//    [voiceViewModel sendCurrentStageData];
-}
-
-- (void)p_updateCurrentStageIfSendDataSuccess { // 本节数据提交成功后，更新节数
-    NSMutableDictionary *gameTableDict = [[self.tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
-//    [StageAllArray enumerateObjectsUsingBlock:^(NSString *stageName, NSUInteger idx, BOOL * _Nonnull stop) {
-//        if ([gameTableDict[CurrentStage] isEqualToString:stageName]) {
-//            if (idx == 6) { // 加时赛3（表示全场比赛彻底结束）
-//                gameTableDict[CurrentStageDataSubmitted] = @"1";
-//                self.submitSectionBtn.enabled = NO;
-//                [self.submitSectionBtn setTitle:GameOver forState:UIControlStateNormal];
-//                [self p_pushFullManagerViewController];
-//            } else if (3 == idx || 4 == idx || 5 == idx) { // 第四节或者加时赛1或者加时赛2数据提交后，不自动进入加时赛
-//                gameTableDict[CurrentStageDataSubmitted] = @"1";
-//                [self p_pushFullManagerViewController];
-//            } else if (idx < 3) {
-//                gameTableDict[CurrentStage] = StageAllArray[idx + 1];
-//                gameTableDict[CurrentStageDataSubmitted] = @"0";
-//            }
-//            *stop = YES;
-//        }
-//    }];
-//    [self.tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
-//    self.topView.currentSecond = StageGameTimes;
-//    self.topView.countDownLab.text = @"00 : 00";
-    [self p_updateStatisticsData];
-}
-
-// LCActionSheetDelegate
-- (void)actionSheet:(LCActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-//    if (self.actionSheet) {
-//        [[NSNotificationCenter defaultCenter] removeObserver:self.actionSheet name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-//        self.actionSheet = nil;
-//    }
-//    
-//    if (1 == buttonIndex) {
-//        NSDictionary *gameTableDict = [self.tSDBManager getObjectById:GameId fromTable:GameTable];
-//        if ([gameTableDict[CurrentStageDataSubmitted] isEqualToString:@"1"]) {
-//            if ([gameTableDict[CurrentStage] isEqualToString:StageFour] || [gameTableDict[CurrentStage] isEqualToString:OverTime3]) {
-//                DDLog(@"CurrentStage is:%@", gameTableDict[CurrentStage]);
-//                [self p_pushFullManagerViewController];
-//                return;
-//            }
-//        }
-//        
-//        [self p_sendCurrentStageData];
-//    }
-}
-
-- (void)p_pushFullManagerViewController { // push到全场比赛技术统计页面
-    }
 
 
 

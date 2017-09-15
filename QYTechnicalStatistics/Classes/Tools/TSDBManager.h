@@ -1,11 +1,3 @@
-//
-//  TSDBManager.h
-//  QYTS
-//
-//  Created by lxd on 2017/7/21.
-//  Copyright © 2017年 longcai. All rights reserved.
-//
-
 #import <Foundation/Foundation.h>
 
 typedef void (^SaveDBStatusSuccessBlock)(NSDictionary *insertDBDict);
@@ -17,13 +9,13 @@ typedef void (^UpdatePalyerTableSuccessBlock)();
 - (void)deleteObjectByInsertDBDict:(NSDictionary *)insertDBDict;
 - (id)getObjectById:(NSString *)objectId fromTable:(NSString *)tableName;
 
- // 修改一条球员数据（包括：罚球、2分和3分命中数）
+// 修改一条球员数据（包括：罚球、2分和3分命中数）
 - (void)updateDBPlayerTabelByPlayerId:(NSString *)playerId dataType:(NSString *)dataType newValue:(NSString *)newValue successReturnBlock:(UpdatePalyerTableSuccessBlock)successReturnBlock;
 
- // 更新一次所有球员的上场时间
+// 更新一次所有球员的上场时间
 - (void)udatePlayingTimesOnce;
 
- // 初始化一次球员的上场时间
+// 初始化一次球员的上场时间
 - (void)initPlayingTimesOnce;
 
 - (void)putObject:(id)object withId:(NSString *)objectId intoTable:(NSString *)tableName; // 保存数据

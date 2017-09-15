@@ -15,6 +15,7 @@
 @optional
 -(void)startGaming;
 -(void)quarterGameEnd;
+-(void)updateResultDic:(NSMutableDictionary *)dic andStatus:(NSInteger)staus;
 
 @end
 

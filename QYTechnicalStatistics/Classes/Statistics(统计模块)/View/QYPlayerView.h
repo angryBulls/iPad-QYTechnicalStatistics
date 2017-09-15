@@ -8,16 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #import "Player.h"
-
+#import "TSPlayerModel.h"
 
 @protocol QYPlayerViewDelegate <NSObject>
 
 -(void)backPlay:(Player *)p andStatus:(NSInteger )status;
 
+-(void)backResultDic:(NSMutableDictionary *)resultDic ;
+
 @end
 
 @interface QYPlayerView : UIView
 @property (nonatomic ,strong)Player *p;
+@property (nonatomic ,strong)TSPlayerModel *playerModel;
+@property (nonatomic ,assign)BOOL guest;
 @property (nonatomic, copy) NSString * playerNum;
 @property (nonatomic, weak) id<QYPlayerViewDelegate>delegate;
 @property (nonatomic, assign) BOOL isGaming;

@@ -37,19 +37,20 @@ static NSString * const PlayerId = @"playerId";
 static NSString * const CurrentStage = @"currentStage";
 static NSString * const CurrentStageDataSubmitted = @"currentStageDataSubmitted";
 
-static NSString * const BnfTeameType = @"<teamName>";
-static NSString * const BnfTenNumberType = @"<tenNumber>";
-static NSString * const BnfBitsNumberType = @"<bitsNumber>";
-static NSString * const BnfBehaviorType = @"<behavior>";
-static NSString * const BnfResultType = @"<result>";
+static NSString * const BnfTeameType = @"<teamName>";//队名
+static NSString * const BnfTenNumberType = @"<tenNumber>";//号码10位数
+static NSString * const BnfBitsNumberType = @"<bitsNumber>";//号码个位数
+static NSString * const BnfBehaviorType = @"<behavior>";//行为
+static NSString * const BnfResultType = @"<result>";//中或不中
 
-static NSString * const NumbResultStr = @"NumbResultStr";
+static NSString * const NumbResultStr = @"NumbResultStr";//号码
 
 static NSString * const BehaviorNumb = @"behaviorNumb"; // 用于标记行为
 
 // 各个技术统计项目对应的标记号（标记好对应的数据为该项目的统计数量）
 static NSString * const Timeout = @"0"; // 暂停
 static NSString * const FreeThrow = @"behaviorNumb1"; // 罚篮
+static NSString * const OnePoints = @"behaviorNumb31"; // 一分
 static NSString * const TwoPoints = @"behaviorNumb2"; // 两分
 static NSString * const ThreePoints = @"behaviorNumb3"; // 三分
 static NSString * const OffensiveRebound = @"behaviorNumb4"; // 进攻篮板
@@ -63,6 +64,7 @@ static NSString * const Fouls = @"behaviorNumb10"; // 犯规
 #define PlayerStatisticsArray @[Timeout, FreeThrow, TwoPoints, ThreePoints, OffensiveRebound, DefensiveRebound, Steals, Turnover, BlockShots, Assists, Fouls]
 
 static NSString * const FreeThrowHit = @"FreeThrowHit"; // 罚篮命中数
+static NSString * const OnePointsHit = @"OnePointsHit"; // 一分命中数
 static NSString * const TwoPointsHit = @"TwoPointsHit"; // 2分命中数
 static NSString * const ThreePointsHit = @"ThreePointsHit"; // 3分命中数
 

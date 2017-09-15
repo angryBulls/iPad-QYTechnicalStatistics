@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TSGameModel.h"
 @protocol QYTeamMidViewDelegate <NSObject>
 
 -(void)backPauseStatus:(BOOL)pause;
@@ -37,5 +38,6 @@
 /** 暂停计时 */
 - (void)pause;
 
+@property (nonatomic ,strong)TSGameModel *gameModel;
 
 @end

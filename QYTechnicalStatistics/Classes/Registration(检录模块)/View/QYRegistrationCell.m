@@ -102,6 +102,7 @@
     
     self.enterFieldBtn.selected = !self.enterFieldBtn.selected;
     _p.isStartPlayer =  self.enterFieldBtn.selected?@"是":@"否";
+    _p.playingStatus = self.enterFieldBtn.selected?@"1":@"0";
     
         if (self.delegate && [_delegate respondsToSelector:@selector(BackPlayerWithPlayer:andSection:andRow:)]) {
             [_delegate BackPlayerWithPlayer:_p andSection:_section andRow:_row];
@@ -252,6 +253,7 @@
     _matchNumLabel.text = _modificationNumLabel.text;
     _p.gameNum = _matchNumLabel.text;
     _p.playerNumber = _matchNumLabel.text;
+    
     
     
     if (self.delegate && [_delegate respondsToSelector:@selector(BackPlayerWithPlayer:andSection:andRow:)]) {

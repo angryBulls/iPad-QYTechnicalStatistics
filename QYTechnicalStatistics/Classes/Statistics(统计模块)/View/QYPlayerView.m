@@ -22,6 +22,7 @@
 @property (strong, nonatomic) NSMutableArray * palyerStatisticsBtns;
 
 @property (nonatomic, assign) NSInteger scroes;
+@property (nonatomic ,strong)TSDBManager *tsDBManger;
 
 @end
 
@@ -47,9 +48,8 @@
     playerView.scaleY = frameY;
     return playerView;
 }
--(void)setP:(Player *)p{
-    _p = p;
-    
+-(void)setPlayerModel:(TSPlayerModel *)playerModel{
+    _playerModel = playerModel;
 }
 
 // 初始化
@@ -95,9 +95,8 @@
               withTitle:(NSString *)title
         backgroundImage:(NSString *)backgroundImage {
     
-//    [playerBtn setImage:[UIImage imageNamed:image] forState:UIControlStateNormal];
-    [playerBtn setTitle:title forState:UIControlStateNormal];
     
+    [playerBtn setTitle:title forState:UIControlStateNormal];
     
     [playerBtn setBackgroundImage:[UIImage imageNamed:backgroundImage]
                          forState:(UIControlStateNormal)];
@@ -106,7 +105,7 @@
 }
 
 - (void)playerClick:(UIButton *)playerBtn {
-
+    
     UIView * bjView = [UIView new];
     self.coverView = bjView;
     bjView.backgroundColor = [UIColor colorWithHexRGB:@"#332412" andAlpha:0.88f];
@@ -122,30 +121,30 @@
     } completion:^(BOOL finished) {
         
         [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.5 options:0 animations:^{
-
+            
             for (NSInteger count = 0; count < 7; count++) {
                 UIButton * btn = self.palyerStatisticsBtns[count];
                 btn.scaleW = 204;
                 btn.scaleH = 204;
                 btn.center = [self layoutPalyerStatisticsBtns:(CGFloat)count/7 and:scaleW_ByPx(350)];
             };
-           
-
             
-         } completion:^(BOOL finished) {
-             
-             self.bounds = CGRectMake(0, 0, self.superview.frame.size.width, self.superview.frame.size.height);
-             for (NSInteger count = 0; count < 7; count++) {
-                 UIButton * btn = self.palyerStatisticsBtns[count];
-                 btn.scaleW = 204;
-                 btn.scaleH = 204;
-                 btn.center = [self layoutPalyerStatisticsBtns:(CGFloat)count/7 and:scaleW_ByPx(350)];
-             };
-             
             
-             
-
-         }];
+            
+        } completion:^(BOOL finished) {
+            
+            self.bounds = CGRectMake(0, 0, self.superview.frame.size.width, self.superview.frame.size.height);
+            for (NSInteger count = 0; count < 7; count++) {
+                UIButton * btn = self.palyerStatisticsBtns[count];
+                btn.scaleW = 204;
+                btn.scaleH = 204;
+                btn.center = [self layoutPalyerStatisticsBtns:(CGFloat)count/7 and:scaleW_ByPx(350)];
+            };
+            
+            
+            
+            
+        }];
         
     }];
     
@@ -205,6 +204,12 @@
 }
 
 #pragma mark - lazy
+-(TSDBManager *)tsDBManger{
+    if (_tsDBManger == nil) {
+        _tsDBManger = [TSDBManager new];
+    }
+    return _tsDBManger;
+}
 
 - (UIButton *)playerBtn {
     
@@ -215,7 +220,7 @@
         _playerBtn.scaleH = _playerBtn.scaleW;
         [_playerBtn addTarget:self action:@selector(playerClick:)
              forControlEvents:(UIControlEventTouchUpInside)];
-//        [_playerBtn setTitle:@"12" forState:(UIControlStateNormal)];
+        //        [_playerBtn setTitle:@"12" forState:(UIControlStateNormal)];
         [_playerBtn setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
         _playerBtn.titleLabel.font = kSCALE_BOLD_FONT(50);
         [self addSubview:_playerBtn];
@@ -240,52 +245,84 @@
 }
 
 -(void)fucationBtnClicked:(UIButton *)btn{
-//    NSString *str = [NSString string];
+    //    NSString *str = [NSString string];
+    NSMutableDictionary *resultDic = [NSMutableDictionary dictionary];
     switch (btn.tag) {
         case 0:
-            
+            resultDic[NumbResultStr] = _playerModel.gameNum;
+            resultDic[BnfBehaviorType] =@"9";
+            //            resultDic[BnfResultType] = @"1";
+            resultDic[BnfTeameType] = [NSString stringWithFormat:@"%d",_guest];
             //助攻
             break;
         case 1:
             //1分
-             [self showChooseBtn:btn];
+            [self showChooseBtn:btn];
             break;
-
+            
         case 2:
-             [self showChooseBtn:btn];
+            [self showChooseBtn:btn];
             //2分
             break;
-
+            
         case 3:
             [self showChooseBtn:btn];
             //3分
             break;
-
+            
         case 4:
             //盖帽
+            
+            resultDic[NumbResultStr] = _playerModel.gameNum;
+            resultDic[BnfBehaviorType] =@"8";
+            //            resultDic[BnfResultType] = @"1";
+            resultDic[BnfTeameType] = [NSString stringWithFormat:@"%d",_guest];
+            
             break;
-
+            
         case 5:
             //犯规
+            resultDic[NumbResultStr] = _playerModel.gameNum;
+            resultDic[BnfBehaviorType] =@"10";
+//            resultDic[BnfResultType] = @"1";
+            resultDic[BnfTeameType] = [NSString stringWithFormat:@"%d",_guest];
+            
             break;
-
+            
         case 6:
             //篮板
+            
+            resultDic[NumbResultStr] = _playerModel.gameNum;
+            resultDic[BnfBehaviorType] =@"4";
+            //            resultDic[BnfResultType] = @"1";
+            resultDic[BnfTeameType] = [NSString stringWithFormat:@"%d",_guest];
+            
             break;
         case 7 :
             //中
             if (self.delegate && [self.delegate respondsToSelector:@selector(backPlay:andStatus:)] ) {
                 [_delegate backPlay:_p andStatus:_scroes];
+                resultDic[NumbResultStr] = _playerModel.gameNum;
+                resultDic[BnfBehaviorType] = [NSString stringWithFormat:@"%ld",_scroes];
+                resultDic[BnfResultType] = @"1";
+                resultDic[BnfTeameType] = [NSString stringWithFormat:@"%d",_guest];
+                
             }
             break;
         case 8:
             //不中
+            
+            resultDic[NumbResultStr] = _playerModel.gameNum;
+            resultDic[BnfBehaviorType] = [NSString stringWithFormat:@"%ld",_scroes];
+            resultDic[BnfResultType] = @"0";
+            resultDic[BnfTeameType] = [NSString stringWithFormat:@"%d",_guest];
             break;
             
         default:
             break;
             
     }
+    
     if (btn.tag !=1 && btn.tag !=2 && btn.tag !=3) {
         
         if (self.delegate && [self.delegate respondsToSelector:@selector(backPlay:andStatus:)] ) {
@@ -293,7 +330,9 @@
         }
         [self stayBack];
     }
-
+    if (self.delegate && [self.delegate respondsToSelector:@selector(backResultDic:)]) {
+        [_delegate backResultDic:resultDic];
+    }
     
 }
 
@@ -324,7 +363,7 @@
 
 -(void)showChooseBtn:(UIButton *)btn{
     _scroes = btn.tag;
-    [UIView animateWithDuration:.5 animations:^{
+    [UIView animateWithDuration:.2 animations:^{
         
         UIButton * btn8 = self.palyerStatisticsBtns[7];
         btn8.scaleW = 204;

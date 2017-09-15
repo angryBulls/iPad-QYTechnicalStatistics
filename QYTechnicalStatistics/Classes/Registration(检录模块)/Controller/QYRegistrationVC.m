@@ -186,6 +186,7 @@ static NSString * const registrationCell = @"registrationCell";
             playerModel.playerNumber =[NSString stringWithFormat:@"%@",p.playerNumber];
             playerModel.photo = p.photo;
             playerModel.ID = p.pid;
+            playerModel.name = p.playName;
             if (self.playerArrayH.count ) {
                 TSPlayerModel *pp = self.playerArrayH[0];
                 if ([pp.ID isEqualToString:playerModel.ID]) {
@@ -210,7 +211,7 @@ static NSString * const registrationCell = @"registrationCell";
             playerModel.isStartPlayer = p.isOn?@"是":@"否";
             playerModel.playingTimes = p.playingTimes;
             playerModel.playingStatus = @"0";
-            
+            playerModel.name = p.playName;
             playerModel.playerNumber =[NSString stringWithFormat:@"%@",p.playerNumber];
             playerModel.photo = p.photo;
             playerModel.ID = p.pid;
