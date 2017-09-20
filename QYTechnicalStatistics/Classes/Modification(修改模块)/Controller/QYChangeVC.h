@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+@protocol QYChangeVCDelegate <NSObject>
+-(void)finishChange;
+@end
 
 @interface QYChangeVC : UIViewController
-
+@property (nonatomic,weak)id <QYChangeVCDelegate>delegate;
 @end

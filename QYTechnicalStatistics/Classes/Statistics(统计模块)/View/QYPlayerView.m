@@ -14,8 +14,7 @@
 @property (weak, nonatomic) UIView * coverView;
 // 球员操作选项titles
 @property (strong, nonatomic) NSArray * operationOptionTitles;
-// 球员按钮
-@property (strong, nonatomic) UIButton * playerBtn;
+
 // 初始位置 单位PX
 @property (assign, nonatomic) CGRect initialFrame;
 // 球员技术统计操作按钮组
@@ -82,6 +81,13 @@
     }
     return self;
 }
+
+- (void)setPlayerTitle:(NSString *)title{
+    
+    [self.playerBtn setTitle:title forState:UIControlStateNormal];
+    
+}
+
 
 - (void)layoutSubviews {
     
@@ -220,7 +226,7 @@
         _playerBtn.scaleH = _playerBtn.scaleW;
         [_playerBtn addTarget:self action:@selector(playerClick:)
              forControlEvents:(UIControlEventTouchUpInside)];
-        //        [_playerBtn setTitle:@"12" forState:(UIControlStateNormal)];
+        
         [_playerBtn setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
         _playerBtn.titleLabel.font = kSCALE_BOLD_FONT(50);
         [self addSubview:_playerBtn];

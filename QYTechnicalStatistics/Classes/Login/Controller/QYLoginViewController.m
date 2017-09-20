@@ -126,8 +126,7 @@
             QYUserInfoModel *userInfo = [QYToolsMethod fetchUserInfoModel];
             NSLog(@" %@", userInfo.token);
             
-            
-            [[UIApplication sharedApplication].keyWindow setRootViewController:[[QYNavigationController alloc] initWithRootViewController:[QYRegistrationVC getRegistrationVC]]];
+        [[UIApplication sharedApplication].keyWindow setRootViewController:[[QYNavigationController alloc] initWithRootViewController:[QYRegistrationVC getRegistrationVC]]];
             
         } WithErrorBlock:^(id errorCode) {
             [SVProgressHUD showInfoWithStatus:errorCode];

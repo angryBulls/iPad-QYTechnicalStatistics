@@ -26,6 +26,8 @@
     
     
     [QYNetworkManger startLogin:_dic responseSuccess:^(id responseObject) {
+        
+        
         if ([responseObject[@"success"] isEqual:@1]) {
             QYUserInfoModel *userInfo = [QYToolsMethod fetchUserInfoModel];
             userInfo.token = responseObject[@"entity"][@"token"];

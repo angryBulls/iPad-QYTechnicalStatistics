@@ -83,20 +83,40 @@
     [self updatePlayersStatus];
     
 
-    [self.hostPlayer_One show];
-    [self.hostPlayer_Two show];
-    [self.hostPlayer_Three show];
-    [self.hostPlayer_Four show];
-    [self.hostPlayer_Five show];
-
-    [self.guestPlayer_One show];
-    [self.guestPlayer_Two show];
-    [self.guestPlayer_Three show];
-    [self.guestPlayer_Four show];
-    [self.guestPlayer_Five show];
+//    [self.hostPlayer_One show];
+//    [self.hostPlayer_Two show];
+//    [self.hostPlayer_Three show];
+//    [self.hostPlayer_Four show];
+//    [self.hostPlayer_Five show];
+//
+//    [self.guestPlayer_One show];
+//    [self.guestPlayer_Two show];
+//    [self.guestPlayer_Three show];
+//    [self.guestPlayer_Four show];
+//    [self.guestPlayer_Five show];
 
     
 }
+-(void)setGameModel:(TSGameModel *)gameModel{
+    _gameModel = gameModel;
+    
+    
+    [self updatePlayersStatus];
+    
+    [self.hostPlayer_One setPlayerTitle:_p_hostPlayingNumArray[0]];
+    [self.hostPlayer_Two setPlayerTitle:_p_hostPlayingNumArray[1]];
+    [self.hostPlayer_Three setPlayerTitle:_p_hostPlayingNumArray[2]];
+    [self.hostPlayer_Four setPlayerTitle:_p_hostPlayingNumArray[3]];
+    [self.hostPlayer_Five setPlayerTitle:_p_hostPlayingNumArray[4]];
+    [self.guestPlayer_One setPlayerTitle:_p_guestPlayingNumArray[0]];
+    [self.guestPlayer_Two setPlayerTitle:_p_guestPlayingNumArray[1]];
+    [self.guestPlayer_Three setPlayerTitle:_p_guestPlayingNumArray[2]];
+    [self.guestPlayer_Four setPlayerTitle:_p_guestPlayingNumArray[3]];
+    [self.guestPlayer_Five setPlayerTitle:_p_guestPlayingNumArray[4]];
+    
+}
+
+
 - (void)updatePlayersStatus {
     // 取出主客队所有球员检录信息
     TSDBManager *tSDBManager = [[TSDBManager alloc] init];
@@ -121,7 +141,6 @@
             
         }
     }];
-    
     _p_hostPlayingNumArray = hostPlayingNumArray;
     // 设置客队在场球员的号码
     NSArray *playerCheckArrayG = [tSDBManager getObjectById:TeamCheckID_G fromTable:TSCheckTable];

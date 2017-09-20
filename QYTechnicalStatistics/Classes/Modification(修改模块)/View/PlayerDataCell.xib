@@ -15,22 +15,14 @@
             <rect key="frame" x="0.0" y="0.0" width="1024" height="71"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="1024" height="70.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="1024" height="71"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fqr-tN-bLF" userLabel="playerInfoView">
                         <rect key="frame" x="0.0" y="0.0" width="158" height="70"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B3U-Wg-tQ9">
-                                <rect key="frame" x="6.5" y="16.5" width="38" height="38"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="38" id="2Tq-JK-zL3"/>
-                                    <constraint firstAttribute="height" constant="38" id="QBh-cI-Q8w"/>
-                                </constraints>
-                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="王朝阳" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fVC-h3-6TX">
-                                <rect key="frame" x="54.5" y="25" width="50" height="21"/>
+                                <rect key="frame" x="55" y="25" width="50" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="Ulm-0f-ags"/>
                                     <constraint firstAttribute="width" constant="50" id="huE-RJ-4a0"/>
@@ -40,7 +32,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="18" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XZH-dw-ukB">
-                                <rect key="frame" x="128" y="25.5" width="20" height="20"/>
+                                <rect key="frame" x="133" y="26" width="20" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="Nbg-dR-ox3"/>
                                     <constraint firstAttribute="width" constant="20" id="Ny0-hA-hDT"/>
@@ -49,20 +41,27 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ASP-5s-qla">
+                                <rect key="frame" x="7" y="16" width="38" height="38"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="38" id="CfQ-3p-CNj"/>
+                                    <constraint firstAttribute="width" constant="38" id="tMT-g0-yvV"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="XZH-dw-ukB" firstAttribute="centerY" secondItem="B3U-Wg-tQ9" secondAttribute="centerY" id="OeI-YY-F9Y"/>
-                            <constraint firstAttribute="trailing" secondItem="XZH-dw-ukB" secondAttribute="trailing" constant="10" id="TRh-kN-ePc"/>
-                            <constraint firstItem="fVC-h3-6TX" firstAttribute="centerY" secondItem="B3U-Wg-tQ9" secondAttribute="centerY" id="hUr-Dt-LY5"/>
-                            <constraint firstItem="B3U-Wg-tQ9" firstAttribute="leading" secondItem="fqr-tN-bLF" secondAttribute="leading" constant="6.5" id="oBH-QA-yaq"/>
+                            <constraint firstItem="ASP-5s-qla" firstAttribute="centerY" secondItem="fqr-tN-bLF" secondAttribute="centerY" id="DiK-15-UYN"/>
+                            <constraint firstItem="fVC-h3-6TX" firstAttribute="baseline" secondItem="XZH-dw-ukB" secondAttribute="baseline" id="I3W-tI-EUD"/>
+                            <constraint firstItem="fVC-h3-6TX" firstAttribute="centerY" secondItem="ASP-5s-qla" secondAttribute="centerY" id="SYA-u9-INr"/>
+                            <constraint firstAttribute="trailing" secondItem="XZH-dw-ukB" secondAttribute="trailing" constant="5" id="TRh-kN-ePc"/>
+                            <constraint firstItem="ASP-5s-qla" firstAttribute="leading" secondItem="fqr-tN-bLF" secondAttribute="leading" constant="6.5" id="Xhr-oT-l4N"/>
                             <constraint firstAttribute="width" constant="158" id="oEC-Bk-gv8"/>
-                            <constraint firstItem="B3U-Wg-tQ9" firstAttribute="centerY" secondItem="fqr-tN-bLF" secondAttribute="centerY" id="tGQ-Cq-jeG"/>
-                            <constraint firstItem="fVC-h3-6TX" firstAttribute="leading" secondItem="B3U-Wg-tQ9" secondAttribute="trailing" constant="10" id="yoY-ZC-EJh"/>
+                            <constraint firstItem="fVC-h3-6TX" firstAttribute="leading" secondItem="ASP-5s-qla" secondAttribute="trailing" constant="10" id="qm0-sg-JbU"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Fd-hC-jLh" userLabel="lanBanView">
-                        <rect key="frame" x="158" y="0.0" width="124" height="70.5"/>
+                        <rect key="frame" x="158" y="0.0" width="124" height="71"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PRl-Bn-qFU">
                                 <rect key="frame" x="7" y="16" width="39" height="39"/>
@@ -87,7 +86,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="32" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JZh-N9-rjB">
-                                <rect key="frame" x="52.5" y="28" width="20" height="15"/>
+                                <rect key="frame" x="52" y="28" width="20" height="15"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="20" id="Lv7-6Y-phg"/>
                                     <constraint firstAttribute="height" constant="15" id="WAI-vl-COA"/>
@@ -111,7 +110,7 @@
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0fP-Lf-r1p" userLabel="lanBanView">
-                        <rect key="frame" x="282.5" y="0.0" width="124" height="70.5"/>
+                        <rect key="frame" x="283" y="0.0" width="124" height="71"/>
                         <subviews>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R0p-ue-UVm">
                                 <rect key="frame" x="7" y="16" width="39" height="39"/>
@@ -136,7 +135,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="32" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZJv-r5-gXM">
-                                <rect key="frame" x="52.5" y="28" width="20" height="15"/>
+                                <rect key="frame" x="52" y="28" width="20" height="15"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="20" id="8bv-fb-GRQ"/>
                                     <constraint firstAttribute="height" constant="15" id="zc6-1A-0N4"/>
@@ -159,7 +158,7 @@
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gh5-Hl-Xlc" userLabel="lanBanView">
-                        <rect key="frame" x="407" y="0.0" width="124" height="70.5"/>
+                        <rect key="frame" x="407" y="0.0" width="124" height="71"/>
                         <subviews>
                             <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q2R-4g-lNI">
                                 <rect key="frame" x="7" y="16" width="39" height="39"/>
@@ -184,7 +183,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="32" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tOO-na-wez">
-                                <rect key="frame" x="52.5" y="28" width="20" height="15"/>
+                                <rect key="frame" x="52" y="28" width="20" height="15"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="20" id="TAp-G9-7gc"/>
                                     <constraint firstAttribute="height" constant="15" id="cuV-IS-cmW"/>
@@ -207,7 +206,7 @@
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1wa-Rc-juU" userLabel="lanBanView">
-                        <rect key="frame" x="531.5" y="0.0" width="124" height="70.5"/>
+                        <rect key="frame" x="532" y="0.0" width="124" height="71"/>
                         <subviews>
                             <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="am1-Oa-vTa">
                                 <rect key="frame" x="7" y="16" width="39" height="39"/>
@@ -232,7 +231,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="32" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0BZ-pk-77Q">
-                                <rect key="frame" x="52.5" y="28" width="20" height="15"/>
+                                <rect key="frame" x="52" y="28" width="20" height="15"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="15" id="gxu-Wg-9Wa"/>
                                     <constraint firstAttribute="width" constant="20" id="n6c-pv-1vW"/>
@@ -255,7 +254,7 @@
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2lf-9n-ByI" userLabel="lanBanView">
-                        <rect key="frame" x="656" y="0.0" width="124" height="70.5"/>
+                        <rect key="frame" x="656" y="0.0" width="124" height="71"/>
                         <subviews>
                             <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rAL-8O-H64">
                                 <rect key="frame" x="7" y="16" width="39" height="39"/>
@@ -280,7 +279,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" tag="4" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="32" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OxU-iW-a0Y">
-                                <rect key="frame" x="52.5" y="28" width="20" height="15"/>
+                                <rect key="frame" x="52" y="28" width="20" height="15"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="15" id="bgA-Wo-JNk"/>
                                     <constraint firstAttribute="width" constant="20" id="pbi-v8-gTW"/>
@@ -303,7 +302,7 @@
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0QW-XA-Wyl" userLabel="lanBanView">
-                        <rect key="frame" x="780.5" y="0.0" width="124" height="70.5"/>
+                        <rect key="frame" x="781" y="0.0" width="124" height="71"/>
                         <subviews>
                             <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WYI-54-geO">
                                 <rect key="frame" x="7" y="16" width="39" height="39"/>
@@ -328,7 +327,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" tag="5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="32" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hSv-mG-xjo">
-                                <rect key="frame" x="52.5" y="28" width="20" height="15"/>
+                                <rect key="frame" x="52" y="28" width="20" height="15"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="15" id="2Ey-IC-X3x"/>
                                     <constraint firstAttribute="width" constant="20" id="Oja-zl-3Au"/>
@@ -351,7 +350,7 @@
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GFa-VR-eTg" userLabel="lanBanView">
-                        <rect key="frame" x="905" y="0.0" width="124" height="70.5"/>
+                        <rect key="frame" x="905" y="0.0" width="124" height="71"/>
                         <subviews>
                             <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hGK-Ig-EZF">
                                 <rect key="frame" x="7" y="16" width="39" height="39"/>
@@ -376,7 +375,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" tag="6" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="32" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cRT-kI-Cpf">
-                                <rect key="frame" x="52.5" y="28" width="20" height="15"/>
+                                <rect key="frame" x="52" y="28" width="20" height="15"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="15" id="R1G-fI-wpq"/>
                                     <constraint firstAttribute="width" constant="20" id="Wn2-Cz-3Rw"/>
@@ -435,11 +434,11 @@
             <connections>
                 <outlet property="fanGuiView" destination="gh5-Hl-Xlc" id="uro-bt-32d"/>
                 <outlet property="gaiMaoView" destination="1wa-Rc-juU" id="qFo-cd-mu1"/>
-                <outlet property="headerIV" destination="B3U-Wg-tQ9" id="XGh-dg-oOb"/>
-                <outlet property="imageH" destination="QBh-cI-Q8w" id="joV-RJ-i25"/>
-                <outlet property="imageLeft" destination="oBH-QA-yaq" id="Vh2-PV-Kf0"/>
-                <outlet property="imageRight" destination="yoY-ZC-EJh" id="Nqb-Bj-qhy"/>
-                <outlet property="imageW" destination="2Tq-JK-zL3" id="Byn-Rv-vbQ"/>
+                <outlet property="headerIV" destination="ASP-5s-qla" id="X7O-2I-LWx"/>
+                <outlet property="imageH" destination="CfQ-3p-CNj" id="3cp-BG-OOY"/>
+                <outlet property="imageLeft" destination="Xhr-oT-l4N" id="Z7P-5q-rep"/>
+                <outlet property="imageRight" destination="qm0-sg-JbU" id="tO7-Td-bHW"/>
+                <outlet property="imageW" destination="tMT-g0-yvV" id="auh-Ab-6SL"/>
                 <outlet property="infoView" destination="fqr-tN-bLF" id="Y0H-Cl-kNz"/>
                 <outlet property="infoW" destination="oEC-Bk-gv8" id="Rfm-up-JPM"/>
                 <outlet property="lanBanView" destination="3Fd-hC-jLh" id="h7S-rh-UZy"/>

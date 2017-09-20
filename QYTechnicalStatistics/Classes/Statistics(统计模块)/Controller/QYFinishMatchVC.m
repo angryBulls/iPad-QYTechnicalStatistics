@@ -32,7 +32,7 @@
 #pragma mark 页面处理
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    _finisnTag = 1;
+    
     self.navigationController.navigationBar.hidden  = YES;
     [self initNavigation];
     [self initTableView];
@@ -122,7 +122,7 @@
     }
     else
     {
-        header.text = [NSString stringWithFormat:@"加时赛%ld",_finisnTag];
+        header.text = [NSString stringWithFormat:@"加时赛%ld",_finisnTag-4];
         
     }
     header.font = [UIFont systemFontOfSize:scaleX_ByPx(34)];

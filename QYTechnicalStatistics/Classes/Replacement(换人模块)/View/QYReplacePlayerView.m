@@ -20,8 +20,9 @@
 @property (strong, nonatomic) UILabel * nameLabel;
 // 号码
 @property (nonatomic ,strong) UILabel * numLabel;
-// 上下场标识Label(Button)
-@property (strong, nonatomic) UIButton * switchoverBtn;
+
+
+
 
 @end
 
@@ -35,6 +36,7 @@
         // 添加手势
         UITapGestureRecognizer * tapGestureRecognizer =
         [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPress)];
+        
         [self addGestureRecognizer:tapGestureRecognizer];
         
     }
@@ -44,8 +46,9 @@
 - (void)tapPress {
     
     self.coverView.backgroundColor = [UIColor colorWithHexRGB:@"#000000" andAlpha:0.3f];
-    if ([self.delegate respondsToSelector:@selector(tapReplacePlayerView:)]) {
-        [self.delegate tapReplacePlayerView:self];
+    
+    if ([self.delegate respondsToSelector:@selector(tapReplacePlayerView:andQYreplaceModel:)]) {
+        [self.delegate tapReplacePlayerView:self andQYreplaceModel:self.playModel];
     }
 }
 
@@ -61,10 +64,10 @@
     [self.infoView scaleFrameMake:0 :226-50 :CGScaleGetWidth(self.frame) :50];
     // 号码
     [self.numLabel scaleFrameMake:16 :11 :30 :30];
-    self.numLabel.text = @"8";
+    
     // 名字
     [self.nameLabel scaleFrameMake:52 :11 :CGScaleGetWidth(self.frame)-52 :30];
-    self.nameLabel.text = @"wwww";
+    
     // 设置上下场标识按钮尺寸
     [self.switchoverBtn scaleFrameMake:0
                                       :CGScaleGetMaxY(self.iconView.frame)+10
@@ -74,6 +77,20 @@
     // 设置遮盖尺寸
     self.coverView.frame = self.bounds;
 }
+
+
+-(void)setPlayModel:(TSPlayerModel *)playModel{
+    _playModel = playModel;
+    
+    [self.iconView sd_setImageWithURL:[NSURL URLWithString:playModel.photo] completed:nil];
+    
+    self.nameLabel.text = playModel.name;
+    self.numLabel.text = playModel.gameNum;
+    
+    self.switchoverBtn.selected = [playModel.playingStatus boolValue];
+    
+}
+
 
 // 移除遮盖
 - (void)removeCoverView {
@@ -85,8 +102,7 @@
     
     _isHost = isHost;
     
-    // 判断显示上(YES)下(NO)场标识
-    self.switchoverBtn.selected = _isHost;
+
 }
 
 #pragma mark - lazy

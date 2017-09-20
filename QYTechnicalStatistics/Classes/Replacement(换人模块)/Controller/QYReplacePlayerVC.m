@@ -10,7 +10,7 @@
 #import "QYReplacementPlayersView.h"
 #define kTestRowCount 3
 
-@interface QYReplacePlayerVC () <UIScrollViewDelegate>
+@interface QYReplacePlayerVC () <UIScrollViewDelegate,QYReplacementPlayersViewDelegate>
 
 @property (strong, nonatomic) UIImageView * topView;
 @property (strong, nonatomic) UIScrollView * scrollView;
@@ -19,12 +19,17 @@
 @property (strong, nonatomic) QYReplacementPlayersView * hostPlayersView;
 @property (strong, nonatomic) QYReplacementPlayersView * guestPlayersView;
 
+
 // 主队上下场每行头标题数组
 @property (strong, nonatomic) NSMutableArray * hostSectionTitleArray;
 // 客队上下场每行头标题数组
 @property (strong, nonatomic) NSMutableArray * guestSectionTitleArray;
 // 进入比赛按钮
 @property (strong, nonatomic) UIButton * enterFieldButton;
+
+//换人字典
+@property (nonatomic ,strong) NSMutableDictionary *insterDic1;
+@property (nonatomic ,strong) NSMutableDictionary *insterDic2;
 
 @end
 
@@ -195,6 +200,7 @@
     
     if (!_hostPlayersView) {
         _hostPlayersView = [QYReplacementPlayersView createReplacementPlayersView];
+        _hostPlayersView.delegate = self;
         [self.scrollView addSubview:_hostPlayersView];
     }
     return _hostPlayersView;
@@ -205,6 +211,8 @@
     
     if (!_guestPlayersView) {
         _guestPlayersView = [QYReplacementPlayersView createReplacementPlayersView];
+        _guestPlayersView.isGuest = 1;
+        _guestPlayersView.delegate = self;
         [self.scrollView addSubview:_guestPlayersView];
     }
     return _guestPlayersView;
@@ -232,6 +240,14 @@
 
 // 换人界面进入比赛按钮监听方法
 - (void)enterFieldClick:(UIButton *)enterFieldBtn {
+    
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(backInsterDic1:andInsterDic2:)] && _insterDic1.count &&_insterDic2.count) {
+        [self.delegate backInsterDic1:_insterDic1 andInsterDic2:_insterDic2];
+        
+    }
+    
+    
     
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -268,6 +284,14 @@
 
 #pragma mark - <UIScrollViewDelegate>
 
+#pragma mark - <QYReplacementPlayersViewDelegate>
 
+-(void)backPlaysChangeDic1:(NSMutableDictionary *)insterDic1 AndPlaysChangeDic2:(NSMutableDictionary *)insterDic2{
+    self.insterDic1 = insterDic1;
+    self.insterDic2 = insterDic2;
+    
+    
+    
+}
 
 @end

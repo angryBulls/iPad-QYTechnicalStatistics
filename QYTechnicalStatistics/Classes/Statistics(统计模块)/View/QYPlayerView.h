@@ -23,6 +23,9 @@
 @property (nonatomic ,strong)TSPlayerModel *playerModel;
 @property (nonatomic ,assign)BOOL guest;
 @property (nonatomic, copy) NSString * playerNum;
+// 球员按钮
+@property (strong, nonatomic) UIButton * playerBtn;
+
 @property (nonatomic, weak) id<QYPlayerViewDelegate>delegate;
 @property (nonatomic, assign) BOOL isGaming;
 
@@ -32,6 +35,9 @@
                                    frameX:(CGFloat)frameX
                                    frameY:(CGFloat)frameY;
 - (void)show;
+
+- (void)setPlayerTitle:(NSString *)title;
+
 
 @end
 

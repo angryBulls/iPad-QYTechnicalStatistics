@@ -13,8 +13,8 @@
 #import "QYReplacePlayerVC.h"
 #import "QYChangeVC.h"
 #import "QYFinishMatchVC.h"
-#import "TSCalculationTool.h"
-@interface QYStatisticsVC ()<QYStadiumViewDelegate,QYRegistrationMinViewDelegate>
+
+@interface QYStatisticsVC ()<QYStadiumViewDelegate,QYRegistrationMinViewDelegate,QYReplacePlayerVCDelegate,QYChangeVCDelegate>
 
 @property (strong, nonatomic) QYRegistrationTitleView * registrationTitleView;
 @property (strong, nonatomic) QYRegistrationMinView * registrationMinView;
@@ -23,6 +23,7 @@
 
 @property (nonatomic ,assign) BOOL isGame;
 @property (nonatomic ,assign) BOOL endQuarter;
+
 
 @property (nonatomic ,strong)NSMutableArray *insertDBDictArray;
 
@@ -163,93 +164,6 @@
 
 -(void)backStatusWithPlayer:(Player *)p Status:(NSInteger)status{
     
-//    if (_isGame ) {
-//        
-//        switch (status) {
-//            case 0:
-//                //助攻
-//                break;
-//            case 1:
-//                //1分
-//                if (p.team) {
-//                    
-//                    _registrationTitleView.guestTeamScoreLabel.score  += 1;
-//                    
-//                    _registrationTitleView.totalGuestTeamLabel.score += 1;
-//                    
-//                }
-//                else{
-//                    
-//                    _registrationTitleView.hostTeamScoreLabel.score +=1;
-//                    _registrationTitleView.totalHostTeamLabel.score +=1;
-//                }
-//                
-//                break;
-//                
-//            case 2:
-//                //2分
-//                if (p.team) {
-//                    _registrationTitleView.guestTeamScoreLabel.score  += 2;
-//                    
-//                    _registrationTitleView.totalGuestTeamLabel.score += 2;
-//                    
-//                }
-//                else{
-//                    _registrationTitleView.hostTeamScoreLabel.score +=2;
-//                    _registrationTitleView.totalHostTeamLabel.score +=2;
-//                    
-//                }
-//                break;
-//                
-//            case 3:
-//                //3分
-//                if (p.team) {
-//                    _registrationTitleView.guestTeamScoreLabel.score  += 3;
-//                    
-//                    _registrationTitleView.totalGuestTeamLabel.score += 3;
-//                    
-//                }
-//                else{
-//                    
-//                    _registrationTitleView.hostTeamScoreLabel.score +=3;
-//                    _registrationTitleView.totalHostTeamLabel.score +=3;
-//                    
-//                }
-//                break;
-//                
-//            case 4:
-//                //盖帽
-//                break;
-//                
-//            case 5:
-//                //犯规
-//                if (p.team) {
-//                    NSInteger scroe =   [_registrationMinView.guestOperationView.foulScoreLabel.text integerValue];
-//                    scroe +=1;
-//                    
-//                    _registrationMinView.guestOperationView.foulScoreLabel.text  = [NSString stringWithFormat:@"%ld",scroe];
-//                    
-//                }
-//                else{
-//                    NSInteger scroe =   [_registrationMinView.hostOperationView.foulScoreLabel.text integerValue];
-//                    scroe +=1;
-//                    
-//                    _registrationMinView.hostOperationView.foulScoreLabel.text  = [NSString stringWithFormat:@"%ld",scroe];
-//                    
-//                }
-//                break;
-//                
-//            case 6:
-//                //篮板
-//                break;
-//                
-//            default:
-//                break;
-//                
-//        }
-//
-//    }
-    
 }
 
 -(void)backResult:(NSMutableDictionary *)resultDic{
@@ -288,8 +202,13 @@
         [self.tSDBManager deleteObjectByInsertDBDict:[self.insertDBDictArray lastObject]];
         
         NSDictionary *insertDBDict = [self.insertDBDictArray lastObject];
-        if ((11 == [insertDBDict[BnfBehaviorType] intValue]) || (12 == [insertDBDict[BnfBehaviorType] intValue])) { // 换人语音识别
-            // [self.voicePlayersView updatePlayersStatus];
+        
+        if ((11 == [insertDBDict[BnfBehaviorType] intValue]) || (12 == [insertDBDict[BnfBehaviorType] intValue])) { // 换人
+            [self.insertDBDictArray removeLastObject];
+            //算作两步，1）下场 2）上场
+            [self.tSDBManager deleteObjectByInsertDBDict:[self.insertDBDictArray lastObject]];
+            
+            
         }
         
         [self.insertDBDictArray removeLastObject];
@@ -297,12 +216,19 @@
         [self p_updateStatisticsData];
     }
 }
+#pragma mark QYChangeVCDelegate
+-(void)finishChange{
+    [self p_updateStatisticsData];
+    
+    
+}
 
 
 #pragma mark QYRegistrationMinViewDelegate
 
 -(void)startGaming{
     _endQuarter = 0;
+    
     _isGame = 1;
 }
 
@@ -310,17 +236,20 @@
     
     _endQuarter = 1;
     _isGame = 0;
-    
+    [[NSUserDefaults standardUserDefaults] objectForKey:lastTime];
     
     
 }
 - (void)changeInfoOfMatch{
     QYChangeVC *vc = [[QYChangeVC alloc] init];
+    vc.delegate = self;
     
     [self.navigationController pushViewController:vc animated:YES];
 }
 -(void)finishGameWithQuarter:(NSInteger)quarter{
-    [self.navigationController pushViewController:[QYFinishMatchVC new] animated:YES];
+    QYFinishMatchVC *vc= [QYFinishMatchVC new];
+    vc.finisnTag = QuarterOne;
+    [self.navigationController pushViewController:vc animated:YES];
     
     
 }
@@ -328,11 +257,40 @@
 - (void)replacePlayerInStadiumView:(QYStadiumView *)stadiumView {
     
     // 跳转换人页面
+    QYReplacePlayerVC *vc = [[QYReplacePlayerVC alloc] init];
+    vc.delegate = self;
     [self.navigationController pushViewController:
-     [QYReplacePlayerVC createReplacePlayerVC] animated:YES];
+     vc animated:YES];
 }
 
+#pragma mark - <QYReplacePlayerVCDelegate>
 
+
+-(void)backInsterDic1:(NSMutableDictionary *)dic1 andInsterDic2:(NSMutableDictionary *)dic2{
+    
+    [self.insertDBDictArray addObject:dic1];
+    
+    [_tSDBManager saveOneResultDataWithDict:dic1 saveDBStatusSuccessBlock:^(NSDictionary *insertDBDict) {
+        
+    } saveDBStatusFailBlock:^(NSString *error) {
+        
+    }];
+    
+    [self p_updateStatisticsData];
+    
+    
+    [self.insertDBDictArray addObject:dic2];
+    
+    [_tSDBManager saveOneResultDataWithDict:dic2 saveDBStatusSuccessBlock:^(NSDictionary *insertDBDict) {
+        
+    } saveDBStatusFailBlock:^(NSString *error) {
+        
+    }];
+    
+    [self p_updateStatisticsData];
+    
+    
+}
 
 #pragma mark - <dealloc>
 - (void)dealloc {
@@ -378,7 +336,11 @@
     [self p_updateStatisticsData];
 }
 
-
+#pragma mark - 每隔30秒更新一次球员的上场时间
+- (void)p_updataPlayingTimesOnce {
+    TSDBManager *tSDBManager = [[TSDBManager alloc] init];
+    [tSDBManager udatePlayingTimesOnce];
+}
 
 #pragma mark - 提交本节数据到BCBC服务器
 

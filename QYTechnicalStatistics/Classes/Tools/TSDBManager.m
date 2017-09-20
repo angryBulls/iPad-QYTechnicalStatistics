@@ -124,7 +124,7 @@
     if (0 == [insertDBDict[BnfBehaviorType] intValue]) { // 这是一条暂停数据，从gameTable表中删除
         [self p_updateDBByGameTabelKey:GameId insertDBDict:insertDBDict count:-1];
     } else if ((11 == [insertDBDict[BnfBehaviorType] intValue]) || (12 == [insertDBDict[BnfBehaviorType] intValue])) { // 这是一条球员上场或下场的数据
-        [self p_updateDBTeamCheckPlayingStatusWithInsertDBDict:insertDBDict operationType:0];
+        [self p_updateDBTeamCheckPlayingStatusWithInsertDBDict:insertDBDict operationType:2];
     } else { // 这是一条球员数据，从playerTable表中删除
         NSString *playerId = [self p_getPlayerIdWithinsertDBDict:insertDBDict];
         if (0 == playerId.length) {
@@ -273,6 +273,16 @@
                     playingStatus = 1;
                 }
                 subDict[@"playingStatus"] = [NSString stringWithFormat:@"%d", playingStatus];
+            } else if (2 == operationType) { // 表示球员正常的上场或下场语音命令识别
+                int playingStatus = 0;
+                if (11 == [insertDBDict[BnfBehaviorType] intValue]) {
+                    playingStatus = 1;
+                } else if (12 == [insertDBDict[BnfBehaviorType] intValue]) {
+                    playingStatus = 0;
+                }
+                subDict[@"playingStatus"] = [NSString stringWithFormat:@"%d", playingStatus];
+                
+                
             }
         }
     }];
@@ -338,7 +348,7 @@
     [self.store putObject:object withId:objectId intoTable:tableName];
 }
 
-// 修改一条球员数据（包括：罚球、2分和3分命中数）
+// 修改一条球员数据（包括：罚球、2分和3分命中数,篮板，助攻，犯规，盖帽）
 - (void)updateDBPlayerTabelByPlayerId:(NSString *)playerId dataType:(NSString *)dataType newValue:(NSString *)newValue successReturnBlock:(UpdatePalyerTableSuccessBlock)successReturnBlock {
     NSString *stageCount = [self.store getObjectById:GameId fromTable:GameTable][CurrentStage];
     
@@ -350,6 +360,7 @@
     // 取出该球员当前节需要修改的字典数据，并转换成可变字典
     NSMutableDictionary *stagePlayerDict = [queryPlayerDict[stageCount] mutableCopy];
     stagePlayerDict[dataType] = newValue;
+    
     // 修改成功后，更新该球员的数据库表
     queryPlayerDict[stageCount] = stagePlayerDict;
     

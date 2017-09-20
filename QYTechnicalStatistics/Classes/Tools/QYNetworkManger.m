@@ -187,8 +187,10 @@
     NSDictionary *encodeDic = [[NSDictionary alloc] initWithObjectsAndKeys:myString, @"body", nil];
     
     [self p_PrivateGET:TS_SERVER_URL_TEST paramsDict:encodeDic showActivityView:NO responseSuccess:^(id responseObject) {
+        
         success(responseObject);
     } responseFailed:^(NSError *error) {
+        
         failed(error);
     }];
 }
@@ -210,6 +212,7 @@
             success(responseObject);
         } responseFailed:^(NSError *error) {
             failed(error);
+            
         }];
     }];
 }

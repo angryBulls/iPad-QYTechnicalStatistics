@@ -9,11 +9,18 @@
 #import "QYChangeVC.h"
 #import "QYRegistrationHeaderView.h"
 #import "PlayerDataCell.h"
-@interface QYChangeVC ()<UITableViewDelegate,UITableViewDataSource>
+#import "TSPlayerModel.h"
+#import "TSManagerPlayerModel.h"
+
+@interface QYChangeVC ()<UITableViewDelegate,UITableViewDataSource,PlayerDataCellDelegate>
+
+@property (nonatomic ,strong)TSDBManager *tSDBManager;
+
 
 @property (nonatomic ,strong)UITableView *tableView;
 
-@property (nonatomic ,strong)NSMutableArray *dataSouce;
+@property (nonatomic ,strong)NSMutableArray *hostPlayerDataArray;
+@property (nonatomic ,strong)NSMutableArray *guestPlayerDataArray;
 
 
 @end
@@ -22,7 +29,12 @@
 
 
 #pragma mark 懒加载
-
+-(TSDBManager *)tSDBManager{
+    if (_tSDBManager == nil) {
+        _tSDBManager = [[TSDBManager alloc] init];
+    }
+    return _tSDBManager;
+}
 
 #pragma mark 页面处理
 - (void)viewDidLoad {
@@ -32,8 +44,71 @@
     [self initNavigation];
     [self initTableView];
     self.view.backgroundColor = [UIColor whiteColor];
+    [self p_setupHostPlayerData];
+    [self p_setupGuestPlayerData];
+    
     
 }
+
+
+- (void)p_setupHostPlayerData {
+    NSArray *playerArrayH = [self.tSDBManager getObjectById:TeamCheckID_H fromTable:TSCheckTable];
+    NSArray *playerModelArrayH = [TSPlayerModel mj_objectArrayWithKeyValuesArray:playerArrayH];
+    
+    NSMutableArray *hostPlayerDataArray = [NSMutableArray array];
+    [playerModelArrayH enumerateObjectsUsingBlock:^(TSPlayerModel *playerModel, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary *playerDataDict = [self.tSDBManager getObjectById:playerModel.ID fromTable:PlayerTable];
+        
+        
+        NSString *stageCount = [self.tSDBManager getObjectById:GameId fromTable:GameTable][CurrentStage];
+        
+        NSDictionary *stagePlayerDataDict = playerDataDict[stageCount];
+        
+        if (!stagePlayerDataDict) {
+            stagePlayerDataDict = @{};
+        }
+        
+        TSManagerPlayerModel *tPlayerModel = [TSManagerPlayerModel mj_objectWithKeyValues:stagePlayerDataDict];
+        tPlayerModel.playerId = playerDataDict[@"playerId"];
+        tPlayerModel.playerName = playerModel.name;
+        tPlayerModel.playerNumber = playerModel.gameNum;
+        tPlayerModel.photo = playerModel.photo;
+        tPlayerModel.changeStatus = NO;
+        
+        [hostPlayerDataArray addObject:tPlayerModel];
+        
+        
+    }];
+    self.hostPlayerDataArray = hostPlayerDataArray;
+    
+}
+
+- (void)p_setupGuestPlayerData {
+    NSArray *playerArrayG = [self.tSDBManager getObjectById:TeamCheckID_G fromTable:TSCheckTable];
+    NSArray *playerModelArrayG = [TSPlayerModel mj_objectArrayWithKeyValuesArray:playerArrayG];
+    
+    NSMutableArray *guestPlayerDataArray = [NSMutableArray array];
+    [playerModelArrayG enumerateObjectsUsingBlock:^(TSPlayerModel *playerModel, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary *playerDataDict = [self.tSDBManager getObjectById:playerModel.ID fromTable:PlayerTable];
+        NSString *stageCount = [self.tSDBManager getObjectById:GameId fromTable:GameTable][CurrentStage];
+        
+        NSDictionary *stagePlayerDataDict = playerDataDict[stageCount];
+        if (!stagePlayerDataDict) {
+            stagePlayerDataDict = @{};
+        }
+        TSManagerPlayerModel *tPlayerModel = [TSManagerPlayerModel mj_objectWithKeyValues:stagePlayerDataDict];
+        tPlayerModel.playerId = playerDataDict[@"playerId"];
+        tPlayerModel.playerName = playerModel.name;
+        tPlayerModel.playerNumber = playerModel.gameNum;
+        tPlayerModel.photo = playerModel.photo;
+        tPlayerModel.changeStatus = NO;
+        
+        [guestPlayerDataArray addObject:tPlayerModel];
+    }];
+    self.guestPlayerDataArray = guestPlayerDataArray;
+    
+}
+
 
 -(void)initNavigation{
     UIView * header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, scaleW_ByPx(2048), scaleY_ByPx(128))];
@@ -47,9 +122,7 @@
     lable.font = [UIFont systemFontOfSize:scaleY_ByPx(30)];
     lable.textColor = [UIColor whiteColor];
     lable.text = @"修改本节比赛";
-    
-    
-    
+
     
 }
 
@@ -166,12 +239,25 @@
 
 #pragma mark 网络请求
 
+#pragma mark - PlayerDataCellDelegate
+-(void)changePlayerDataAction:(TSManagerPlayerModel *)playerModel dataType:(NSString *)dataType andNewValue:(NSInteger)newValue{
+    // 确定修改数据
+    NSString *returnValue = [NSString stringWithFormat:@"%ld",newValue];
+    [self.tSDBManager updateDBPlayerTabelByPlayerId:playerModel.playerId dataType:dataType newValue:returnValue successReturnBlock:^{
+        
+    }];
+    
+    
+}
 #pragma mark 代理
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 2;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    if (section == 0) {
+        return _hostPlayerDataArray.count;
+    }
+    return _guestPlayerDataArray.count;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     PlayerDataCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
@@ -180,6 +266,13 @@
     }
     cell.contentView.backgroundColor = [UIColor colorWithHexRGB:@"#D9E2F3" andAlpha:0.88f];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if (indexPath.section) {
+        cell.tPlayModel = _guestPlayerDataArray[indexPath.row];
+    }
+    else{
+        cell.tPlayModel = _hostPlayerDataArray[indexPath.row];
+    }
+    cell.delegate = self;
     return cell;
     
 }
@@ -203,7 +296,6 @@
     teamLabel.clipsToBounds = YES;
     
     [self initSectionHeaderByView:header];
-    
     return header;
 }
 
@@ -217,9 +309,11 @@
 
 #pragma mark 点击事件
 -(void)finishChageData{
-    
-    
+    if (self.delegate && [_delegate respondsToSelector:@selector(finishChange)]) {
+        [_delegate finishChange];
+    }
     [self.navigationController popViewControllerAnimated:YES];
 }
+
 
 @end
