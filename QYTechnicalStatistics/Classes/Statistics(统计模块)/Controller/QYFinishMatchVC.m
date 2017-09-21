@@ -8,37 +8,114 @@
 
 #import "QYFinishMatchVC.h"
 #import "QYFinishCell.h"
+#import "TSPlayerModel.h"
+#import "TSManagerPlayerModel.h"
+#import "TSVoiceViewModel.h"
 
 #define LabelW (1024 -29)/7
 #define Label2W (1024 -29)*2/9
 #define LabelH self.frame.size.height *2
 @interface QYFinishMatchVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (strong,nonatomic) UITableView *tableView;
-@property (nonatomic ,strong)NSMutableArray *dataSouce;
+//@property (nonatomic ,strong)NSMutableArray *dataSouce;
+
+@property (nonatomic ,strong)NSMutableArray *hostPlayerDataArray;
+@property (nonatomic ,strong)NSMutableArray *guestPlayerDataArray;
+
+@property (nonatomic ,strong)UILabel *timeLabel;
+@property (nonatomic ,strong)UILabel *teamInfoLabel;
+@property (nonatomic ,strong)UILabel *gameInfoLabel;
+@property (nonatomic, copy)NSString *finisnTag;
 
 @end
 
 @implementation QYFinishMatchVC
 #pragma mark 懒加载
 
--(NSMutableArray *)dataSouce{
-    if (_dataSouce == nil) {
-        _dataSouce = [NSMutableArray array];
-    }
-    
-    return _dataSouce;
-}
 
 #pragma mark 页面处理
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.navigationController.navigationBar.hidden  = YES;
+    
+    
+    [self p_setupMatchData];
+    [self p_setupHostPlayerData];
+    [self p_setupGuestPlayerData];
+    
     [self initNavigation];
     [self initTableView];
     self.view.backgroundColor = [UIColor whiteColor];
+    [self p_getGameInfo];
+}
+-(void)p_setupMatchData{
+     NSMutableDictionary *checkTableDic = [[self.tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    _finisnTag = checkTableDic[@"currentStage"] ;
     
 }
+
+- (void)p_setupHostPlayerData {
+    NSArray *playerArrayH = [self.tSDBManager getObjectById:TeamCheckID_H fromTable:TSCheckTable];
+    NSArray *playerModelArrayH = [TSPlayerModel mj_objectArrayWithKeyValuesArray:playerArrayH];
+    
+    NSMutableArray *hostPlayerDataArray = [NSMutableArray array];
+    [playerModelArrayH enumerateObjectsUsingBlock:^(TSPlayerModel *playerModel, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary *playerDataDict = [self.tSDBManager getObjectById:playerModel.ID fromTable:PlayerTable];
+        
+        
+        NSString *stageCount = [self.tSDBManager getObjectById:GameId fromTable:GameTable][CurrentStage];
+        
+        NSDictionary *stagePlayerDataDict = playerDataDict[stageCount];
+        
+        if (!stagePlayerDataDict) {
+            stagePlayerDataDict = @{};
+        }
+        
+        TSManagerPlayerModel *tPlayerModel = [TSManagerPlayerModel mj_objectWithKeyValues:stagePlayerDataDict];
+        tPlayerModel.playerId = playerDataDict[@"playerId"];
+        tPlayerModel.playerName = playerModel.name;
+        tPlayerModel.playerNumber = playerModel.gameNum;
+        tPlayerModel.photo = playerModel.photo;
+        tPlayerModel.changeStatus = NO;
+        tPlayerModel.positional  = playerModel.positional;
+        tPlayerModel.playTimes = playerModel.playingTimes;
+        
+        [hostPlayerDataArray addObject:tPlayerModel];
+        
+        
+    }];
+    self.hostPlayerDataArray = hostPlayerDataArray;
+    
+}
+
+- (void)p_setupGuestPlayerData {
+    NSArray *playerArrayG = [self.tSDBManager getObjectById:TeamCheckID_G fromTable:TSCheckTable];
+    NSArray *playerModelArrayG = [TSPlayerModel mj_objectArrayWithKeyValuesArray:playerArrayG];
+    
+    NSMutableArray *guestPlayerDataArray = [NSMutableArray array];
+    [playerModelArrayG enumerateObjectsUsingBlock:^(TSPlayerModel *playerModel, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary *playerDataDict = [self.tSDBManager getObjectById:playerModel.ID fromTable:PlayerTable];
+        NSString *stageCount = [self.tSDBManager getObjectById:GameId fromTable:GameTable][CurrentStage];
+        
+        NSDictionary *stagePlayerDataDict = playerDataDict[stageCount];
+        if (!stagePlayerDataDict) {
+            stagePlayerDataDict = @{};
+        }
+        TSManagerPlayerModel *tPlayerModel = [TSManagerPlayerModel mj_objectWithKeyValues:stagePlayerDataDict];
+        tPlayerModel.playerId = playerDataDict[@"playerId"];
+        tPlayerModel.playerName = playerModel.name;
+        tPlayerModel.playerNumber = playerModel.gameNum;
+        tPlayerModel.photo = playerModel.photo;
+        tPlayerModel.changeStatus = NO;
+        tPlayerModel.positional  = playerModel.positional;
+        tPlayerModel.playTimes = playerModel.playingTimes;
+        [guestPlayerDataArray addObject:tPlayerModel];
+    }];
+    self.guestPlayerDataArray = guestPlayerDataArray;
+    
+}
+
 
 -(void)initNavigation{
     UIView * header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, scaleW_ByPx(2048), scaleY_ByPx(256))];
@@ -46,26 +123,26 @@
     header.backgroundColor = [UIColor colorWithHexRGB:@"#3F85FF" andAlpha:1];
     
     
-    UILabel *lable = [[UILabel alloc] initWithFrame:CGRectMake(scaleX_ByPx(31), scaleY_ByPx(61), SCREEN_WIDTH, scaleH_ByPx(31))];
-    [header addSubview:lable];
-    lable.textAlignment = NSTextAlignmentLeft;
-    lable.font = [UIFont systemFontOfSize:scaleY_ByPx(32)];
-    lable.textColor = [UIColor whiteColor];
-    lable.text = @"比赛时间：2017-05-21 10:00";
+    _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(scaleX_ByPx(31), scaleY_ByPx(61), SCREEN_WIDTH, scaleH_ByPx(31))];
+    [header addSubview:_timeLabel];
+    _timeLabel.textAlignment = NSTextAlignmentLeft;
+    _timeLabel.font = [UIFont systemFontOfSize:scaleY_ByPx(32)];
+    _timeLabel.textColor = [UIColor whiteColor];
+//    lable.text = @"比赛时间：2017-05-21 10:00";
     
-    UILabel *lable2 = [[UILabel alloc] initWithFrame:CGRectMake(scaleX_ByPx(31), scaleY_ByPx(129), SCREEN_WIDTH, scaleH_ByPx(31))];
-    [header addSubview:lable2];
-    lable2.textAlignment = NSTextAlignmentLeft;
-    lable2.font = [UIFont systemFontOfSize:scaleY_ByPx(32)];
-    lable2.textColor = [UIColor whiteColor];
-    lable2.text = @"[大区赛] —— [东南赛区] —— [安徽市] —— [主场：传奇队] —— [客场：老鹰队]";
+    _teamInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(scaleX_ByPx(31), scaleY_ByPx(129), SCREEN_WIDTH, scaleH_ByPx(31))];
+    [header addSubview:_teamInfoLabel];
+    _teamInfoLabel.textAlignment = NSTextAlignmentLeft;
+    _teamInfoLabel.font = [UIFont systemFontOfSize:scaleY_ByPx(32)];
+    _teamInfoLabel.textColor = [UIColor whiteColor];
+
     
-    UILabel *lable3 = [[UILabel alloc] initWithFrame:CGRectMake(scaleX_ByPx(31), scaleY_ByPx(194), SCREEN_WIDTH, scaleH_ByPx(31))];
-    [header addSubview:lable3];
-    lable3.textAlignment = NSTextAlignmentLeft;
-    lable3.font = [UIFont systemFontOfSize:scaleY_ByPx(32)];
-    lable3.textColor = [UIColor whiteColor];
-    lable3.text = @"[主裁判:王宇龙] —— [第一副裁:王宇龙] —— [第二副裁:王宇龙] —— [技术代表:王宇龙] —— [技术统计:王宇";
+    _gameInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(scaleX_ByPx(31), scaleY_ByPx(194), SCREEN_WIDTH, scaleH_ByPx(31))];
+    [header addSubview:_gameInfoLabel];
+    _gameInfoLabel.textAlignment = NSTextAlignmentLeft;
+    _gameInfoLabel.font = [UIFont systemFontOfSize:scaleY_ByPx(32)];
+    _gameInfoLabel.textColor = [UIColor whiteColor];
+
     
 }
 
@@ -107,7 +184,6 @@
         l.font = [UIFont systemFontOfSize:scaleX_ByPx(30)];
         l.text = infoArr[i];
         
-        
     }
     
     return view;
@@ -117,12 +193,27 @@
     UILabel *header = [[UILabel alloc] initWithFrame:scaleFrameMake(29, 256, SCREEN_WIDTH*2 - 29*2, 91)];
     
     header.textAlignment = NSTextAlignmentCenter;
-    if (_finisnTag<AddOne) {
-        header.text = [NSString stringWithFormat:@"第%ld节",_finisnTag];
+    if ([_finisnTag isEqualToString:StageOne]) {
+        header.text = @"第一节";
+    }else if ([_finisnTag isEqualToString:StageTwo]){
+        header.text = @"第二节";
+    }
+    else if ([_finisnTag isEqualToString:StageThree]){
+        header.text = @"第三节";
+    }
+    else if ([_finisnTag isEqualToString:StageFour]){
+        header.text = @"第四节";
+    }else if ([_finisnTag isEqualToString:OverTime1]){
+        header.text = @"加时赛 1";
+    }
+    else if ([_finisnTag isEqualToString:OverTime2]){
+        header.text = @"加时赛 2";
+    }else if ([_finisnTag isEqualToString:OverTime3]){
+        header.text = @"加时赛 3";
     }
     else
     {
-        header.text = [NSString stringWithFormat:@"加时赛%ld",_finisnTag-4];
+        header.text = @"比赛结束";
         
     }
     header.font = [UIFont systemFontOfSize:scaleX_ByPx(34)];
@@ -138,7 +229,7 @@
     _tableView.dataSource = self;
     _tableView.backgroundColor = [UIColor whiteColor];
     _tableView.tableFooterView = [self footerView];
-    if (_finisnTag == GameFinish) {
+    if ([_finisnTag isEqualToString:finish]) {
         _tableView.tableHeaderView = [self creatFinshHeader];
     }
     else{
@@ -194,6 +285,34 @@
     return view;
 }
 
+
+
+#pragma mark set方法
+-(void)setGameModel:(TSGameModel *)gameModel{
+    _gameModel = gameModel;
+    
+    
+    NSString *str =  gameModel.scoreTotalH;
+}
+-(void)setTSDBManager:(TSDBManager *)tSDBManager{
+    _tSDBManager = tSDBManager;
+}
+
+
+-(void)p_getGameInfo{
+    
+    NSMutableDictionary *gameTableDict = [[self.tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    _timeLabel.text = [NSString stringWithFormat:@"比赛时间:%@",gameTableDict[@"matchDate"]];
+    
+    NSMutableDictionary *checkTableDic = [[self.tSDBManager getObjectById:GameCheckID fromTable:TSCheckTable] mutableCopy];
+    
+    _teamInfoLabel.text = [NSString stringWithFormat:@"[%@] —— [%@] —— [%@] —— [主场：%@] —— [客场：%@]",checkTableDic[@"gameLevel"],checkTableDic[@"gameArea"],checkTableDic[@"gameProvince"],checkTableDic[@"teamNameH"],checkTableDic[@"teamNameG"]];
+    
+
+    _gameInfoLabel.text = [NSString stringWithFormat:@"[主裁判:%@] —— [第一副裁:%@] —— [第二副裁:%@] —— [技术代表:%@] —— [技术统计:%@ %@]",checkTableDic[@"mainReferee"],checkTableDic[@"firstReferee"],checkTableDic[@"secondReferee"],checkTableDic[@"td"],checkTableDic[@"ts01"],checkTableDic[@"ts02"]];
+    
+}
+
 #pragma mark 代理
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -201,7 +320,10 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 14;
+    if (!section) {
+        return _hostPlayerDataArray.count;
+    }
+    return _guestPlayerDataArray.count;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return scaleX_ByPx(102);
@@ -210,10 +332,17 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     QYFinishCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (cell == nil) {
-        cell = [[QYFinishCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-        
+        cell = [[QYFinishCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];  
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+;
+    if (indexPath.section) {
+        cell.tPlayModel = _guestPlayerDataArray[indexPath.row];
+    }
+    else{
+        cell.tPlayModel = _hostPlayerDataArray[indexPath.row];
+    }
+    
     return cell;
 }
 
@@ -255,11 +384,13 @@
     infoLabel.font = [UIFont systemFontOfSize:scaleX_ByPx(32)];
     [teamView addSubview:infoLabel];
     infoLabel.textAlignment = NSTextAlignmentLeft;
+    NSMutableDictionary *gameTableDict = [[_tSDBManager getObjectById:GameCheckID fromTable:TSCheckTable] mutableCopy];
     if (section) {
-        infoLabel.text = @"遨游队   主教练：李大志";
+        
+        infoLabel.text = [NSString stringWithFormat:@"%@    主教练：%@",gameTableDict[@"teamNameG"],gameTableDict[@"teamCoachG"]];
     }
     else{
-        infoLabel.text = @"雄鹰队   主教练：王大志";
+        infoLabel.text = [NSString stringWithFormat:@"%@    主教练：%@",gameTableDict[@"teamNameH"],gameTableDict[@"teamCoachH"]];
     }
     
     return teamView;
@@ -339,13 +470,171 @@
 }
 
 -(void)tiJiao{
+    
+    [self p_sendCurrentStageData];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@"600" forKey:lastTime];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    
     [self.navigationController popViewControllerAnimated:YES];
     
 }
 
 -(void)joinOverTime{
+    
     [self.navigationController popViewControllerAnimated:YES];
     
 }
+
+#pragma mark - 提交本节数据到BCBC服务器
+- (void)p_sendCurrentStageData {
+    // 如果是最后一节，并且比分相同，则拒绝提交
+    if ([self p_refuseIfDivideAndLastStage]) {
+        [SVProgressHUD showInfoWithStatus:@"胜负未分，无法提交"];
+        return;
+    }
+    
+    [SVProgressHUD show];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
+    
+    NSString *stageCount = [self.tSDBManager getObjectById:GameId fromTable:GameTable][CurrentStage];
+    
+    
+    NSMutableDictionary *paramsDict = [NSMutableDictionary dictionary];
+    
+    TSVoiceViewModel *voiceViewModel = [[TSVoiceViewModel alloc] initWithPramasDict:paramsDict];
+    
+    
+    [voiceViewModel setBlockWithReturnBlock:^(id returnValue) {
+        
+        if (returnValue[@"entity"][@"matchInfoId"]) {
+            NSMutableDictionary *gameTableDict = [[self.tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+            gameTableDict[@"matchInfoId"] = returnValue[@"entity"][@"matchInfoId"];
+            [self.tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
+        }
+        [self p_updateCurrentStageIfSendDataSuccess];
+        
+#pragma mark -清空返回数据
+        
+    
+        
+//        [self.insertDBDictArray removeAllObjects];
+        
+        
+        // 每节数据提交成功后，初始化所有球员的上场时间
+        [self.tSDBManager initPlayingTimesOnce];
+        [SVProgressHUD showInfoWithStatus:@"提交成功"];
+        [self p_setupGameStatus]; // 更新比赛进行状态
+    } WithErrorBlock:^(id errorCode) {
+        [SVProgressHUD showInfoWithStatus:errorCode];
+    } WithFailureBlock:^{
+        [SVProgressHUD dismiss];
+    }];
+    [voiceViewModel sendCurrentStageData];
+}
+
+- (BOOL)p_refuseIfDivideAndLastStage {
+    NSDictionary *gameTableDict = [self.tSDBManager getObjectById:GameId fromTable:GameTable];
+    // 5V5平分
+    
+        if ([gameTableDict[CurrentStage] isEqualToString:OverTime3] && [self.gameModel.scoreTotalH isEqualToString:self.gameModel.scoreTotalG] ) {
+            // 最后一节，比分相同，不能结束比赛
+            return YES;
+        }
+    
+    return NO;
+}
+
+- (void)p_updateCurrentStageIfSendDataSuccess { // 本节数据提交成功后，更新节数
+    NSMutableDictionary *gameTableDict = [[self.tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    
+    
+    [StageAllArray enumerateObjectsUsingBlock:^(NSString *stageName, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([gameTableDict[CurrentStage] isEqualToString:stageName]) {
+            if (idx == 6) { // 加时赛3（表示全场比赛彻底结束）
+                gameTableDict[CurrentStageDataSubmitted] = @"1";
+//                self.submitSectionBtn.enabled = NO;
+                
+#pragma mark 比赛结束
+                
+//                [self.submitSectionBtn setTitle:GameOver forState:UIControlStateNormal];
+//                [self p_pushFullManagerViewController];
+            } else if (3 == idx || 4 == idx || 5 == idx) { // 第四节或者加时赛1或者加时赛2数据提交后，不自动进入加时赛
+                gameTableDict[CurrentStageDataSubmitted] = @"1";
+//                [self p_pushFullManagerViewController];
+            } else if (idx < 3) {
+                gameTableDict[CurrentStage] = StageAllArray[idx + 1];
+                gameTableDict[CurrentStageDataSubmitted] = @"0";
+            }
+            *stop = YES;
+        }
+    }];
+    
+    
+    [self.tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
+    
+    TSCalculationTool *calculationTool = [[TSCalculationTool alloc] init];
+    int stageGameTimes = [calculationTool getCurrentStageTimes];
+    if (0 == stageGameTimes) { // 3V3 加时赛
+        
+//        self.topView.timeCountType = TimeCountTypeUp;
+        
+    } else {
+        
+//        self.topView.timeCountType = TimeCountTypeDown;
+    }
+//    self.topView.currentSecond = stageGameTimes;
+//    self.topView.countDownLab.text = @"00 : 00";
+//    [self p_updateStatisticsData];
+    
+    
+}
+
+- (void)p_setupGameStatus { // 设置比赛状态（结束或未结束）
+    __block BOOL gameOver = NO;
+    NSMutableDictionary *gameTableDict = [[self.tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    if (2 == [gameTableDict[@"ruleType"] intValue]) {
+        if (3 == [gameTableDict[@"sectionType"] intValue]) { // 1X10
+            if ([gameTableDict[CurrentStage] isEqualToString:OverTime1]) {
+                gameOver = YES;
+            } else if ([gameTableDict[CurrentStage] isEqualToString:StageOne]) {
+                if ((1 == [gameTableDict[CurrentStageDataSubmitted] intValue]) && ![self.gameModel.scoreTotalH isEqualToString:self.gameModel.scoreTotalG]) { // 比赛结束
+                    gameOver = YES;
+                }
+            }
+        } else if (4 == [gameTableDict[@"sectionType"] intValue]) { // 2X8
+            if (1 == [gameTableDict[CurrentStageDataSubmitted] intValue]) {
+                if ([gameTableDict[CurrentStage] isEqualToString:StageTwo] && ![self.gameModel.scoreTotalH isEqualToString:self.gameModel.scoreTotalG]) {
+                    gameOver = YES;
+                } else if ([gameTableDict[CurrentStage] isEqualToString:OverTime1]) {
+                    gameOver = YES;
+                }
+            }
+        }
+    } else {
+        [StageAllArray enumerateObjectsUsingBlock:^(NSString *stageCount, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([stageCount isEqualToString:gameTableDict[CurrentStage]]) {
+                if (idx > 2) {
+                    if ((1 == [gameTableDict[CurrentStageDataSubmitted] intValue]) && ![self.gameModel.scoreTotalH isEqualToString:self.gameModel.scoreTotalG]) { // 比赛结束
+                        gameOver = YES;
+                    } else if ((1 == [gameTableDict[CurrentStageDataSubmitted] intValue]) && [stageCount isEqualToString:OverTime3]) {
+                        gameOver = YES;
+                    }
+                }
+            }
+        }];
+    }
+    
+    if (gameOver == YES) { // 比赛结束
+        gameTableDict[GameStatus] = @"1";
+    } else {
+        gameTableDict[GameStatus] = @"0";
+    }
+    [self.tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
+    
+    
+}
+
 
 @end

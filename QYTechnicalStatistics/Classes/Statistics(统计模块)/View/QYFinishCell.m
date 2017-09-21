@@ -26,6 +26,9 @@
 @property (nonatomic ,strong)UILabel *threeL;
 @property (nonatomic ,strong)UILabel *hitThree;
 @property (nonatomic ,strong)NSMutableArray *viewArr;
+@property (nonatomic,assign)NSInteger oneScroe;
+@property (nonatomic,assign)NSInteger twoScroe;
+@property (nonatomic,assign)NSInteger threeScroe;
 
 @end
 @implementation QYFinishCell
@@ -55,11 +58,12 @@
             l.font = [UIFont systemFontOfSize:scaleX_ByPx(32)];
             l.backgroundColor = [UIColor clearColor];
             l.text = arr[i-1];
+            [self.viewArr addObject:l];
             [view addSubview:l];
             
         }
         view.tag = i;
-        [self.viewArr addObject:view];
+        
         [self addSubview:view];
         
     }
@@ -69,7 +73,63 @@
     return self;
 }
 
-
+-(void)setTPlayModel:(TSManagerPlayerModel *)tPlayModel{
+    _tPlayModel = tPlayModel;
+    
+     [_headerIV sd_setImageWithURL:[NSURL URLWithString:tPlayModel.photo] completed:nil];//头像
+    
+    [_viewArr enumerateObjectsUsingBlock:^(UILabel  *label, NSUInteger idx, BOOL * _Nonnull stop) {
+        switch (idx) {
+            case 0: //名字
+                label.text = tPlayModel.playerName;
+                break;
+            case 1: //位置
+                label.text = tPlayModel.positional;
+                break;
+            case 2: //上场时间
+                label.text = [NSString stringWithFormat:@"%.1fmin",[tPlayModel.playTimes floatValue] /60];
+                break;
+            case 3: //篮板
+                label.text = tPlayModel.behaviorNumb4.length ? tPlayModel.behaviorNumb4:@"0";
+                break;
+            case 4: //助攻
+                label.text = tPlayModel.behaviorNumb9.length ? tPlayModel.behaviorNumb9:@"0";
+                break;
+            case 5: //犯规
+                label.text = tPlayModel.behaviorNumb10.length ? tPlayModel.behaviorNumb10:@"0";
+                break;
+            case 6: //盖帽
+                label.text = tPlayModel.behaviorNumb8.length ? tPlayModel.behaviorNumb8 : @"0";
+                break;
+            case 7: //1分个数
+                label.text = tPlayModel.FreeThrowHit.length ? tPlayModel.FreeThrowHit: @"0";
+                _oneScroe = [label.text integerValue];
+                break;
+            case 8: //1分命中率
+                label.text = tPlayModel.behaviorNumb1.length && _oneScroe != 0 ? [NSString stringWithFormat:@"%.1lf%%",100*_oneScroe/[tPlayModel.behaviorNumb1 floatValue]]:@"0";
+                break;
+            case 9: //2分个数
+                label.text = tPlayModel.TwoPointsHit.length ? tPlayModel.TwoPointsHit: @"0";
+                _twoScroe = [label.text integerValue];
+                break;
+            case 10: //2分命中率
+                label.text = tPlayModel.behaviorNumb2.length && _twoScroe != 0 ? [NSString stringWithFormat:@"%.1f%%",_twoScroe/[tPlayModel.behaviorNumb2 floatValue]*100]:@"0";
+                break;
+            case 11: //3分个数
+                label.text = tPlayModel.ThreePointsHit.length? tPlayModel.ThreePointsHit :@"0";
+                _threeScroe = [label.text integerValue];
+                break;
+            case 12: //3分命中率
+                label.text = label.text = tPlayModel.behaviorNumb3.length && _threeScroe != 0 ? [NSString stringWithFormat:@"%.1f%%",_threeScroe/[tPlayModel.behaviorNumb3 floatValue]*100]:@"0";
+                break;
+            default:
+                break;
+        }
+    }];
+    
+ 
+    
+}
 
 
 

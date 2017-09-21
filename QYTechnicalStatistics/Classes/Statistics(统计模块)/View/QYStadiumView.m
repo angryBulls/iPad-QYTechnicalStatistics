@@ -83,17 +83,7 @@
     [self updatePlayersStatus];
     
 
-//    [self.hostPlayer_One show];
-//    [self.hostPlayer_Two show];
-//    [self.hostPlayer_Three show];
-//    [self.hostPlayer_Four show];
-//    [self.hostPlayer_Five show];
-//
-//    [self.guestPlayer_One show];
-//    [self.guestPlayer_Two show];
-//    [self.guestPlayer_Three show];
-//    [self.guestPlayer_Four show];
-//    [self.guestPlayer_Five show];
+
 
     
 }

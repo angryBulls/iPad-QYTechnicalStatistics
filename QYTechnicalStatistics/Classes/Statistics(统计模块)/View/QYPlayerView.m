@@ -336,7 +336,7 @@
         }
         [self stayBack];
     }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(backResultDic:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(backResultDic:)] ) {
         [_delegate backResultDic:resultDic];
     }
     

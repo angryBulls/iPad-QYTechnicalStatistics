@@ -12,6 +12,65 @@
 
 @implementation QYNetworkManger
 
++ (void)abstention:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed {
+    NSMutableDictionary *unEncodeDict = [NSMutableDictionary dictionary];
+    
+    int currentUserType = [[[NSUserDefaults standardUserDefaults] objectForKey:CurrentLoginUserType] intValue];
+    
+        TSUserInfoModelBCBC *userInfo = [TSToolsMethod fetchUserInfoModelBCBC];
+        unEncodeDict[@"token"] = userInfo.token;
+    
+    unEncodeDict[@"sn"] = [TSToolsMethod creatUUID];
+    unEncodeDict[@"service"] = @"amateurstatistic";
+    unEncodeDict[@"method"] = @"abstention";
+    unEncodeDict[@"params"] = paramsDict;
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:unEncodeDict options:0 error:nil];
+    NSString *myString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSDictionary *encodeDic = [[NSDictionary alloc] initWithObjectsAndKeys:myString, @"body", nil];
+    
+    [self p_PrivateGET:TS_SERVER_URL_TEST paramsDict:encodeDic showActivityView:NO responseSuccess:^(id responseObject) {
+        success(responseObject);
+    } responseFailed:^(NSError *error) {
+        failed(error);
+    }];
+}
+
+
+
+
++ (void)sendCurrentStageDataBCBC:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed {
+    NSMutableDictionary *unEncodeDict = [NSMutableDictionary dictionary];
+    
+    
+    NSLog(@"%@",paramsDict);
+    
+    NSTimeInterval interval = [[NSDate date] timeIntervalSince1970] * 1000;
+    unEncodeDict[@"sn"] = [NSString stringWithFormat:@"%lf", interval];
+    
+    TSUserInfoModelBCBC *userInfo = [TSToolsMethod fetchUserInfoModelBCBC];
+    unEncodeDict[@"token"] = userInfo.token;
+    
+    unEncodeDict[@"service"] = @"playerMatch";
+    unEncodeDict[@"method"] = @"save";
+    unEncodeDict[@"params"] = paramsDict;
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:unEncodeDict options:0 error:nil];
+    NSString *myString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSDictionary *encodeDic = [[NSDictionary alloc] initWithObjectsAndKeys:myString, @"body", nil];
+    
+    
+    [self p_PrivateGET:TS_SERVER_URL_TEST paramsDict:encodeDic showActivityView:NO responseSuccess:^(id responseObject) {
+                NSLog(@"responseObject:%@", responseObject);
+        success(responseObject);
+        
+    } responseFailed:^(NSError *error) {
+        failed(error);
+        
+    }];
+}
+
+
 
 
 + (void)getPlaysDataByTeam:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed {

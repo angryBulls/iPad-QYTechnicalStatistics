@@ -21,4 +21,5 @@
 
 @property (nonatomic, copy) NSString *playingStatus; // 上场状态（0:场下   1:场上）
 @property (nonatomic, copy) NSString *playingTimes; // 球员上场时间
+@property (nonatomic , copy) NSString *positional;
 @end

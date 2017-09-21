@@ -187,6 +187,7 @@ static NSString * const registrationCell = @"registrationCell";
             playerModel.photo = p.photo;
             playerModel.ID = p.pid;
             playerModel.name = p.playName;
+            playerModel.positional = p.positional;
             if (self.playerArrayH.count ) {
                 TSPlayerModel *pp = self.playerArrayH[0];
                 if ([pp.ID isEqualToString:playerModel.ID]) {
@@ -215,6 +216,7 @@ static NSString * const registrationCell = @"registrationCell";
             playerModel.playerNumber =[NSString stringWithFormat:@"%@",p.playerNumber];
             playerModel.photo = p.photo;
             playerModel.ID = p.pid;
+            playerModel.positional = p.positional;
             
             if (self.playerArrayG.count ) {
                 TSPlayerModel *pp = self.playerArrayG[0];
@@ -493,21 +495,25 @@ static NSString * const registrationCell = @"registrationCell";
 
 -(void)p_initCheckModel{
     self.checkModel.gameLevel = [(UIButton *)_registrationHeaderView.competitionLevelButton titleForState:UIControlStateNormal];
-    _checkModel.gameProvince = [(UIButton *)_registrationHeaderView.competitionAreaButton titleForState:UIControlStateNormal];
+    _checkModel.gameArea = [(UIButton *)_registrationHeaderView.competitionAreaButton titleForState:UIControlStateNormal];
     _checkModel.gameProvince = [(UIButton *)_registrationHeaderView.provinceAndCityButton titleForState:UIControlStateNormal];
     Player *pH = _hostDataSouce.firstObject;
     _checkModel.teamIdH = pH.teamID;
+    _checkModel.teamCoachH = pH.coach;
     _checkModel.teamNameH = [(UIButton *)_registrationHeaderView.hostTeamButton titleForState:UIControlStateNormal ];
     Player *pG = _guestDataSouce.firstObject;
     _checkModel.teamIdG = pG.teamID;
-    _checkModel.teamNameG = [(UIButton *)_registrationHeaderView.hostTeamButton titleForState:UIControlStateNormal];
+    _checkModel.teamCoachG = pG.coach;
+    _checkModel.teamNameG = [(UIButton *)_registrationHeaderView.guestTeamButton titleForState:UIControlStateNormal];
+    
     _checkModel.teamColorH = @"红";
     _checkModel.teamColorG = @"蓝";
     _checkModel.mainReferee = _registrationHeaderView.mainRefereeNameLabel.text;
     _checkModel.firstReferee = _registrationHeaderView.firstDeputyRefereeNameLabel.text;
     _checkModel.secondReferee = _registrationHeaderView.secondDeputyRefereeNameLabel.text;
     _checkModel.td = _registrationHeaderView.technicalRepresentativeNameLabel.text;
-    
+    _checkModel.ts01 = _registrationHeaderView.technicalStatisticsNameLabel_01.text;
+    _checkModel.ts02 = _registrationHeaderView.technicalStatisticsNameLabel_02.text;
     
     
     
@@ -580,6 +586,12 @@ static NSString * const registrationCell = @"registrationCell";
     }];
     
     [store putObject:playerIdArray withId:GameId intoTable:PlayerIdTable];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:startTag];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@"600" forKey:lastTime];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 

@@ -233,7 +233,10 @@
     userInfo.password = _pwd.text;
     [QYToolsMethod setUserInfo:[userInfo dictWithModel:userInfo]];
     
-       
+    
+    
+    
+    
     
     if ([self.delegate respondsToSelector:@selector(inputView:loginClick:AndDic:)]) {
         [self.delegate inputView:self loginClick:loginBtn AndDic:dic];

@@ -30,6 +30,7 @@
 #pragma mark 网络
 
 @property (nonatomic ,strong) TSDBManager *tSDBManager;
+@property (nonatomic ,strong) TSGameModel *gameModel;
 
 @end
 
@@ -207,8 +208,6 @@
             [self.insertDBDictArray removeLastObject];
             //算作两步，1）下场 2）上场
             [self.tSDBManager deleteObjectByInsertDBDict:[self.insertDBDictArray lastObject]];
-            
-            
         }
         
         [self.insertDBDictArray removeLastObject];
@@ -228,6 +227,28 @@
 
 -(void)startGaming{
     _endQuarter = 0;
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    NSInteger i = [[userDefault objectForKey:startTag] integerValue];
+    
+    
+    if (i == 0) {
+        // save the matchDate
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            TSDBManager *tSDBManager = [[TSDBManager alloc] init];
+            NSMutableDictionary *gameTableDict = [[tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+            if ([gameTableDict[@"currentStage"] isEqualToString:StageOne]) {
+                NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+                fmt.dateFormat = @"YYYY-MM-dd HH:mm:ss";
+                gameTableDict[@"matchDate"] = [fmt stringFromDate:[NSDate date]];
+                [tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
+            }
+            
+        });
+    }
+    i++;
+    [userDefault setObject:[NSString stringWithFormat:@"%ld",i] forKey:startTag];
+    [userDefault synchronize];
     
     _isGame = 1;
 }
@@ -248,7 +269,9 @@
 }
 -(void)finishGameWithQuarter:(NSInteger)quarter{
     QYFinishMatchVC *vc= [QYFinishMatchVC new];
-    vc.finisnTag = QuarterOne;
+    vc.tSDBManager = _tSDBManager;
+    vc.gameModel = _gameModel;
+//    vc.finisnTag = QuarterOne;
     [self.navigationController pushViewController:vc animated:YES];
     
     
@@ -313,10 +336,12 @@
         
         [calculationTool calculationTimeOutSatgeData];
         
+        
 
         _registrationTitleView.gameModel = calculationTool.gameModel;
         _registrationMinView.gameModel = calculationTool.gameModel;
         _stadiumView.gameModel = calculationTool.gameModel;
+        _gameModel = calculationTool.gameModel;
         
         NSDictionary *insertDBDict = [self.insertDBDictArray lastObject];
         if ((11 == [insertDBDict[BnfBehaviorType] intValue]) || (12 == [insertDBDict[BnfBehaviorType] intValue])) { // 换人语音识别
@@ -336,13 +361,6 @@
     [self p_updateStatisticsData];
 }
 
-#pragma mark - 每隔30秒更新一次球员的上场时间
-- (void)p_updataPlayingTimesOnce {
-    TSDBManager *tSDBManager = [[TSDBManager alloc] init];
-    [tSDBManager udatePlayingTimesOnce];
-}
-
-#pragma mark - 提交本节数据到BCBC服务器
 
 
 

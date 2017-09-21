@@ -36,10 +36,14 @@
  */
 +(NSMutableArray *)queryPlayByTeam:(NSDictionary *)dic andTeamID:(NSString *)teamID{
     NSMutableArray *arr = [NSMutableArray array];
+    
     NSDictionary *entityDic = dic[@"entity"];
     NSArray *palyInfos = entityDic[@"playInfos"];
     for (NSDictionary *playDic in palyInfos) {
+        
+        
         Player *p = [Player new];
+        p.coach = entityDic[@"teamCoach"];
         p.teamID = teamID;
         p.birthday = playDic[@"birthday"];
         p.height = playDic[@"height"];

@@ -28,6 +28,8 @@
 @property (nonatomic, copy) NSString *playerName;
 @property (nonatomic, copy) NSString *playerNumber;
 @property (nonatomic, copy) NSString *photo; // 球员头像
+@property (nonatomic , copy) NSString *positional; //球员位置
+@property (nonatomic , copy) NSString *playTimes;
 
 @property (nonatomic, assign) BOOL changeStatus; // 标记cell是否可以被修改
 @end

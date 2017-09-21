@@ -76,12 +76,15 @@
 - (UILabel *)minLabel {
     
     if (!_minLabel) {
+        NSInteger min = [[[NSUserDefaults standardUserDefaults] objectForKey:lastTime] integerValue]/60;
+        
+        
         _minLabel = [[UILabel alloc] init];
         _minLabel.backgroundColor = [UIColor whiteColor];
         _minLabel.layer.cornerRadius = kSCALE_NUM(5);
         _minLabel.layer.masksToBounds = YES;
         _minLabel.textColor = [UIColor colorWithHexRGB:@"#333333" andAlpha:1.0f];
-        _minLabel.text = @"10";
+        _minLabel.text = [NSString stringWithFormat:@"%ld",min];
         _minLabel.textAlignment = NSTextAlignmentCenter;
         _minLabel.font = kSCALE_FONT_NAME_SIZE(@"DBLCDTempBlack", 21);
         [self addSubview:_minLabel];
@@ -105,12 +108,13 @@
 - (UILabel *)secLabel {
     
     if (!_secLabel) {
+        NSInteger sec = [[[NSUserDefaults standardUserDefaults] objectForKey:lastTime] integerValue]%60;
         _secLabel = [[UILabel alloc] init];
         _secLabel.backgroundColor = [UIColor whiteColor];
         _secLabel.layer.cornerRadius = kSCALE_NUM(5);
         _secLabel.layer.masksToBounds = YES;
         _secLabel.textColor = [UIColor colorWithHexRGB:@"#333333" andAlpha:1.0f];
-        _secLabel.text = @"00";
+        _secLabel.text = [NSString stringWithFormat:@"%ld",sec];
         _secLabel.textAlignment = NSTextAlignmentCenter;
         _secLabel.font = kSCALE_FONT_NAME_SIZE(@"DBLCDTempBlack", 21);
         [self addSubview:_secLabel];
@@ -159,6 +163,9 @@
         _isPausIng = 1;
         QYToolsMethod *toolsMethod = [[QYToolsMethod alloc] init];
         _toolsMethod = toolsMethod;
+    
+
+    
         if (self.delegate && [self.delegate performSelector:@selector(startGame)]) {
             [_delegate startGame];
         }
@@ -178,6 +185,19 @@
                     _secLabel.text = [NSString stringWithFormat:@"%02d",seconds];
                     
                     int current = [_minLabel.text intValue] *60 +[_secLabel.text intValue];
+                    
+                    if (time < StageGameTimes) {
+                        
+                        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",current] forKey:lastTime];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                        
+                        
+                        if (0 == (StageGameTimes - time)%30) {
+                            [self p_updataPlayingTimesOnce];
+                            
+                        }
+                    }
+                    
                     
                     if (current ==0) {
                         [_toolsMethod stopGCDTimer];
@@ -220,19 +240,18 @@
 }
 
 
-- (void)setCurrentSecond:(int)currentSecond {
-    _currentSecond = currentSecond;
-    
-    int minutes2 = currentSecond / 60;
-    int seconds2 = currentSecond % 60;
-    
 
-    _minLabel.text = [NSString stringWithFormat:@"%02d",minutes2];
-    _secLabel.text = [NSString stringWithFormat:@"%02d",seconds2];
+- (void)setCurrentSecond:(int)currentSecond {
     
+    _currentSecond  = [[[NSUserDefaults standardUserDefaults] objectForKey:lastTime] intValue];
 }
 
-
+#pragma mark - 每隔30秒更新一次球员的上场时间
+- (void)p_updataPlayingTimesOnce {
+    TSDBManager *tSDBManager = [[TSDBManager alloc] init];
+    [tSDBManager udatePlayingTimesOnce];
+    
+}
 
 
 

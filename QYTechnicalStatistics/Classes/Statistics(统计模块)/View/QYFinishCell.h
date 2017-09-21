@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "TSManagerPlayerModel.h"
 @interface QYFinishCell : UITableViewCell
+
+@property (nonatomic ,strong)TSManagerPlayerModel *tPlayModel;
 
 @end

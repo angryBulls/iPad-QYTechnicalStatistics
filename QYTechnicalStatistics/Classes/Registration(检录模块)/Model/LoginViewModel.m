@@ -29,20 +29,23 @@
         
         
         if ([responseObject[@"success"] isEqual:@1]) {
-            QYUserInfoModel *userInfo = [QYToolsMethod fetchUserInfoModel];
+            TSUserInfoModelBCBC *userInfo = [TSToolsMethod fetchUserInfoModelBCBC];
+            userInfo.loginUserType = @"1";
+            userInfo.loginName = responseObject[@"entity"][@"loginName"];
+            userInfo.nickname = responseObject[@"entity"][@"nickname"];
+            userInfo.status = responseObject[@"entity"][@"status"];
             userInfo.token = responseObject[@"entity"][@"token"];
-            userInfo.ID = responseObject[@"entity"][@"user"][@"id"];
-            userInfo.name = responseObject[@"entity"][@"user"][@"name"];
-            userInfo.sex = responseObject[@"entity"][@"user"][@"sex"];
-            userInfo.photo = responseObject[@"entity"][@"user"][@"photo"];
-            userInfo.level = responseObject[@"entity"][@"user"][@"level"];
-            userInfo.hitRate = responseObject[@"entity"][@"user"][@"hitRate"];
-            userInfo.rebound = responseObject[@"entity"][@"user"][@"rebound"];
-            userInfo.assists = responseObject[@"entity"][@"user"][@"assists"];
-            userInfo.gameCount = responseObject[@"entity"][@"user"][@"gameCount"];
-            userInfo.leader = responseObject[@"entity"][@"user"][@"leader"];
+            userInfo.userId = responseObject[@"entity"][@"userId"];
+            userInfo.sn = responseObject[@"sn"];
             
-            [QYToolsMethod setUserInfo:[userInfo dictWithModel:userInfo]];
+//            userInfo.password = self.userInfoDict[@"password"];
+//            userInfo.rememberPD = self.userInfoDict[@"rememberPD"];
+            
+            //            DDLog(@"userInfo is:%@", [userInfo dictWithModel:userInfo]);
+            [TSToolsMethod setUserInfoBCBC:[userInfo dictWithModel:userInfo]];
+            
+            [[NSUserDefaults standardUserDefaults] setObject:@(1) forKey:CurrentLoginUserType];
+            [[NSUserDefaults standardUserDefaults] synchronize];
             
             self.returnBlock(responseObject);
         } else {

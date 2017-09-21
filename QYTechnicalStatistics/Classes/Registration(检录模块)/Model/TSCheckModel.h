@@ -26,4 +26,9 @@
 @property (nonatomic, copy) NSString *firstReferee; // 第一副裁
 @property (nonatomic, copy) NSString *secondReferee; // 第二副裁
 @property (nonatomic, copy) NSString *td; // 技术代表
+@property (nonatomic , copy) NSString *ts01;
+@property (nonatomic , copy) NSString *ts02;
+
+@property (nonatomic , copy) NSString *teamCoachH;
+@property (nonatomic , copy) NSString *teamCoachG;
 @end

@@ -465,4 +465,34 @@
     
     return allPlayerDataedModelArray;
 }
+
+
+#pragma mark - 获取当前节的时间
+- (int)getCurrentStageTimes {
+    NSDictionary *gameTableDict = [self.tSDBManager getObjectById:GameId fromTable:GameTable];
+    __block int stageGameTimes = 0;
+    NSString *currentStage = [self.tSDBManager getObjectById:GameId fromTable:GameTable][CurrentStage];
+    [StageAllArray enumerateObjectsUsingBlock:^(NSString *stageCount, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([currentStage isEqualToString:stageCount]) {
+            if (idx <= 3) { // 1 - 4节
+                if (1 == [gameTableDict[@"sectionType"] intValue]) { // 4节X10分钟
+                    stageGameTimes = 600;
+                } else if (2 == [gameTableDict[@"sectionType"] intValue]) { // 4节X12分钟
+                    stageGameTimes = 720;
+                } else if (3 == [gameTableDict[@"sectionType"] intValue]) { // 1节X10分钟
+                    stageGameTimes = 600;
+                } else if (4 == [gameTableDict[@"sectionType"] intValue]) { // 2节X8分钟
+                    stageGameTimes = 480;
+                }
+            } else if ([stageCount isEqualToString:OverTime1] && 2 == [gameTableDict[@"ruleType"] intValue]) { // 3V3 加时赛
+                stageGameTimes = 0;
+            } else { // 加时赛
+                stageGameTimes = 300;
+            }
+        }
+    }];
+    
+    return stageGameTimes;
+}
+
 @end

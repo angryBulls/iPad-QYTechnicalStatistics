@@ -26,4 +26,6 @@
 @property (nonatomic , copy) NSString *playingTimes;
 @property (nonatomic, assign) BOOL isOn;
 @property (nonatomic , copy) NSString *teamID;
+@property (nonatomic , copy) NSString *coach;
+
 @end

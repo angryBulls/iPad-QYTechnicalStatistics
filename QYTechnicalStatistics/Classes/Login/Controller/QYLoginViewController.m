@@ -15,7 +15,8 @@
 #import "QYNavigationController.h"
 #import "QYRegistrationVC.h"
 #import "LoginViewModel.h"
-
+#import "TSUserInfoModelBCBC.h"
+#import "TSToolsMethod.h"
 //网络请求
 
 
@@ -127,6 +128,9 @@
             NSLog(@" %@", userInfo.token);
             
         [[UIApplication sharedApplication].keyWindow setRootViewController:[[QYNavigationController alloc] initWithRootViewController:[QYRegistrationVC getRegistrationVC]]];
+            
+            
+            
             
         } WithErrorBlock:^(id errorCode) {
             [SVProgressHUD showInfoWithStatus:errorCode];

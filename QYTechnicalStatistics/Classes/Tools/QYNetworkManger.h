@@ -44,8 +44,19 @@ typedef void (^Failed)(NSError * error);
  */
 + (void)getTeamInfoByProvence:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed;
 /**
- *
+ *根据球队获取球员
  */
 + (void)getPlaysDataByTeam:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed;
+
+/**
+ * 提交单节数据
+ */
++ (void)sendCurrentStageDataBCBC:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed;
+
+/**
+ * 
+ */
++ (void)abstention:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed;
+
 
 @end

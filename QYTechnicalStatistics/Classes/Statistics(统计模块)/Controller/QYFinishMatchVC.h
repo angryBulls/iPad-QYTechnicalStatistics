@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-
+#import "TSGameModel.h"
 
 @interface QYFinishMatchVC : UIViewController
-@property (nonatomic,assign)NSInteger finisnTag;
+
+@property (nonatomic ,strong)TSDBManager *tSDBManager;
+@property (nonatomic ,strong)TSGameModel *gameModel;
+
 @end

@@ -5,18 +5,22 @@
 //  Created by lxd on 2017/7/6.
 //  Copyright © 2017年 longcai. All rights reserved.
 //
-
 #ifndef TS_URL_Header_h
 #define TS_URL_Header_h
 
-static NSString * const My_UMeng_Appkey = @"";
+static NSString * const My_UMeng_Appkey = @"598a7966c89576489d000cb8";
 static NSString * const MicrophoneURLStr = @"App-Prefs:root=Privacy&path=MICROPHONE";
 
 // 讯飞
-static NSString * const IFLY_APPID_VALUE = @"59703863";
+static NSString * const IFLY_APPID_VALUE = @"599f8c84";
+
+// 微信支付appId
+static NSString * const WXAppId_Pay = @"wx3ce22732707ec63d";
+// 微信支付商户号
+static NSString * const WXPartnerId_Pay = @"1487563712";
 
 // contact way
-static NSString * const ContactUSContent = @"如需赛事技术统计合作请致电：15201513972\n\n客服电话：400-681-8888";
+static NSString * const ContactUSContent = @"赛事组织及赛事技术统计合作请致电：15201513972\n\n客服电话：400-631-3677";
 
 // database set
 static NSString * const TSDBName = @"TSDB.db";
@@ -34,16 +38,17 @@ static NSString * const GameId = @"gameId";
 
 static NSString * const PlayerId = @"playerId";
 
+static NSString * const GameStatus = @"gameStatus"; // 比赛是否结束
 static NSString * const CurrentStage = @"currentStage";
 static NSString * const CurrentStageDataSubmitted = @"currentStageDataSubmitted";
 
-static NSString * const BnfTeameType = @"<teamName>";//队名
-static NSString * const BnfTenNumberType = @"<tenNumber>";//号码10位数
-static NSString * const BnfBitsNumberType = @"<bitsNumber>";//号码个位数
-static NSString * const BnfBehaviorType = @"<behavior>";//行为
-static NSString * const BnfResultType = @"<result>";//中或不中
+static NSString * const BnfTeameType = @"<teamName>";
+static NSString * const BnfTenNumberType = @"<tenNumber>";
+static NSString * const BnfBitsNumberType = @"<bitsNumber>";
+static NSString * const BnfBehaviorType = @"<behavior>";
+static NSString * const BnfResultType = @"<result>";
 
-static NSString * const NumbResultStr = @"NumbResultStr";//号码
+static NSString * const NumbResultStr = @"NumbResultStr";
 
 static NSString * const BehaviorNumb = @"behaviorNumb"; // 用于标记行为
 
@@ -61,7 +66,7 @@ static NSString * const BlockShots = @"behaviorNumb8"; // 盖帽
 static NSString * const Assists = @"behaviorNumb9"; // 助攻
 static NSString * const Fouls = @"behaviorNumb10"; // 犯规
 
-#define PlayerStatisticsArray @[Timeout, FreeThrow, TwoPoints, ThreePoints, OffensiveRebound, DefensiveRebound, Steals, Turnover, BlockShots, Assists, Fouls]
+#define PlayerStatisticsArray @[Timeout, FreeThrow, OnePoints, TwoPoints, ThreePoints, OffensiveRebound, DefensiveRebound, Steals, Turnover, BlockShots, Assists, Fouls]
 
 static NSString * const FreeThrowHit = @"FreeThrowHit"; // 罚篮命中数
 static NSString * const OnePointsHit = @"OnePointsHit"; // 一分命中数
@@ -76,6 +81,7 @@ static NSString * const StageFour = @"StageFour";
 static NSString * const OverTime1 = @"OverTime1";
 static NSString * const OverTime2 = @"OverTime2";
 static NSString * const OverTime3 = @"OverTime3";
+static NSString * const finish = @"finsh";
 
 #define StageFourArray @[StageOne, StageTwo, StageThree, StageFour]
 #define StageAllArray @[StageOne, StageTwo, StageThree, StageFour, OverTime1, OverTime2, OverTime3]
