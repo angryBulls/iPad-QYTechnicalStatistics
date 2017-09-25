@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4328947E1F78AC1800A528A9 /* GameCheckViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4328947D1F78AC1800A528A9 /* GameCheckViewModel.m */; };
 		433FF91A1F5E4FB4008DB472 /* UserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 433FF9191F5E4FB4008DB472 /* UserEntity.m */; };
 		433FF9341F5E77FB008DB472 /* QYNetworkManger.m in Sources */ = {isa = PBXBuildFile; fileRef = 433FF9331F5E77FB008DB472 /* QYNetworkManger.m */; };
 		433FF93D1F5E782B008DB472 /* QY404TagSign.m in Sources */ = {isa = PBXBuildFile; fileRef = 433FF9361F5E782B008DB472 /* QY404TagSign.m */; };
@@ -76,6 +77,8 @@
 
 /* Begin PBXFileReference section */
 		3BB1CC47730C9792FF1D3C0A /* Pods_QYTechnicalStatistics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QYTechnicalStatistics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4328947C1F78AC1800A528A9 /* GameCheckViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameCheckViewModel.h; sourceTree = "<group>"; };
+		4328947D1F78AC1800A528A9 /* GameCheckViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameCheckViewModel.m; sourceTree = "<group>"; };
 		433FF9181F5E4FB4008DB472 /* UserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserEntity.h; sourceTree = "<group>"; };
 		433FF9191F5E4FB4008DB472 /* UserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserEntity.m; sourceTree = "<group>"; };
 		433FF9311F5E77CD008DB472 /* QY_URL_Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QY_URL_Header.h; sourceTree = "<group>"; };
@@ -295,6 +298,8 @@
 		977BA29F1EF371C100516ED9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4328947C1F78AC1800A528A9 /* GameCheckViewModel.h */,
+				4328947D1F78AC1800A528A9 /* GameCheckViewModel.m */,
 				43EC3D411F68CA0F00181D6D /* PlayerCheckViewModel.h */,
 				43EC3D421F68CA0F00181D6D /* PlayerCheckViewModel.m */,
 				43D732511F67F0F5009CF1E6 /* TSCheckModel.h */,
@@ -774,6 +779,7 @@
 				43D75B591F60D812001A1413 /* PlayerDataCell.m in Sources */,
 				43EC3D431F68CA0F00181D6D /* PlayerCheckViewModel.m in Sources */,
 				433FF91A1F5E4FB4008DB472 /* UserEntity.m in Sources */,
+				4328947E1F78AC1800A528A9 /* GameCheckViewModel.m in Sources */,
 				9746D9141EFA4023001EDF9F /* QYRegistrationTitleView.m in Sources */,
 				43E7405B1F666AA8007D9B6B /* QYTeam.m in Sources */,
 				43D732531F67F0F5009CF1E6 /* TSCheckModel.m in Sources */,

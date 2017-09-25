@@ -14,6 +14,11 @@ typedef void (^Failed)(NSError * error);
 @interface QYNetworkManger : NSObject
 
 /**
+ * 获得比赛ID
+ */
++ (void)getBCBCMatchId:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed ;
+
+/**
  *获得球队球员
  */
 +(void)queryPlayByTeam:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed;

@@ -14,6 +14,7 @@
 #import "YTKKeyValueStore.h"
 #import "PlayerCheckViewModel.h"
 #import "Player.h"
+#import "GameCheckViewModel.h"
 @interface QYRegistrationVC ()<QYRegistrationHeaderViewDelegate,UICollectionViewDelegate,QYRegistrationCellDelegate>
 
 /**
@@ -443,10 +444,7 @@ static NSString * const registrationCell = @"registrationCell";
 
         return;
     }
-    
-    
-    
-    
+
     
     // 检测“本场号码”是否有重复
     NSMutableArray *gameNumbArrayH = [NSMutableArray array];
@@ -479,12 +477,7 @@ static NSString * const registrationCell = @"registrationCell";
         return;
     }
     [self p_initCheckModel];
-
-    
-    [self p_initTSDB];
-    
-    [(AppDelegate *)[UIApplication sharedApplication].delegate setVoicePageBeRootView];
-    
+    [self p_getBCBCMatchId];
     
     
 }
@@ -506,8 +499,8 @@ static NSString * const registrationCell = @"registrationCell";
     _checkModel.teamCoachG = pG.coach;
     _checkModel.teamNameG = [(UIButton *)_registrationHeaderView.guestTeamButton titleForState:UIControlStateNormal];
     
-    _checkModel.teamColorH = @"红";
-    _checkModel.teamColorG = @"蓝";
+    _checkModel.teamColorH = @"红色";
+    _checkModel.teamColorG = @"蓝色";
     _checkModel.mainReferee = _registrationHeaderView.mainRefereeNameLabel.text;
     _checkModel.firstReferee = _registrationHeaderView.firstDeputyRefereeNameLabel.text;
     _checkModel.secondReferee = _registrationHeaderView.secondDeputyRefereeNameLabel.text;
@@ -520,19 +513,44 @@ static NSString * const registrationCell = @"registrationCell";
 }
 
 
+
+
+- (void)p_getBCBCMatchId { // 获取matchId成功才能继续
+    [SVProgressHUD show];
+    NSMutableDictionary *paramsDict = [NSMutableDictionary dictionary];
+    GameCheckViewModel *checkViewModel = [[GameCheckViewModel alloc] initWithPramasDict:paramsDict];
+    [checkViewModel setBlockWithReturnBlock:^(id returnValue) {
+        
+        if (returnValue[@"entity"][@"matchId"]) {
+            
+            self.checkModel.matchId = returnValue[@"entity"][@"matchId"];
+            
+            
+            [self p_initTSDB];
+            [SVProgressHUD dismiss];
+        } else {
+            [SVProgressHUD showInfoWithStatus:@"获取比赛id失败，请重试"];
+        }
+    } WithErrorBlock:^(id errorCode) {
+        [SVProgressHUD showInfoWithStatus:errorCode];
+    } WithFailureBlock:^{
+        
+    }];
+    [checkViewModel getBCBCMatchId];
+}
+
+
+
+
 - (void)p_initTSDB {
     NSMutableDictionary *gameCheckDict = self.checkModel.mj_keyValues;
     
-    
     NSMutableArray *playerArrayH = [TSPlayerModel mj_keyValuesArrayWithObjectArray:self.playerArrayH];
-    
     
     NSMutableArray *playerArrayG = [TSPlayerModel mj_keyValuesArrayWithObjectArray:self.playerArrayG];
     
-    
     // 创建数据库和数据库表
     NSString *documentsPath = nil;
-    
     
     
     NSArray *appArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -562,6 +580,7 @@ static NSString * const registrationCell = @"registrationCell";
     NSMutableDictionary *gameTableDict = [NSMutableDictionary dictionary];
     gameTableDict[CurrentStage] = StageOne;
     gameTableDict[CurrentStageDataSubmitted] = @"0";
+    gameTableDict[@"matchInfoId"] = self.checkModel.matchId;
     [store putObject:gameTableDict withId:GameId intoTable:GameTable];
     
     
@@ -592,6 +611,11 @@ static NSString * const registrationCell = @"registrationCell";
     
     [[NSUserDefaults standardUserDefaults] setObject:@"600" forKey:lastTime];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    
+    [(AppDelegate *)[UIApplication sharedApplication].delegate setVoicePageBeRootView];
+
+    
 }
 
 

@@ -29,7 +29,7 @@
 }
 
 - (void)sendCurrentStageData {
-    int currentUserType = [[[NSUserDefaults standardUserDefaults] objectForKey:CurrentLoginUserType] intValue];
+    
     
     [self p_sendCurrentStageDataBCBC];
     
@@ -188,7 +188,9 @@
     TSDBManager *tSDBManager = [[TSDBManager alloc] init];
     NSString *TeamCheckID = TeamCheckID_H;
     NSArray *playerCheckArray = @[];
-    if ([teamId isEqualToString:self.gameCheckDict[@"homeTeamId"]]) { // 主队数据
+    
+    if ([teamId isEqualToString:self.gameCheckDict[@"teamIdH"]]) { // 主队数据
+        
         playerCheckArray = [tSDBManager getObjectById:TeamCheckID fromTable:TSCheckTable];
         
     } else { // 客队数据
@@ -209,32 +211,36 @@
         [playerCheckArray enumerateObjectsUsingBlock:^(NSDictionary *subDict, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([subDict[@"id"] isEqualToString:tPlayerModel.playerId]) {
                 NSString *secondTimes = subDict[@"playingTimes"];
+                
+                
                 int minutes = secondTimes.intValue / 60;
                 playerMatchStDict[@"gameTime"] = [NSString stringWithFormat:@"%d", minutes];
                 *stop = YES;
             }
+            
         }];
-//        tPlayerModel.OnePointsHit ? (playerMatchStDict[@"oneFenHit"] = @(tPlayerModel.OnePointsHit.intValue)) : (playerMatchStDict[@"oneFenHit"] = @0);
-//        tPlayerModel.behaviorNumb31 ? (playerMatchStDict[@"oneFenTry"] = @(tPlayerModel.behaviorNumb31.intValue)) : (playerMatchStDict[@"oneFenTry"] = @0);
+        tPlayerModel.OnePointsHit ? (playerMatchStDict[@"oneFenHit"] = @(tPlayerModel.OnePointsHit.intValue)) : (playerMatchStDict[@"oneFenHit"] = @0);
+        tPlayerModel.behaviorNumb31 ? (playerMatchStDict[@"oneFenTry"] = @(tPlayerModel.behaviorNumb31.intValue)) : (playerMatchStDict[@"oneFenTry"] = @0);
         tPlayerModel.TwoPointsHit ? (playerMatchStDict[@"twoPointHit"] = @(tPlayerModel.TwoPointsHit.intValue)) : (playerMatchStDict[@"twoPointHit"] = @0);
         tPlayerModel.behaviorNumb2 ? (playerMatchStDict[@"twoPointTry"] = @(tPlayerModel.behaviorNumb2.intValue)) : (playerMatchStDict[@"twoPointTry"] = @0);
         tPlayerModel.ThreePointsHit ? (playerMatchStDict[@"threePointHit"] = @(tPlayerModel.ThreePointsHit.intValue)) : (playerMatchStDict[@"threePointHit"] = @0);
         tPlayerModel.behaviorNumb3 ? (playerMatchStDict[@"threePointTry"] = @(tPlayerModel.behaviorNumb3.intValue)) : (playerMatchStDict[@"threePointTry"] = @0);
         tPlayerModel.FreeThrowHit ? (playerMatchStDict[@"onePointHit"] = @(tPlayerModel.FreeThrowHit.intValue)) : (playerMatchStDict[@"onePointHit"] = @0);
         tPlayerModel.behaviorNumb1 ? (playerMatchStDict[@"onePointTry"] = @(tPlayerModel.behaviorNumb1.intValue)) : (playerMatchStDict[@"onePointTry"] = @0);
-//        playerMatchStDict[@"fastBreak"] = @0;
+
         tPlayerModel.behaviorNumb4 ? (playerMatchStDict[@"offensiveRebound"] = @(tPlayerModel.behaviorNumb4.intValue)) : (playerMatchStDict[@"offensiveRebound"] = @0);
         tPlayerModel.behaviorNumb5 ? (playerMatchStDict[@"defensiveRebound"] = @(tPlayerModel.behaviorNumb5.intValue)) : (playerMatchStDict[@"defensiveRebound"] = @0);
         tPlayerModel.behaviorNumb9 ? (playerMatchStDict[@"assists"] = @(tPlayerModel.behaviorNumb9.intValue)) : (playerMatchStDict[@"assists"] = @0);
-//        playerMatchStDict[@"dunk"] = @0;
+        
         tPlayerModel.behaviorNumb7 ? (playerMatchStDict[@"fault"] = @(tPlayerModel.behaviorNumb7.intValue)) : (playerMatchStDict[@"fault"] = @0);
         tPlayerModel.behaviorNumb6 ? (playerMatchStDict[@"steal"] = @(tPlayerModel.behaviorNumb6.intValue)) : (playerMatchStDict[@"steal"] = @0);
         tPlayerModel.behaviorNumb10 ? (playerMatchStDict[@"foul"] = @(tPlayerModel.behaviorNumb10.intValue)) : (playerMatchStDict[@"foul"] = @0);
         tPlayerModel.behaviorNumb8 ? (playerMatchStDict[@"block"] = @(tPlayerModel.behaviorNumb8.intValue)) : (playerMatchStDict[@"block"] = @0);
-//        playerMatchStDict[@"violated"] = @"0";
+
         
         [playerMatchStArray addObject:playerMatchStDict];
     }];
+    
     
     return playerMatchStArray;
 }

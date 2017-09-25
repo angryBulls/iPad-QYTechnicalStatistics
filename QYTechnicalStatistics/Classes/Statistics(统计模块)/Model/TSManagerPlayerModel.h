@@ -19,8 +19,11 @@
 @property (nonatomic, copy) NSString *behaviorNumb8; // 盖帽
 @property (nonatomic, copy) NSString *behaviorNumb9; // 助攻
 @property (nonatomic, copy) NSString *behaviorNumb10; // 犯规
-
+@property (nonatomic , copy) NSString *behaviorNumb31; //1分投
 @property (nonatomic, copy) NSString *FreeThrowHit; // 罚篮命中数
+
+@property (nonatomic , copy) NSString *OnePointsHit; //1分中
+
 @property (nonatomic, copy) NSString *TwoPointsHit; // 2分命中数
 @property (nonatomic, copy) NSString *ThreePointsHit; // 3分命中数
 

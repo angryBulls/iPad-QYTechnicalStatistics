@@ -31,4 +31,5 @@
 
 @property (nonatomic , copy) NSString *teamCoachH;
 @property (nonatomic , copy) NSString *teamCoachG;
+@property (nonatomic , copy) NSString *matchId;
 @end

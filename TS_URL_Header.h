@@ -92,5 +92,6 @@ static int const StageGameTimes = 600;
 // 测试数据
 
 // 测试服务器地址
-#define TS_SERVER_URL_TEST @"http://180.76.166.143:8094/statistics/request/"
+//#define TS_SERVER_URL_TEST @"http://180.76.166.143:8094/statistics/request/"
+#define TS_SERVER_URL_TEST @"http://test2.qiuyouzone.com/statistics/request"
 #endif /* TS_URL_Header_h */

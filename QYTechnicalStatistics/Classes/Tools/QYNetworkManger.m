@@ -12,13 +12,40 @@
 
 @implementation QYNetworkManger
 
+
++ (void)getBCBCMatchId:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed { // 获取BCBC的MatchId
+    NSMutableDictionary *unEncodeDict = [NSMutableDictionary dictionary];
+    
+    
+    unEncodeDict[@"sn"] = [TSToolsMethod creatUUID];
+    TSUserInfoModelBCBC *userInfo = [TSToolsMethod fetchUserInfoModelBCBC];
+    
+    unEncodeDict[@"token"] = userInfo.token;
+    unEncodeDict[@"service"] = @"playerMatch";
+    unEncodeDict[@"method"] = @"getMatchId";
+    unEncodeDict[@"params"] = paramsDict;
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:unEncodeDict options:0 error:nil];
+    NSString *myString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSDictionary *encodeDic = [[NSDictionary alloc] initWithObjectsAndKeys:myString, @"body", nil];
+    
+    [self p_PrivateGET:TS_SERVER_URL_TEST paramsDict:encodeDic showActivityView:NO responseSuccess:^(id responseObject) {
+        success(responseObject);
+    } responseFailed:^(NSError *error) {
+        failed(error);
+    }];
+}
+
+
+
+
 + (void)abstention:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed {
     NSMutableDictionary *unEncodeDict = [NSMutableDictionary dictionary];
     
-    int currentUserType = [[[NSUserDefaults standardUserDefaults] objectForKey:CurrentLoginUserType] intValue];
+
     
-        TSUserInfoModelBCBC *userInfo = [TSToolsMethod fetchUserInfoModelBCBC];
-        unEncodeDict[@"token"] = userInfo.token;
+    TSUserInfoModelBCBC *userInfo = [TSToolsMethod fetchUserInfoModelBCBC];
+    unEncodeDict[@"token"] = userInfo.token;
     
     unEncodeDict[@"sn"] = [TSToolsMethod creatUUID];
     unEncodeDict[@"service"] = @"amateurstatistic";
@@ -41,9 +68,7 @@
 
 + (void)sendCurrentStageDataBCBC:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed {
     NSMutableDictionary *unEncodeDict = [NSMutableDictionary dictionary];
-    
-    
-    NSLog(@"%@",paramsDict);
+
     
     NSTimeInterval interval = [[NSDate date] timeIntervalSince1970] * 1000;
     unEncodeDict[@"sn"] = [NSString stringWithFormat:@"%lf", interval];
@@ -59,15 +84,25 @@
     NSString *myString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     NSDictionary *encodeDic = [[NSDictionary alloc] initWithObjectsAndKeys:myString, @"body", nil];
     
+    NSLog(@"unEncodeDict:%@",unEncodeDict);
     
-    [self p_PrivateGET:TS_SERVER_URL_TEST paramsDict:encodeDic showActivityView:NO responseSuccess:^(id responseObject) {
-                NSLog(@"responseObject:%@", responseObject);
+    
+    [self p_PrivatePOST:TS_SERVER_URL_TEST paramsDict:encodeDic responseSuccess:^(id responseObject) {
+        
+        NSLog(@"responseObject:%@", responseObject);
         success(responseObject);
-        
+
     } responseFailed:^(NSError *error) {
-        failed(error);
-        
+         failed(error);
     }];
+//    [self p_PrivatePOST:TS_SERVER_URL_TEST paramsDict:encodeDic showActivityView:NO responseSuccess:^(id responseObject) {
+//                NSLog(@"responseObject:%@", responseObject);
+//        success(responseObject);
+//        
+//    } responseFailed:^(NSError *error) {
+//        failed(error);
+//        
+//    }];
 }
 
 
@@ -76,7 +111,7 @@
 + (void)getPlaysDataByTeam:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed {
     NSMutableDictionary *unEncodeDict = [NSMutableDictionary dictionary];
     
-    QYUserInfoModel *userInfo = [QYToolsMethod fetchUserInfoModel];
+    TSUserInfoModelBCBC *userInfo = [TSToolsMethod fetchUserInfoModelBCBC];
     
     NSTimeInterval interval = [[NSDate date] timeIntervalSince1970] * 1000;
     unEncodeDict[@"sn"] = [NSString stringWithFormat:@"%lf", interval];
@@ -104,7 +139,7 @@
 +(void)queryPlayByTeam:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed{
     
     NSMutableDictionary *unEncodeDict = [NSMutableDictionary dictionary];
-    QYUserInfoModel *userInfo = [QYToolsMethod fetchUserInfoModel];
+    TSUserInfoModelBCBC *userInfo = [TSToolsMethod fetchUserInfoModelBCBC];
     unEncodeDict[@"sn"] = [QYToolsMethod creatUUID];
     unEncodeDict[@"token"] = userInfo.token;
     unEncodeDict[@"service"] = @"playerMatch";
@@ -130,7 +165,7 @@
  */
 + (void)getTeamInfoFinalMatch:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed{
     NSMutableDictionary *unEncodeDict = [NSMutableDictionary dictionary];
-    QYUserInfoModel *userInfo = [QYToolsMethod fetchUserInfoModel];
+    TSUserInfoModelBCBC *userInfo = [TSToolsMethod fetchUserInfoModelBCBC];
     unEncodeDict[@"sn"] = [QYToolsMethod creatUUID];
     unEncodeDict[@"token"] = userInfo.token;
     unEncodeDict[@"service"] = @"playerMatch";
@@ -157,7 +192,7 @@
  */
 + (void)getTeamInfoByZone:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed{
     NSMutableDictionary *unEncodeDict = [NSMutableDictionary dictionary];
-    QYUserInfoModel *userInfo = [QYToolsMethod fetchUserInfoModel];
+    TSUserInfoModelBCBC *userInfo = [TSToolsMethod fetchUserInfoModelBCBC];
     unEncodeDict[@"sn"] = [QYToolsMethod creatUUID];
     unEncodeDict[@"token"] = userInfo.token;
     unEncodeDict[@"service"] = @"playerMatch";
@@ -182,7 +217,7 @@
  */
 + (void)getTeamInfoByProvence:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed{
     NSMutableDictionary *unEncodeDict = [NSMutableDictionary dictionary];
-    QYUserInfoModel *userInfo = [QYToolsMethod fetchUserInfoModel];
+    TSUserInfoModelBCBC *userInfo = [TSToolsMethod fetchUserInfoModelBCBC];
     unEncodeDict[@"sn"] = [QYToolsMethod creatUUID];
     unEncodeDict[@"token"] = userInfo.token;
     unEncodeDict[@"service"] = @"playerMatch";
@@ -279,7 +314,7 @@
 
 + (void)p_PrivatePOST:(NSString *)url paramsDict:(NSDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+//    manager.requestSerializer = [AFJSONRequestSerializer serializer];
     [manager POST:url parameters:paramsDict progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
