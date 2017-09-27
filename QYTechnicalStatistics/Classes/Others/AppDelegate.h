@@ -14,7 +14,7 @@
 
 - (void)setGuidPageBeRootView;
 - (void)setVoicePageBeRootView;
-
+- (void)setChoosePageRootView;
 
 @end
 

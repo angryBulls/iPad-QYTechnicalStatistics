@@ -84,7 +84,7 @@
         _minLabel.layer.cornerRadius = kSCALE_NUM(5);
         _minLabel.layer.masksToBounds = YES;
         _minLabel.textColor = [UIColor colorWithHexRGB:@"#333333" andAlpha:1.0f];
-        _minLabel.text = [NSString stringWithFormat:@"%ld",min];
+        _minLabel.text = [NSString stringWithFormat:@"%02ld",min];
         _minLabel.textAlignment = NSTextAlignmentCenter;
         _minLabel.font = kSCALE_FONT_NAME_SIZE(@"DBLCDTempBlack", 21);
         [self addSubview:_minLabel];
@@ -114,7 +114,7 @@
         _secLabel.layer.cornerRadius = kSCALE_NUM(5);
         _secLabel.layer.masksToBounds = YES;
         _secLabel.textColor = [UIColor colorWithHexRGB:@"#333333" andAlpha:1.0f];
-        _secLabel.text = [NSString stringWithFormat:@"%ld",sec];
+        _secLabel.text = [NSString stringWithFormat:@"%02ld",sec];
         _secLabel.textAlignment = NSTextAlignmentCenter;
         _secLabel.font = kSCALE_FONT_NAME_SIZE(@"DBLCDTempBlack", 21);
         [self addSubview:_secLabel];

@@ -16,7 +16,6 @@
 + (void)getBCBCMatchId:(NSMutableDictionary *)paramsDict responseSuccess:(Success)success responseFailed:(Failed)failed { // 获取BCBC的MatchId
     NSMutableDictionary *unEncodeDict = [NSMutableDictionary dictionary];
     
-    
     unEncodeDict[@"sn"] = [TSToolsMethod creatUUID];
     TSUserInfoModelBCBC *userInfo = [TSToolsMethod fetchUserInfoModelBCBC];
     
@@ -95,14 +94,7 @@
     } responseFailed:^(NSError *error) {
          failed(error);
     }];
-//    [self p_PrivatePOST:TS_SERVER_URL_TEST paramsDict:encodeDic showActivityView:NO responseSuccess:^(id responseObject) {
-//                NSLog(@"responseObject:%@", responseObject);
-//        success(responseObject);
-//        
-//    } responseFailed:^(NSError *error) {
-//        failed(error);
-//        
-//    }];
+
 }
 
 

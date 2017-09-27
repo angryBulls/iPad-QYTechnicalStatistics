@@ -20,6 +20,7 @@
 
 @property (nonatomic, strong) UILabel * totalColonLabel;
 @property (nonatomic, strong) UILabel * sectionColonLabel;
+@property (nonatomic ,strong) TSDBManager *tSDBManager;
 
 @end
 
@@ -35,7 +36,7 @@
     [super layoutSubviews];
     
     [self integratedLayout];
-}
+    }
 
 // 界面布局 px为基准
 - (void)integratedLayout {
@@ -50,11 +51,11 @@
                                             :self.totalHostTeamLabel.scaleY
                                             :self.totalHostTeamLabel.scaleW
                                             :self.totalHostTeamLabel.scaleH];
-    [self.sectionScoreLabel scaleFrameMake:CGScaleGetMaxX(self.totalGuestTeamLabel.frame) + 140
+    [self.sectionScoreLabel scaleFrameMake:CGScaleGetMaxX(self.totalGuestTeamLabel.frame) + 80
                                           :self.totalScoreLabel.scaleY
                                           :self.totalScoreLabel.scaleW/2.0*3
                                           :self.totalScoreLabel.scaleH];
-    [self.hostTeamScoreLabel scaleFrameMake:CGScaleGetMaxX(self.sectionScoreLabel.frame) + 30
+    [self.hostTeamScoreLabel scaleFrameMake:CGScaleGetMaxX(self.sectionScoreLabel.frame) + 60
                                            :self.totalHostTeamLabel.scaleY
                                            :self.totalHostTeamLabel.scaleW
                                            :self.totalHostTeamLabel.scaleH];
@@ -65,6 +66,13 @@
 }
 
 #pragma mark - lazy
+
+-(TSDBManager *)tSDBManager{
+    if (_tSDBManager == nil) {
+        _tSDBManager = [[TSDBManager alloc] init];
+    }
+    return _tSDBManager;
+}
 
 - (UIImageView *)bjView {
     
@@ -114,10 +122,10 @@
     
     if (!_sectionScoreLabel) {
         _sectionScoreLabel = [[UILabel alloc] init];
-        _sectionScoreLabel.text = @"第一小节";
+//        _sectionScoreLabel.text = @"第一小节";
         _sectionScoreLabel.textAlignment = NSTextAlignmentCenter;
         _sectionScoreLabel.font = kSCALE_BOLD_FONT(21);
-        _sectionColonLabel.backgroundColor = [UIColor redColor];
+        
         _sectionScoreLabel.textColor = [UIColor colorWithHexRGB:@"#FFFFFF" andAlpha:1.0f];
         [self addSubview:_sectionScoreLabel];
     }
@@ -163,13 +171,45 @@
 -(void)setGameModel:(TSGameModel *)gameModel{
     _gameModel = gameModel;
     _totalHostTeamLabel.score = [gameModel.scoreTotalH integerValue];
-    _totalGuestTeamLabel.score = [gameModel.scoreStageG integerValue];
+    _totalGuestTeamLabel.score = [gameModel.scoreTotalG integerValue];
     _hostTeamScoreLabel.score = [gameModel.scoreStageH integerValue];
     _guestTeamScoreLabel.score = [gameModel.scoreStageG integerValue];
     
-    
+    [self p_setupMatchData];
+
 }
 
+-(void)p_setupMatchData{
+    NSMutableDictionary *checkTableDic = [[self.tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    NSString *lesson = checkTableDic[@"currentStage"] ;
+    
+    if ([lesson isEqualToString:StageOne]) {
+        _sectionScoreLabel.text = @"第一节";
+    }else if ([lesson isEqualToString:StageTwo]){
+        _sectionScoreLabel.text = @"第二节";
+    }
+    else if ([lesson isEqualToString:StageThree]){
+        _sectionScoreLabel.text = @"第三节";
+    }
+    else if ([lesson isEqualToString:StageFour]){
+        _sectionScoreLabel.text = @"第四节";
+    }else if ([lesson isEqualToString:OverTime1]){
+        _sectionScoreLabel.text = @"加时赛 1";
+    }
+    else if ([lesson isEqualToString:OverTime2]){
+        _sectionScoreLabel.text = @"加时赛 2";
+    }else if ([lesson isEqualToString:OverTime3]){
+        _sectionScoreLabel.text = @"加时赛 3";
+    }
+    else
+    {
+        _sectionScoreLabel.text = @"比赛结束";
+        
+    }
+
+    
+    
+}
 
 
 @end

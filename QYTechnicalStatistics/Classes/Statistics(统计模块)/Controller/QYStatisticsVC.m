@@ -14,7 +14,7 @@
 #import "QYChangeVC.h"
 #import "QYFinishMatchVC.h"
 
-@interface QYStatisticsVC ()<QYStadiumViewDelegate,QYRegistrationMinViewDelegate,QYReplacePlayerVCDelegate,QYChangeVCDelegate>
+@interface QYStatisticsVC ()<QYStadiumViewDelegate,QYRegistrationMinViewDelegate,QYReplacePlayerVCDelegate,QYChangeVCDelegate,QYFinishMatchVCDelegate>
 
 @property (strong, nonatomic) QYRegistrationTitleView * registrationTitleView;
 @property (strong, nonatomic) QYRegistrationMinView * registrationMinView;
@@ -222,6 +222,13 @@
     
 }
 
+#pragma mark QYFinishMatchVCDelegate
+-(void)removeInsertDBDictArrayObjects{
+    [self.insertDBDictArray removeAllObjects];
+    [self p_updateStatisticsData];
+
+}
+
 
 #pragma mark QYRegistrationMinViewDelegate
 
@@ -270,9 +277,10 @@
 }
 -(void)finishGameWithQuarter:(NSInteger)quarter{
     QYFinishMatchVC *vc= [QYFinishMatchVC new];
+    vc.delegate = self;
     vc.tSDBManager = _tSDBManager;
     vc.gameModel = _gameModel;
-//    vc.finisnTag = QuarterOne;
+
     [self.navigationController pushViewController:vc animated:YES];
     
     
@@ -333,6 +341,26 @@
         
         [calculationTool calculationHostStageScoreFouls];
         [calculationTool calculationGuestStageScoreFouls];
+        //主队各个节的分
+        [calculationTool calculationHostStageScoreFoulsWithStageCount:StageOne];
+        [calculationTool calculationHostStageScoreFoulsWithStageCount:StageTwo];
+        [calculationTool calculationHostStageScoreFoulsWithStageCount:StageThree];
+        [calculationTool calculationHostStageScoreFoulsWithStageCount:StageFour];
+
+        [calculationTool calculationHostStageScoreFoulsWithStageCount:OverTime1];
+        [calculationTool calculationHostStageScoreFoulsWithStageCount:OverTime2];
+        [calculationTool calculationHostStageScoreFoulsWithStageCount:OverTime3];
+        //客队各个节得分
+        [calculationTool calculationGuestStageScoreFoulsWithStageCount:StageOne];
+        [calculationTool calculationGuestStageScoreFoulsWithStageCount:StageTwo];
+        [calculationTool calculationGuestStageScoreFoulsWithStageCount:StageThree];
+        [calculationTool calculationGuestStageScoreFoulsWithStageCount:StageFour];
+        
+        [calculationTool calculationGuestStageScoreFoulsWithStageCount:OverTime1];
+        [calculationTool calculationGuestStageScoreFoulsWithStageCount:OverTime2];
+        [calculationTool calculationGuestStageScoreFoulsWithStageCount:OverTime3];
+        
+        
         
         
         [calculationTool calculationTimeOutSatgeData];
@@ -346,7 +374,7 @@
         
         NSDictionary *insertDBDict = [self.insertDBDictArray lastObject];
         if ((11 == [insertDBDict[BnfBehaviorType] intValue]) || (12 == [insertDBDict[BnfBehaviorType] intValue])) { // 换人语音识别
-//            [self.voicePlayersView updatePlayersStatus];  
+ 
         }
         
     });

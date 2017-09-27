@@ -11,6 +11,7 @@
 #import "UIColor+QYHexRGB.h"
 #import "QYMovieCoveringView.h"
 #import "QYLoginViewController.h"
+#import "QYRegistrationVC.h"
 #import "QYStatisticsVC.h"
 @interface AppDelegate ()
 
@@ -54,6 +55,16 @@
     rootNav.navigationBar.hidden = YES;
     [self setCurrentPageBeRootView:rootNav];
 }
+
+
+- (void)setChoosePageRootView{
+    
+    UINavigationController *rootNav = [[UINavigationController alloc] initWithRootViewController:[[QYRegistrationVC alloc] init]];
+    rootNav.navigationBar.hidden = YES;
+    [self setCurrentPageBeRootView:rootNav];
+    
+}
+
 
 - (void)setVoicePageBeRootView {
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[QYStatisticsVC alloc] init]];

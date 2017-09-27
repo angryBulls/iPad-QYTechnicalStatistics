@@ -3,7 +3,6 @@
 
 @interface TSDBManager ()
 @property (nonatomic, strong) YTKKeyValueStore *store;
-@property (nonatomic, strong) NSArray *playerIdArray;
 @end
 
 @implementation TSDBManager
@@ -374,10 +373,10 @@
 
 - (NSString *)p_getPlayerIdWithinsertDBDict:(NSDictionary *)insertDBDict { // 根据GameId、主客队类型和球员号码获取本条语音统计数据的playerId
     NSString *playerIdKey = [NSString stringWithFormat:@"%@+%@", insertDBDict[BnfTeameType], insertDBDict[NumbResultStr]];
-    self.playerIdArray = [self.store getObjectById:GameId fromTable:PlayerIdTable];
+    NSArray *playerIdArray = [self.store getObjectById:GameId fromTable:PlayerIdTable];
     
     __block NSString *playerId = @"";
-    [self.playerIdArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [playerIdArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([[obj allKeys][0] isEqualToString:playerIdKey]) {
             playerId = [obj allValues][0];
         }

@@ -136,7 +136,7 @@
 // 计算客队本场的数据（包括：本场得分、本场犯规）
 - (void)calculationGuestTotalScoreFouls {
     NSMutableArray *allGuestPlayerDataArray = [self.tSDBManager getAllGuestTeamPlayerData];
-//    DDLog(@"allGuestPlayerDataArray is:%@", allGuestPlayerDataArray);
+
     
     __block NSInteger scoreTotalG = 0;
     [allGuestPlayerDataArray enumerateObjectsUsingBlock:^(NSDictionary *subDict1, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -152,6 +152,7 @@
     }];
     
     self.gameModel.scoreTotalG = [NSString stringWithFormat:@"%ld", scoreTotalG];
+    
 //    DDLog(@"guest team scoreTotal is:%ld", scoreTotalG);
 }
 

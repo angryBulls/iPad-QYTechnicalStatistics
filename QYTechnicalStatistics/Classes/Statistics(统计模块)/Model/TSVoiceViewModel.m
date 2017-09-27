@@ -86,10 +86,8 @@
 
 - (void)p_createSendCurrentStageData { // 获取当节需要被提交的数据
     TSDBManager *tSDBManager = [[TSDBManager alloc] init];
-    
     // 获取当前第几节
     NSDictionary *gameTableDict = [tSDBManager getObjectById:GameId fromTable:GameTable];
-    
     [StageAllArray enumerateObjectsUsingBlock:^(NSString *stageName, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([gameTableDict[CurrentStage] isEqualToString:stageName]) {
             if (0 == idx) {
@@ -114,7 +112,6 @@
     // 获取“比赛数据表”中的“matchId”
     if ([gameTableDict[@"matchInfoId"] length]) {
         self.pramasDict[@"matchId"] = gameTableDict[@"matchInfoId"];
-        
         
     }
     
