@@ -21,7 +21,6 @@
 @property (strong, nonatomic) QYStadiumView * stadiumView;
 @property (strong, nonatomic) UIView * maskView; // 蒙板
 
-@property (nonatomic ,assign) BOOL isGame;
 @property (nonatomic ,assign) BOOL endQuarter;
 
 
@@ -46,7 +45,6 @@
         NSLog(@"ssssss");
         documentsPath = [appArray objectAtIndex:0];
     }
-    
     NSLog(@"%ld ----  --  %@",appArray.count,documentsPath);
     
     NSArray *allHostTeamPlayerData = [self.tSDBManager getAllHostTeamPlayerData];
@@ -55,6 +53,12 @@
     NSArray *allGuestTeamPlayerData = [self.tSDBManager getAllGuestTeamPlayerData];
     NSLog(@"allGuestTeamPlayerData is:%@", allGuestTeamPlayerData);
     [self p_updateStatisticsData];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self p_updateStatisticsData];
+    
 }
 
 - (void)initialization {
@@ -100,11 +104,6 @@
     
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    
-    [super viewWillAppear:animated];
-    
-}
 
 #define mark - lazy
 
@@ -169,18 +168,35 @@
 
 -(void)backResult:(NSMutableDictionary *)resultDic{
     
-    [self.insertDBDictArray addObject:resultDic];
-    
-    [_tSDBManager saveOneResultDataWithDict:resultDic saveDBStatusSuccessBlock:^(NSDictionary *insertDBDict) {
+    TSDBManager *tSDBManager = [[TSDBManager alloc] init];
+    NSMutableDictionary *gameTableDict = [[tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    NSString *startStr = gameTableDict[startTag];
+    if (![startStr isEqualToString:isStartGaming]) {
         
-    } saveDBStatusFailBlock:^(NSString *error) {
+    }
+    else
+    {
+        [self.insertDBDictArray addObject:resultDic];
         
-    }];
-    
-    [self p_updateStatisticsData];
+        [_tSDBManager saveOneResultDataWithDict:resultDic saveDBStatusSuccessBlock:^(NSDictionary *insertDBDict) {
+            
+        } saveDBStatusFailBlock:^(NSString *error) {
+            
+        }];
+        
+        [self p_updateStatisticsData];
+    }
     
 }
+
+//暂停
 -(void)updateResultDic:(NSMutableDictionary *)dic andStatus:(NSInteger)staus{
+    
+    
+    TSDBManager *tSDBManager = [[TSDBManager alloc] init];
+    NSMutableDictionary *gameTableDict = [[tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    gameTableDict[gameStatu] = gamePause;
+    [tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
     
     [self.insertDBDictArray addObject:dic];
     
@@ -226,7 +242,7 @@
 -(void)removeInsertDBDictArrayObjects{
     [self.insertDBDictArray removeAllObjects];
     [self p_updateStatisticsData];
-
+    
 }
 
 
@@ -234,72 +250,121 @@
 
 -(void)startGaming{
     _endQuarter = 0;
-    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSInteger i = [[userDefault objectForKey:startTag] integerValue];
     
+    TSDBManager *tSDBManager = [[TSDBManager alloc] init];
+    NSMutableDictionary *gameTableDict = [[tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    NSString *startStr = gameTableDict[startTag];
     
-    if (i == 0) {
-        // save the matchDate
+    if (![startStr isEqualToString:isStartGaming]) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            TSDBManager *tSDBManager = [[TSDBManager alloc] init];
-            NSMutableDictionary *gameTableDict = [[tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
             if ([gameTableDict[@"currentStage"] isEqualToString:StageOne]) {
                 NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
                 fmt.dateFormat = @"YYYY-MM-dd HH:mm:ss";
                 gameTableDict[@"matchDate"] = [fmt stringFromDate:[NSDate date]];
+                gameTableDict[startTag] = isStartGaming;
                 [tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
             }
-            
         });
-        
     }
-    i++;
-    [userDefault setObject:[NSString stringWithFormat:@"%ld",i] forKey:startTag];
-    [userDefault synchronize];
-    
-    _isGame = 1;
 }
 
 -(void)quarterGameEnd{
     
     _endQuarter = 1;
-    _isGame = 0;
+    
     [[NSUserDefaults standardUserDefaults] objectForKey:lastTime];
     
     
 }
-- (void)changeInfoOfMatch{
-    QYChangeVC *vc = [[QYChangeVC alloc] init];
-    vc.delegate = self;
-    
-    [self.navigationController pushViewController:vc animated:YES];
-}
--(void)finishGameWithQuarter:(NSInteger)quarter{
-    QYFinishMatchVC *vc= [QYFinishMatchVC new];
-    vc.delegate = self;
-    vc.tSDBManager = _tSDBManager;
-    vc.gameModel = _gameModel;
 
-    [self.navigationController pushViewController:vc animated:YES];
+- (void)changeInfoOfMatch{
     
+    TSDBManager *tSDBManager = [[TSDBManager alloc] init];
+    NSMutableDictionary *gameTableDict = [[tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    NSString *startStr = gameTableDict[startTag];
+    if (![startStr isEqualToString:isStartGaming]) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"比赛未开始" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    else
+    {
+        QYChangeVC *vc = [[QYChangeVC alloc] init];
+        vc.delegate = self;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
+
+#pragma mark QYStadiumViewDelegate
+-(void)finishGameWithQuarter:(NSInteger)quarter{
+    TSDBManager *tSDBManager = [[TSDBManager alloc] init];
+    NSMutableDictionary *gameTableDict = [[tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    NSString *startStr = gameTableDict[startTag];
     
+    if ([startStr isEqualToString:isStartGaming]) {
+        
+        NSString *gameStatus = gameTableDict[gameStatu];
+        
+        if ([gameStatus isEqualToString:gameQuarterEnd]) {
+            QYFinishMatchVC *vc= [QYFinishMatchVC new];
+            vc.delegate = self;
+            vc.tSDBManager = _tSDBManager;
+            vc.gameModel = _gameModel;
+            
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+        else
+        {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"单节结束后才能生成比赛" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+            
+        }
+        
+    }
+    else
+    {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"比赛未开始" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alert show];
+        
+        
+        
+    }
 }
 
 - (void)replacePlayerInStadiumView:(QYStadiumView *)stadiumView {
+    TSDBManager *tSDBManager = [[TSDBManager alloc] init];
+    NSMutableDictionary *gameTableDict = [[tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    NSString *startStr = gameTableDict[startTag];
+    if (![startStr isEqualToString:isStartGaming]) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"比赛未开始" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    else
+    {
+        if ([gameTableDict[gameStatu] isEqualToString:gameContinue]) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"请先暂停比赛" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+            
+        }
+        else
+        {
+            // 跳转换人页面
+            QYReplacePlayerVC *vc = [[QYReplacePlayerVC alloc] init];
+            vc.delegate = self;
+            [self.navigationController pushViewController:
+             vc animated:YES];
+            
+        }
+        
+    }
     
-    // 跳转换人页面
-    QYReplacePlayerVC *vc = [[QYReplacePlayerVC alloc] init];
-    vc.delegate = self;
-    [self.navigationController pushViewController:
-     vc animated:YES];
 }
 
 #pragma mark - <QYReplacePlayerVCDelegate>
 
 
 -(void)backInsterDic1:(NSMutableDictionary *)dic1 andInsterDic2:(NSMutableDictionary *)dic2{
-    
     [self.insertDBDictArray addObject:dic1];
     
     [_tSDBManager saveOneResultDataWithDict:dic1 saveDBStatusSuccessBlock:^(NSDictionary *insertDBDict) {
@@ -321,7 +386,6 @@
     
     [self p_updateStatisticsData];
     
-    
 }
 
 #pragma mark - <dealloc>
@@ -338,7 +402,7 @@
         TSCalculationTool *calculationTool = [[TSCalculationTool alloc] init];
         [calculationTool calculationHostTotalScoreFouls];
         [calculationTool calculationGuestTotalScoreFouls];
-        
+        //主队全场得分
         [calculationTool calculationHostStageScoreFouls];
         [calculationTool calculationGuestStageScoreFouls];
         //主队各个节的分
@@ -346,7 +410,7 @@
         [calculationTool calculationHostStageScoreFoulsWithStageCount:StageTwo];
         [calculationTool calculationHostStageScoreFoulsWithStageCount:StageThree];
         [calculationTool calculationHostStageScoreFoulsWithStageCount:StageFour];
-
+        
         [calculationTool calculationHostStageScoreFoulsWithStageCount:OverTime1];
         [calculationTool calculationHostStageScoreFoulsWithStageCount:OverTime2];
         [calculationTool calculationHostStageScoreFoulsWithStageCount:OverTime3];
@@ -359,14 +423,9 @@
         [calculationTool calculationGuestStageScoreFoulsWithStageCount:OverTime1];
         [calculationTool calculationGuestStageScoreFoulsWithStageCount:OverTime2];
         [calculationTool calculationGuestStageScoreFoulsWithStageCount:OverTime3];
-        
-        
-        
-        
         [calculationTool calculationTimeOutSatgeData];
         
         
-
         _registrationTitleView.gameModel = calculationTool.gameModel;
         _registrationMinView.gameModel = calculationTool.gameModel;
         _stadiumView.gameModel = calculationTool.gameModel;
@@ -374,7 +433,7 @@
         
         NSDictionary *insertDBDict = [self.insertDBDictArray lastObject];
         if ((11 == [insertDBDict[BnfBehaviorType] intValue]) || (12 == [insertDBDict[BnfBehaviorType] intValue])) { // 换人语音识别
- 
+            
         }
         
     });
@@ -385,7 +444,7 @@
 }
 
 - (void)p_gotoTheNextStageGame:(NSNotification *)notif {
-
+    
     self.registrationMinView.midBjView.currentSecond = StageGameTimes;
     [self p_updateStatisticsData];
 }

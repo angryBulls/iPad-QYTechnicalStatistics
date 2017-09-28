@@ -581,6 +581,8 @@ static NSString * const registrationCell = @"registrationCell";
     gameTableDict[CurrentStage] = StageOne;
     gameTableDict[CurrentStageDataSubmitted] = @"0";
     gameTableDict[@"matchInfoId"] = self.checkModel.matchId;
+    gameTableDict[lastTime] = [NSString stringWithFormat:@"%d",StageGameTimes];
+    
     [store putObject:gameTableDict withId:GameId intoTable:GameTable];
     
     
@@ -605,12 +607,6 @@ static NSString * const registrationCell = @"registrationCell";
     }];
     
     [store putObject:playerIdArray withId:GameId intoTable:PlayerIdTable];
-    
-    [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:startTag];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    [[NSUserDefaults standardUserDefaults] setObject:@"600" forKey:lastTime];
-    [[NSUserDefaults standardUserDefaults] synchronize];
     
     
     [(AppDelegate *)[UIApplication sharedApplication].delegate setVoicePageBeRootView];

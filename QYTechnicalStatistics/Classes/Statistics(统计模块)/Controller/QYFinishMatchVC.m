@@ -571,8 +571,11 @@
     {
         [self p_sendCurrentStageData];
         
-        [[NSUserDefaults standardUserDefaults] setObject:@"600" forKey:lastTime];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        NSMutableDictionary *gameTableDict = [[self.tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+        gameTableDict[lastTime] = [NSString stringWithFormat:@"%d",StageGameTimes];
+        [_tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
+        
+        
         [self.navigationController popViewControllerAnimated:YES];
     }
     

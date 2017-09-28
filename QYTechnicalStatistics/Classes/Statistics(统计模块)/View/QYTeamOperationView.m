@@ -221,14 +221,7 @@
 
 
 -(void)pauseAddBntClicked:(UIButton *)btn {
-    
-    NSInteger i = [_pauseScoreLabel.text integerValue];
-    i++;
-    _pauseScoreLabel.text = [NSString stringWithFormat:@"%ld",i];
-
-    
    
-    
     NSMutableDictionary *resultDic = [NSMutableDictionary dictionary];
     resultDic[BnfBehaviorType] =@"0";
     

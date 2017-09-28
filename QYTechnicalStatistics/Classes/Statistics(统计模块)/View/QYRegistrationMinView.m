@@ -103,13 +103,16 @@
 }
 -(void)quarterEnd{
     
-    if (self.delegate && [self.delegate performSelector:@selector(quarterGameEnd)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(quarterGameEnd)]) {
+        
+        
         
     }
 }
 
 -(void)startGame{
-    if ( self.delegate && [self.delegate performSelector:@selector(startGaming)]) {
+    
+    if ( self.delegate && [self.delegate respondsToSelector:@selector(startGaming)]) {
         [_delegate startGaming];
     }
 }
@@ -125,6 +128,8 @@
     _midBjView.currentSecond = [_midBjView.minLabel.text intValue] *60 +[_midBjView.secLabel.text intValue];
     
     [_midBjView.toolsMethod stopGCDTimer];
+    
+    
     if (self.delegate && [self.delegate respondsToSelector:@selector(updateResultDic:andStatus:)]) {
         [_delegate updateResultDic:dic andStatus:status];
     }

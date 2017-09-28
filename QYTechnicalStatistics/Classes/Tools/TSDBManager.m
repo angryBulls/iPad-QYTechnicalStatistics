@@ -24,39 +24,39 @@
         return;
     }
     
-//    NSArray *restltArray = resultDict[@"ws"];
-//    if (0 == restltArray.count) {
-//        return;
-//    }
-//    
-//    //    NSLog(@"result array is:%@", restltArray);
-//    NSMutableDictionary *insertDBDict = [NSMutableDictionary dictionary];
-//    [restltArray enumerateObjectsUsingBlock:^(NSDictionary *subDict, NSUInteger idx, BOOL * _Nonnull stop) {
-//        NSString *slotType = @"";
-//        
-//        if ([subDict[@"slot"] isEqualToString:BnfTeameType]) {
-//            slotType = BnfTeameType;
-//        } else if ([subDict[@"slot"] isEqualToString:BnfTenNumberType]) {
-//            slotType = BnfTenNumberType;
-//        } else if ([subDict[@"slot"] isEqualToString:BnfBitsNumberType]) {
-//            slotType = BnfBitsNumberType;
-//        } else if ([subDict[@"slot"] isEqualToString:BnfBehaviorType]) {
-//            slotType = BnfBehaviorType;
-//        } else if ([subDict[@"slot"] isEqualToString:BnfResultType]) {
-//            slotType = BnfResultType;
-//        }
-//        
-//        if (slotType.length) {
-//            insertDBDict[slotType] = subDict[@"cw"][0][@"id"];
-//        }
-//    }];
-//    
-//    NSLog(@"self.insertDBDict is:%@", insertDBDict);
-//    
-//    if (!insertDBDict[BnfTeameType]) { // 如果未识别主客队，则放弃存储
-//        saveDBStatusFailBlock(@"");
-//        return;
-//    }
+    //    NSArray *restltArray = resultDict[@"ws"];
+    //    if (0 == restltArray.count) {
+    //        return;
+    //    }
+    //
+    //    //    NSLog(@"result array is:%@", restltArray);
+    //    NSMutableDictionary *insertDBDict = [NSMutableDictionary dictionary];
+    //    [restltArray enumerateObjectsUsingBlock:^(NSDictionary *subDict, NSUInteger idx, BOOL * _Nonnull stop) {
+    //        NSString *slotType = @"";
+    //
+    //        if ([subDict[@"slot"] isEqualToString:BnfTeameType]) {
+    //            slotType = BnfTeameType;
+    //        } else if ([subDict[@"slot"] isEqualToString:BnfTenNumberType]) {
+    //            slotType = BnfTenNumberType;
+    //        } else if ([subDict[@"slot"] isEqualToString:BnfBitsNumberType]) {
+    //            slotType = BnfBitsNumberType;
+    //        } else if ([subDict[@"slot"] isEqualToString:BnfBehaviorType]) {
+    //            slotType = BnfBehaviorType;
+    //        } else if ([subDict[@"slot"] isEqualToString:BnfResultType]) {
+    //            slotType = BnfResultType;
+    //        }
+    //
+    //        if (slotType.length) {
+    //            insertDBDict[slotType] = subDict[@"cw"][0][@"id"];
+    //        }
+    //    }];
+    //
+    //    NSLog(@"self.insertDBDict is:%@", insertDBDict);
+    //
+    //    if (!insertDBDict[BnfTeameType]) { // 如果未识别主客队，则放弃存储
+    //        saveDBStatusFailBlock(@"");
+    //        return;
+    //    }
     
 #pragma mark - 保存暂停的数据
     if (0 == [resultDict[BnfBehaviorType] intValue]) { // 这是一条暂停数据
@@ -65,35 +65,35 @@
         return;
     }
     
-//    if (!resultDict[BnfTenNumberType] && !insertDBDict[BnfBitsNumberType]) { // 如果未识别球员号码，则放弃存储
-//        saveDBStatusFailBlock(@"");
-//        return;
-//    }
+    //    if (!resultDict[BnfTenNumberType] && !insertDBDict[BnfBitsNumberType]) { // 如果未识别球员号码，则放弃存储
+    //        saveDBStatusFailBlock(@"");
+    //        return;
+    //    }
     
-//    if (!insertDBDict[BnfBehaviorType] && !insertDBDict[BnfBehaviorType]) { // 如果没有球员行为，则放弃存储
-//        saveDBStatusFailBlock(@"");
-//        return;
-//    }
+    //    if (!insertDBDict[BnfBehaviorType] && !insertDBDict[BnfBehaviorType]) { // 如果没有球员行为，则放弃存储
+    //        saveDBStatusFailBlock(@"");
+    //        return;
+    //    }
     
-//    if (1 == [insertDBDict[BnfBehaviorType] intValue] || 31 == [insertDBDict[BnfBehaviorType] intValue] || 2 == [insertDBDict[BnfBehaviorType] intValue] || 3 == [insertDBDict[BnfBehaviorType] intValue]) { // 如果识别行为是罚篮、2分、3分则必须确认是否投中再存储
-//        if (!insertDBDict[BnfResultType]) {
-//            return;
-//        }
-//    }
+    //    if (1 == [insertDBDict[BnfBehaviorType] intValue] || 31 == [insertDBDict[BnfBehaviorType] intValue] || 2 == [insertDBDict[BnfBehaviorType] intValue] || 3 == [insertDBDict[BnfBehaviorType] intValue]) { // 如果识别行为是罚篮、2分、3分则必须确认是否投中再存储
+    //        if (!insertDBDict[BnfResultType]) {
+    //            return;
+    //        }
+    //    }
     
-//    if (insertDBDict[BnfTenNumberType] && insertDBDict[BnfBitsNumberType]) {
-//        NSInteger tenNumb = [insertDBDict[BnfTenNumberType] integerValue];
-//        NSInteger bitNumb = [insertDBDict[BnfBitsNumberType] integerValue];
-//        insertDBDict[NumbResultStr] = [NSString stringWithFormat:@"%ld", tenNumb + bitNumb];
-//    } else if (insertDBDict[BnfTenNumberType] && !insertDBDict[BnfBitsNumberType]) {
-//        insertDBDict[NumbResultStr] = [NSString stringWithFormat:@"%ld", [insertDBDict[BnfTenNumberType] integerValue]];
-//    } else if (insertDBDict[BnfBitsNumberType] && !insertDBDict[BnfTenNumberType]) {
-//        insertDBDict[NumbResultStr] = [NSString stringWithFormat:@"%ld", [insertDBDict[BnfBitsNumberType] integerValue]];
-//    }
+    //    if (insertDBDict[BnfTenNumberType] && insertDBDict[BnfBitsNumberType]) {
+    //        NSInteger tenNumb = [insertDBDict[BnfTenNumberType] integerValue];
+    //        NSInteger bitNumb = [insertDBDict[BnfBitsNumberType] integerValue];
+    //        insertDBDict[NumbResultStr] = [NSString stringWithFormat:@"%ld", tenNumb + bitNumb];
+    //    } else if (insertDBDict[BnfTenNumberType] && !insertDBDict[BnfBitsNumberType]) {
+    //        insertDBDict[NumbResultStr] = [NSString stringWithFormat:@"%ld", [insertDBDict[BnfTenNumberType] integerValue]];
+    //    } else if (insertDBDict[BnfBitsNumberType] && !insertDBDict[BnfTenNumberType]) {
+    //        insertDBDict[NumbResultStr] = [NSString stringWithFormat:@"%ld", [insertDBDict[BnfBitsNumberType] integerValue]];
+    //    }
     
-//    // 拼接好球员号码后，删除没用号码的数据
-//    [insertDBDict removeObjectForKey:BnfTenNumberType];
-//    [insertDBDict removeObjectForKey:BnfBitsNumberType];
+    //    // 拼接好球员号码后，删除没用号码的数据
+    //    [insertDBDict removeObjectForKey:BnfTenNumberType];
+    //    [insertDBDict removeObjectForKey:BnfBitsNumberType];
     
     NSString *playerId = [self p_getPlayerIdWithinsertDBDict:resultDict];
     if (0 == playerId.length) {
@@ -291,31 +291,33 @@
 
 #pragma mark - 更新一次所有球员的上场时间
 - (void)udatePlayingTimesOnce {
-    // 异步执行
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(queue, ^{
-        NSMutableArray *playerCheckArrayH = [[self.store getObjectById:TeamCheckID_H fromTable:TSCheckTable] mutableCopy];
-        NSMutableArray *newPlayerCheckArrayH = [NSMutableArray array];
-        [playerCheckArrayH enumerateObjectsUsingBlock:^(NSDictionary *subDict, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSMutableDictionary *newDict = [subDict mutableCopy];
-            if (1 == [newDict[@"playingStatus"] intValue]) { // 如果该球员在场，则增加该球员的上场时间
-                newDict[@"playingTimes"] = [NSString stringWithFormat:@"%d", [newDict[@"playingTimes"] intValue] + 30];
-            }
-            [newPlayerCheckArrayH addObject:newDict];
-        }];
-        [self.store putObject:newPlayerCheckArrayH withId:TeamCheckID_H intoTable:TSCheckTable];
-        
-        NSMutableArray *playerCheckArrayG = [[self.store getObjectById:TeamCheckID_G fromTable:TSCheckTable] mutableCopy];
-        NSMutableArray *newPlayerCheckArrayG = [NSMutableArray array];
-        [playerCheckArrayG enumerateObjectsUsingBlock:^(NSDictionary *subDict, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSMutableDictionary *newDict = [subDict mutableCopy];
-            if (1 == [newDict[@"playingStatus"] intValue]) { // 如果该球员在场，则增加该球员的上场时间
-                newDict[@"playingTimes"] = [NSString stringWithFormat:@"%d", [newDict[@"playingTimes"] intValue] + 30];
-            }
-            [newPlayerCheckArrayG addObject:newDict];
-        }];
-        [self.store putObject:newPlayerCheckArrayG withId:TeamCheckID_G intoTable:TSCheckTable];
-    });
+
+        // 异步执行
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        dispatch_async(queue, ^{
+            NSMutableArray *playerCheckArrayH = [[self.store getObjectById:TeamCheckID_H fromTable:TSCheckTable] mutableCopy];
+            NSMutableArray *newPlayerCheckArrayH = [NSMutableArray array];
+            [playerCheckArrayH enumerateObjectsUsingBlock:^(NSDictionary *subDict, NSUInteger idx, BOOL * _Nonnull stop) {
+                NSMutableDictionary *newDict = [subDict mutableCopy];
+                if (1 == [newDict[@"playingStatus"] intValue]) { // 如果该球员在场，则增加该球员的上场时间
+                    newDict[@"playingTimes"] = [NSString stringWithFormat:@"%d", [newDict[@"playingTimes"] intValue] + 30];
+                }
+                [newPlayerCheckArrayH addObject:newDict];
+            }];
+            [self.store putObject:newPlayerCheckArrayH withId:TeamCheckID_H intoTable:TSCheckTable];
+            
+            NSMutableArray *playerCheckArrayG = [[self.store getObjectById:TeamCheckID_G fromTable:TSCheckTable] mutableCopy];
+            NSMutableArray *newPlayerCheckArrayG = [NSMutableArray array];
+            [playerCheckArrayG enumerateObjectsUsingBlock:^(NSDictionary *subDict, NSUInteger idx, BOOL * _Nonnull stop) {
+                NSMutableDictionary *newDict = [subDict mutableCopy];
+                if (1 == [newDict[@"playingStatus"] intValue]) { // 如果该球员在场，则增加该球员的上场时间
+                    newDict[@"playingTimes"] = [NSString stringWithFormat:@"%d", [newDict[@"playingTimes"] intValue] + 30];
+                }
+                [newPlayerCheckArrayG addObject:newDict];
+            }];
+            [self.store putObject:newPlayerCheckArrayG withId:TeamCheckID_G intoTable:TSCheckTable];
+        });
+    
 }
 
 // 每节数据提交完成后，初始化球员的上场时间

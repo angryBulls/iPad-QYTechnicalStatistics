@@ -19,7 +19,7 @@
 
 @property (nonatomic ,strong) NSTimer *timer;
 
-
+@property (nonatomic ,strong)TSDBManager *tSDBManager;
 
 //比赛状态
 @property (nonatomic,assign) BOOL isGaming;
@@ -37,12 +37,13 @@
 }
 
 - (void)layoutSubviews {
-    
     [super layoutSubviews];
+    
     _isGaming = 0;
     _isPausIng = 1;
-    
-    
+    NSMutableDictionary *gameTableDict = [[self.tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    _currentSecond = [gameTableDict[lastTime] intValue];
+
     // 布局子控件
     self.sessionLabel.scaleX = 14;
     self.sessionLabel.scaleY = 46;
@@ -55,10 +56,19 @@
     [self.secLabel scaleFrameMake:8+CGScaleGetMaxX(self.colonLabel.frame) :20 :84 :84];
     [self.startingBtn scaleFrameMake:CGScaleGetMaxX(self.secLabel.frame)+34 :26 :125 :72];
     [self.pauseBtn scaleFrameMake:CGScaleGetMaxX(self.startingBtn.frame)+26 :26 :125 :72];
-    self.currentSecond = StageGameTimes;
+    
 }
 
+
+
 #pragma mark - lazy
+
+-(TSDBManager *)tSDBManager{
+    _tSDBManager = [[TSDBManager alloc] init];
+    
+    return _tSDBManager;
+}
+
 
 - (UILabel *)sessionLabel {
     
@@ -76,9 +86,7 @@
 - (UILabel *)minLabel {
     
     if (!_minLabel) {
-        NSInteger min = [[[NSUserDefaults standardUserDefaults] objectForKey:lastTime] integerValue]/60;
-        
-        
+        NSInteger min = _currentSecond/60;
         _minLabel = [[UILabel alloc] init];
         _minLabel.backgroundColor = [UIColor whiteColor];
         _minLabel.layer.cornerRadius = kSCALE_NUM(5);
@@ -108,7 +116,7 @@
 - (UILabel *)secLabel {
     
     if (!_secLabel) {
-        NSInteger sec = [[[NSUserDefaults standardUserDefaults] objectForKey:lastTime] integerValue]%60;
+        NSInteger sec = _currentSecond%60;
         _secLabel = [[UILabel alloc] init];
         _secLabel.backgroundColor = [UIColor whiteColor];
         _secLabel.layer.cornerRadius = kSCALE_NUM(5);
@@ -146,9 +154,9 @@
         _pauseBtn.enabled = NO;
         [_pauseBtn setTitle:@"暂停" forState:(UIControlStateNormal)];
         [_pauseBtn setBackgroundImage:[UIImage imageNamed:@"小节按钮"]
-                                forState:(UIControlStateNormal)];
+                             forState:(UIControlStateNormal)];
         [_pauseBtn setBackgroundImage:[UIImage imageNamed:@"小节按钮-选中"]
-                                forState:(UIControlStateHighlighted)];
+                             forState:(UIControlStateHighlighted)];
         [_pauseBtn addTarget:self action:@selector(pauseScoringClick:) forControlEvents:(UIControlEventTouchUpInside)];
         [self addSubview:_pauseBtn];
     }
@@ -157,99 +165,94 @@
 
 - (void)startScoringClick:(UIButton *)startingBtn {
     
-        startingBtn.enabled = NO;
-        self.pauseBtn.enabled = YES;
-        _isGaming = 1;
-        _isPausIng = 1;
-        QYToolsMethod *toolsMethod = [[QYToolsMethod alloc] init];
-        _toolsMethod = toolsMethod;
+    startingBtn.enabled = NO;
+    self.pauseBtn.enabled = YES;
+    _isGaming = 1;
+    _isPausIng = 1;
+    QYToolsMethod *toolsMethod = [[QYToolsMethod alloc] init];
+    _toolsMethod = toolsMethod;
     
-
     
-        if (self.delegate && [self.delegate performSelector:@selector(startGame)]) {
-            [_delegate startGame];
-        }
-        
-        if (self.delegate && [self.delegate performSelector:@selector(backPauseStatus:)]) {
-            [_delegate backPauseStatus:_isPausIng];
-        }
-        
-        
-        if (_currentSecond>0) {
-            [toolsMethod startGCDTimerWithDuration:self.currentSecond countdownReturnBlock:^(int time) {
-                int minutes = time / 60;
-                int seconds = time % 60;
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    _minLabel.text = [NSString stringWithFormat:@"%02d",minutes];
-                    _secLabel.text = [NSString stringWithFormat:@"%02d",seconds];
-                    
-                    int current = [_minLabel.text intValue] *60 +[_secLabel.text intValue];
-                    
-                    if (time < StageGameTimes) {
-                        
-                        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",current] forKey:lastTime];
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                        
-                        
-                        if (0 == (StageGameTimes - time)%30) {
-                            [self p_updataPlayingTimesOnce];
-                            
-                        }
-                    }
-                    
-                    
-                    if (current ==0) {
-                        [_toolsMethod stopGCDTimer];
-                        _currentSecond = StageGameTimes;
-                        self.startingBtn.enabled = YES;
-                        _pauseBtn.enabled = NO;
-                        if (self.delegate &&[self.delegate performSelector:@selector(quarterEnd)]) {
-                            [_delegate quarterEnd];
-                        }
-                        
-                    }
-                    
-                });
-                
-                
-            }];
-        }
-        else{
+    NSMutableDictionary *gameTableDict = [[_tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    gameTableDict[startTag] = isStartGaming;
+    
+    if (self.delegate && [self.delegate performSelector:@selector(startGame)]) {
+        [_delegate startGame];
+    }
+    
+    if (self.delegate && [self.delegate performSelector:@selector(backPauseStatus:)]) {
+        [_delegate backPauseStatus:_isPausIng];
+    }
+    if (_currentSecond>0) {
+        [toolsMethod startGCDTimerWithDuration:self.currentSecond countdownReturnBlock:^(int time) {
+            int minutes = time / 60;
+            int seconds = time % 60;
             
-            _currentSecond = StageGameTimes;
-            
-        }
-    
-    
+            dispatch_async(dispatch_get_main_queue(), ^{
+                _minLabel.text = [NSString stringWithFormat:@"%02d",minutes];
+                _secLabel.text = [NSString stringWithFormat:@"%02d",seconds];
+                
+                int current = [_minLabel.text intValue] *60 +[_secLabel.text intValue];
+                
+                if (time < StageGameTimes) {
+                    
+                    gameTableDict[lastTime] = [NSString stringWithFormat:@"%d",current];
+                    
+                    if (0 == (StageGameTimes - time)%30) {
+                        [self p_updataPlayingTimesOnce];
+                    }
+                }
+                if (current ==0) {
+                    [_toolsMethod stopGCDTimer];
+                    self.startingBtn.enabled = YES;
+                    _pauseBtn.enabled = NO;
+                    
+                    gameTableDict[gameStatu] = gameQuarterEnd;
+                    
+                    
+                }
+                
+                if (self.delegate &&[self.delegate performSelector:@selector(quarterEnd)]) {
+                    [_delegate quarterEnd];
+                }
+                [_tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
+                
+                
+            });
+        }];
+    }
+    else{
+        _currentSecond = StageGameTimes;
+    }
+    [_tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
 }
 
 - (void)pauseScoringClick:(UIButton *)pauseBtn {
+    
+    
+    NSMutableDictionary *gameTableDict = [[_tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    gameTableDict[gameStatu] = gamePause;
+    [_tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
+    
     self.startingBtn.enabled = YES;
     pauseBtn.enabled = NO;
-    
     _currentSecond = [_minLabel.text intValue] *60 +[_secLabel.text intValue];
     
     [_toolsMethod stopGCDTimer];
     _isPausIng = 0;
     
-    if (self.delegate && [self.delegate performSelector:@selector(backPauseStatus:)]) {
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(backPauseStatus:)]) {
         [_delegate backPauseStatus:_isPausIng];
     }
     
 }
 
 
-
-- (void)setCurrentSecond:(int)currentSecond {
-    
-    _currentSecond  = [[[NSUserDefaults standardUserDefaults] objectForKey:lastTime] intValue];
-}
-
 #pragma mark - 每隔30秒更新一次球员的上场时间
 - (void)p_updataPlayingTimesOnce {
-    TSDBManager *tSDBManager = [[TSDBManager alloc] init];
-    [tSDBManager udatePlayingTimesOnce];
+    
+    [_tSDBManager udatePlayingTimesOnce];
     
 }
 
