@@ -33,7 +33,7 @@
 @end
 
 @implementation QYFinishMatchVC
-#pragma mark 懒加载
+
 
 
 #pragma mark 页面处理

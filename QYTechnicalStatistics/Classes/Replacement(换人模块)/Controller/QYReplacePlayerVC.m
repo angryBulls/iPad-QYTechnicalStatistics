@@ -19,6 +19,8 @@
 @property (strong, nonatomic) QYReplacementPlayersView * hostPlayersView;
 @property (strong, nonatomic) QYReplacementPlayersView * guestPlayersView;
 
+@property (nonatomic ,strong)TSDBManager * tSDBManager;
+
 
 // 主队上下场每行头标题数组
 @property (strong, nonatomic) NSMutableArray * hostSectionTitleArray;
@@ -31,9 +33,26 @@
 @property (nonatomic ,strong) NSMutableDictionary *insterDic1;
 @property (nonatomic ,strong) NSMutableDictionary *insterDic2;
 
+//主队人数
+@property (nonatomic ,assign) NSInteger teamHostNum;
+@property (nonatomic ,assign) NSInteger hostLineNum;
+//客队人数
+@property (nonatomic ,assign) NSInteger teamGuestNum;
+@property (nonatomic ,assign) NSInteger guestLineNum;
 @end
 
 @implementation QYReplacePlayerVC
+
+#pragma mark lazy
+
+-(TSDBManager *)tSDBManager{
+    if (_tSDBManager == nil) {
+        _tSDBManager = [[TSDBManager alloc] init];
+    }
+    return _tSDBManager;
+}
+
+
 
 + (instancetype)createReplacePlayerVC {
     
@@ -43,7 +62,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    _teamHostNum = [self getTeamPlayNumsByTeamCheckID:TeamCheckID_H];
+    _hostLineNum = _teamHostNum%5 ? _teamHostNum/5 +1 : _teamHostNum/5;
+    
+    _teamGuestNum = [self getTeamPlayNumsByTeamCheckID:TeamCheckID_G];
+    _guestLineNum = _teamGuestNum%5 ? _teamGuestNum/5 + 1 :_teamGuestNum/5;
+    
     [self initialization];
+    
 }
 
 - (void)initialization {
@@ -54,6 +81,12 @@
     [self.view addSubview:self.topView];
 }
 
+-(NSInteger)getTeamPlayNumsByTeamCheckID:(NSString *)teamCheckID{
+    NSArray *playerCheckArray = [self.tSDBManager getObjectById:teamCheckID fromTable:TSCheckTable];
+    return playerCheckArray.count;
+    
+}
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -61,13 +94,14 @@
     // 布局子控件
     [self.hostTeamTitleView scaleFrameMake:108 :31 :1832 :72];
     
-    for (NSInteger count = 0; count < kTestRowCount; count++) {
+    for (NSInteger count = 0; count < _hostLineNum; count++) {
         
         UIButton * secTitleView = self.hostSectionTitleArray[count];
         [secTitleView scaleFrameMake:108
                                     :CGScaleGetMaxY(self.hostTeamTitleView.frame)+31 + count*(286+50)
                                     :64
                                     :286];
+        
     }
     
     [self.guestTeamTitleView scaleFrameMake:CGScaleGetMinX(self.hostTeamTitleView.frame)
@@ -75,7 +109,7 @@
                                            :CGScaleGetWidth(self.hostTeamTitleView.frame)
                                            :CGScaleGetHeight(self.hostTeamTitleView.frame)];
     
-    for (NSInteger count = 0; count < kTestRowCount; count++) {
+    for (NSInteger count = 0; count < _guestLineNum; count++) {
         
         UIButton * secTitleView = self.guestSectionTitleArray[count];
         [secTitleView scaleFrameMake:108
@@ -84,17 +118,18 @@
                                     :286];
     }
     
-    [self.enterFieldButton scaleCenterBoundsMake:CGScaleGetWidth(self.scrollView.frame)/2
-                                                :CGScaleGetMaxY(((UIButton *)self.guestSectionTitleArray.lastObject).frame)+70+50
-                                                :326
-                                                :100];
-    
     // 布局换人界面主队球员视图
     self.hostPlayersView.scaleX = 306;
     self.hostPlayersView.scaleY = CGScaleGetMaxY(self.hostTeamTitleView.frame)+31;
     // 布局换人界面客队球员视图
     self.guestPlayersView.scaleX = CGScaleGetMinX(self.hostPlayersView.frame);
     self.guestPlayersView.scaleY = CGScaleGetMaxY(self.guestTeamTitleView.frame)+31;
+    
+    
+    [self.enterFieldButton scaleCenterBoundsMake:CGScaleGetWidth(self.scrollView.frame)/2
+                                                :CGScaleGetMaxY(((UIButton *)self.guestSectionTitleArray.lastObject).frame)+70+50
+                                                :326
+                                                :100];
     
     // 根据内容重设contentSize
     self.scrollView.contentSize =
@@ -166,7 +201,7 @@
     
     if (!_hostSectionTitleArray) {
         _hostSectionTitleArray = [NSMutableArray array];
-        for (NSInteger count = 0; count < kTestRowCount; count++) {
+        for (NSInteger count = 0; count < _hostLineNum; count++) {
             
             UIButton * secTitleView = [self createSecTitleViewWith:@"圆角矩形28副本"
                                               enterFieldTitleColor:@"eb1a15"
@@ -183,7 +218,7 @@
     
     if (!_guestSectionTitleArray) {
         _guestSectionTitleArray = [NSMutableArray array];
-        for (NSInteger count = 0; count < kTestRowCount; count++) {
+        for (NSInteger count = 0; count < _guestLineNum; count++) {
             
             UIButton * secTitleView = [self createSecTitleViewWith:@"圆角矩形28副本4"
                                               enterFieldTitleColor:@"#02703F"
@@ -201,6 +236,7 @@
     if (!_hostPlayersView) {
         _hostPlayersView = [QYReplacementPlayersView createReplacementPlayersView];
         _hostPlayersView.delegate = self;
+        _hostPlayersView.userInteractionEnabled = YES;
         [self.scrollView addSubview:_hostPlayersView];
     }
     return _hostPlayersView;
@@ -213,6 +249,7 @@
         _guestPlayersView = [QYReplacementPlayersView createReplacementPlayersView];
         _guestPlayersView.isGuest = 1;
         _guestPlayersView.delegate = self;
+        _guestPlayersView.userInteractionEnabled = YES;
         [self.scrollView addSubview:_guestPlayersView];
     }
     return _guestPlayersView;
@@ -247,8 +284,7 @@
         
     }
     
-    
-    
+
     [self.navigationController popViewControllerAnimated:YES];
 }
 
