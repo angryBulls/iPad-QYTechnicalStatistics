@@ -58,7 +58,7 @@
     if (_finisnTag == nil) {
         NSMutableDictionary *checkTableDic = [[self.tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
         _finisnTag = checkTableDic[@"currentStage"] ;
-
+        
     }
     
 }
@@ -67,7 +67,7 @@
     if (_controllerTag) {
         TSCalculationTool *calculationTool = [[TSCalculationTool alloc] init];
         self.hostPlayerDataArray = [calculationTool calculationallHostPlayerFullData];
-
+        
     }
     else{
         
@@ -129,12 +129,13 @@
             tPlayerModel.changeStatus = NO;
             tPlayerModel.positional  = playerModel.positional;
             tPlayerModel.playTimes = playerModel.playingTimes;
+            
+            
             [guestPlayerDataArray addObject:tPlayerModel];
         }];
         self.guestPlayerDataArray = guestPlayerDataArray;
         
     }
-    
     
 }
 
@@ -267,7 +268,7 @@
     else{
         _tableView.tableHeaderView = [self creatLessionHeader];
     }
-
+    
 }
 
 
@@ -305,6 +306,7 @@
                 _footBtn1.frame = scaleFrameMake(568-29, 59, 310, 86);
                 _footBtn1.alpha = .4;
                 _footBtn1.userInteractionEnabled = NO;
+                _controllerTag = 0;
             }
             else
             {
@@ -322,7 +324,7 @@
                 
                 [_footBtn1 setTitle:@"保存并退出" forState:UIControlStateNormal];
             }
-
+            
             
             
         }
@@ -524,24 +526,28 @@
 #pragma mark 点击事件
 
 -(void)finishChageData{
-    
     [self.navigationController popViewControllerAnimated:YES];
     
 }
 
 -(void)tiJiao{
-    [self pushMatchData];
+    [self p_sendCurrentStageData];
     
 }
 
 -(void)joinOverTime{
-    [self pushMatchData];
-
+    [self p_sendCurrentStageData];
     
 }
 
 -(void)pushMatchData{
+    
     if (_controllerTag && ![_finisnTag isEqualToString:finish]) {
+        
+        NSMutableDictionary *gameTableDict = [[self.tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+        gameTableDict[lastTime] = [NSString stringWithFormat:@"%d",StageGameTimes];
+        [_tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
+        
         QYFinishMatchVC *vc = [[QYFinishMatchVC alloc] init];
         vc.controllerTag = _controllerTag;
         vc.finisnTag = finish;
@@ -569,17 +575,24 @@
     }
     else
     {
-        [self p_sendCurrentStageData];
-        
         NSMutableDictionary *gameTableDict = [[self.tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
-        gameTableDict[lastTime] = [NSString stringWithFormat:@"%d",StageGameTimes];
-        [_tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
+        if ([gameTableDict[@"currentStage"] isEqualToString:StageOne]||[gameTableDict[@"currentStage"] isEqualToString:StageTwo]||[gameTableDict[@"currentStage"] isEqualToString:StageThree]||[gameTableDict[@"currentStage"] isEqualToString:StageFour]) {
+            gameTableDict[lastTime] = [NSString stringWithFormat:@"%d",StageGameTimes];
+        }
+        else
+        {
+            gameTableDict[lastTime] = [NSString stringWithFormat:@"%d",OverTimeTimes];
+        }
         
+        [_tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
+        if ([self.delegate respondsToSelector:@selector(refreshTime)]) {
+            [_delegate refreshTime];
+        }
         
         [self.navigationController popViewControllerAnimated:YES];
     }
     
-
+    
 }
 
 
@@ -593,7 +606,7 @@
     
     [SVProgressHUD show];
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
-
+    
     NSMutableDictionary *paramsDict = [NSMutableDictionary dictionary];
     
     TSVoiceViewModel *voiceViewModel = [[TSVoiceViewModel alloc] initWithPramasDict:paramsDict];
@@ -611,11 +624,15 @@
         if ([self.delegate respondsToSelector:@selector(removeInsertDBDictArrayObjects)]) {
             [self.delegate removeInsertDBDictArrayObjects];
         }
+        
+        
         // 每节数据提交成功后，初始化所有球员的上场时间
         [self.tSDBManager initPlayingTimesOnce];
         [SVProgressHUD setMinimumDismissTimeInterval:1.0];
         [SVProgressHUD showInfoWithStatus:@"提交成功"];
         [self p_setupGameStatus]; // 更新比赛进行状态
+        [self pushMatchData];
+        
     } WithErrorBlock:^(id errorCode) {
         [SVProgressHUD showInfoWithStatus:errorCode];
     } WithFailureBlock:^{
@@ -647,8 +664,7 @@
                 
 #pragma mark 比赛结束
                 
-                //                [self.submitSectionBtn setTitle:GameOver forState:UIControlStateNormal];
-                //                [self p_pushFullManagerViewController];
+                
             } else if (3 == idx || 4 == idx || 5 == idx) { // 第四节或者加时赛1或者加时赛2数据提交后，不自动进入加时赛
                 gameTableDict[CurrentStage] = StageAllArray[idx + 1];
                 gameTableDict[CurrentStageDataSubmitted] = @"0";

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+@class TSManagerPlayerModel;
 @class TSGameModel;
 
 @interface TSCalculationTool : NSObject
@@ -37,6 +37,7 @@
 
 // 计算客队本场每个球员的全部统计数据（已进行的比赛），保存到TSManagerPlayerModel中返回
 - (NSMutableArray *)calculationallGuestPlayerFullData;
+
 
 
 #pragma mark - 获取当前节的时间

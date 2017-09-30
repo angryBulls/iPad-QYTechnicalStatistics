@@ -87,7 +87,8 @@ static NSString * const finish = @"finsh";
 #define StageAllArray @[StageOne, StageTwo, StageThree, StageFour, OverTime1, OverTime2, OverTime3]
 //
 //// 单节比赛时长
-static int const StageGameTimes = 60;
+static int const StageGameTimes = 600;//常规赛
+static int const OverTimeTimes = 300;//加时赛
 
 // 测试数据
 

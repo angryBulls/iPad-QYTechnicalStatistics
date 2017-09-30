@@ -413,14 +413,18 @@
 
 #pragma mark 代理
 -(void)backPlay:(Player *)p andStatus:(NSInteger)status{
-    if (self.delegate && [self respondsToSelector:@selector(backPlay:andStatus:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(backPlay:andStatus:)]) {
         
         [_delegate backStatusWithPlayer:p Status:status];
     }
     
 }
 -(void)backResultDic:(NSMutableDictionary *)resultDic{
-    if (self.delegate && [self respondsToSelector:@selector(backResultDic:)]) {
+    
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(backResult:)]) {
+        
+        
         [_delegate backResult:resultDic];
     }
 }

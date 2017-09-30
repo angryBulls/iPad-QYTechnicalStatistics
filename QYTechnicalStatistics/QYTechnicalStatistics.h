@@ -94,8 +94,8 @@ typedef enum {
 #define gameContinue @"比赛进行"
 #define gamePause @"比赛暂停"
 #define gameQuarterEnd @"单节结束"
-//记录比赛单节是否结束
 
+#define allPlayTime @"allPlayTimes"
 
 
 static NSString * const CurrentLoginUserType = @"CurrentLoginUserType";

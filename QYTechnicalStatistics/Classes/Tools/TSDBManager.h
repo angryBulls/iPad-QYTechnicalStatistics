@@ -21,4 +21,7 @@ typedef void (^UpdatePalyerTableSuccessBlock)();
 - (void)putObject:(id)object withId:(NSString *)objectId intoTable:(NSString *)tableName; // 保存数据
 - (NSMutableArray *)getAllHostTeamPlayerData; // 获取所有主队球员的数据
 - (NSMutableArray *)getAllGuestTeamPlayerData; // 获取所有客队球员的数据
+
+
+
 @end

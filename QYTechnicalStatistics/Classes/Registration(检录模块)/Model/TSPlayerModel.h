@@ -20,6 +20,8 @@
 @property (nonatomic, copy) NSString *isStartPlayer; // 是否首发球员
 
 @property (nonatomic, copy) NSString *playingStatus; // 上场状态（0:场下   1:场上）
-@property (nonatomic, copy) NSString *playingTimes; // 球员上场时间
+@property (nonatomic, copy) NSString *playingTimes; // 球员单节上场时间
+@property (nonatomic , copy) NSString *allPlayTimes; //球员总上场时间
 @property (nonatomic , copy) NSString *positional;
+
 @end

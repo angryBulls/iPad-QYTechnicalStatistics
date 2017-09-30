@@ -87,7 +87,7 @@
                 label.text = tPlayModel.positional;
                 break;
             case 2: //上场时间
-                label.text = [NSString stringWithFormat:@"%.1fmin",[tPlayModel.playTimes floatValue] /60];
+                label.text =  tPlayModel.allPlayTimes.floatValue>0? [NSString stringWithFormat:@"%.1fmin",[tPlayModel.allPlayTimes floatValue] /60]:[NSString stringWithFormat:@"%.1fmin",[tPlayModel.playTimes floatValue] /60];
                 break;
             case 3: //篮板
                 label.text = tPlayModel.behaviorNumb4.length ? tPlayModel.behaviorNumb4:@"0";

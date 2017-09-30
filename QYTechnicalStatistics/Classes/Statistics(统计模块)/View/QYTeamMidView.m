@@ -29,10 +29,17 @@
 
 @implementation QYTeamMidView
 
--(void)start{
+
+
+-(void)refreshTime{
     
-}
--(void)pause{
+    _startingBtn.enabled = YES;
+    NSMutableDictionary *gameTableDict = [[self.tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    _currentSecond = [gameTableDict[lastTime] intValue];
+    NSInteger min = _currentSecond/60;
+    _minLabel.text = [NSString stringWithFormat:@"%02ld",min];
+    NSInteger sec = _currentSecond%60;
+    _secLabel.text = [NSString stringWithFormat:@"%02ld",sec];
     
 }
 
@@ -56,6 +63,14 @@
     [self.secLabel scaleFrameMake:8+CGScaleGetMaxX(self.colonLabel.frame) :20 :84 :84];
     [self.startingBtn scaleFrameMake:CGScaleGetMaxX(self.secLabel.frame)+34 :26 :125 :72];
     [self.pauseBtn scaleFrameMake:CGScaleGetMaxX(self.startingBtn.frame)+26 :26 :125 :72];
+    //判断本节比赛是否已经提交
+    if ([gameTableDict[gameStatu] isEqualToString:gameQuarterEnd] ) {
+        _startingBtn.enabled = NO;
+        
+    }
+    else{
+        _startingBtn.enabled = YES;
+    }
     
 }
 
@@ -172,10 +187,6 @@
     QYToolsMethod *toolsMethod = [[QYToolsMethod alloc] init];
     _toolsMethod = toolsMethod;
     
-    
-    NSMutableDictionary *gameTableDict = [[_tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
-    gameTableDict[startTag] = isStartGaming;
-    
     if (self.delegate && [self.delegate performSelector:@selector(startGame)]) {
         [_delegate startGame];
     }
@@ -183,6 +194,10 @@
     if (self.delegate && [self.delegate performSelector:@selector(backPauseStatus:)]) {
         [_delegate backPauseStatus:_isPausIng];
     }
+    NSMutableDictionary *gameTableDict = [[_tSDBManager getObjectById:GameId fromTable:GameTable] mutableCopy];
+    gameTableDict[startTag] = isStartGaming;
+    gameTableDict[gameStatu] = gameContinue;
+    
     if (_currentSecond>0) {
         [toolsMethod startGCDTimerWithDuration:self.currentSecond countdownReturnBlock:^(int time) {
             int minutes = time / 60;
@@ -204,17 +219,16 @@
                 }
                 if (current ==0) {
                     [_toolsMethod stopGCDTimer];
-                    self.startingBtn.enabled = YES;
                     _pauseBtn.enabled = NO;
-                    
+                    startingBtn.enabled = NO;
                     gameTableDict[gameStatu] = gameQuarterEnd;
                     
-                    
+                    if (self.delegate &&[self.delegate performSelector:@selector(quarterEnd)]) {
+                        [_delegate quarterEnd];
+                    }
                 }
                 
-                if (self.delegate &&[self.delegate performSelector:@selector(quarterEnd)]) {
-                    [_delegate quarterEnd];
-                }
+               
                 [_tSDBManager putObject:gameTableDict withId:GameId intoTable:GameTable];
                 
                 

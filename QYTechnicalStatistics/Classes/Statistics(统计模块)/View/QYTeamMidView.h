@@ -33,10 +33,9 @@
 
 //用来限制是哪方发起的暂停
 @property (nonatomic,assign) BOOL isPausIng;
-/** 开启计时 */
-- (void)start;
-/** 暂停计时 */
-- (void)pause;
+
+/** 刷新时间 */
+-(void)refreshTime;
 
 @property (nonatomic ,strong)TSGameModel *gameModel;
 

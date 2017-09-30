@@ -14,6 +14,9 @@
 
 -(void)removeInsertDBDictArrayObjects;
 
+-(void)refreshTime;
+
+
 @end
 
 

@@ -334,10 +334,15 @@
         if (self.delegate && [self.delegate respondsToSelector:@selector(backPlay:andStatus:)] ) {
             [_delegate backPlay:_p andStatus:btn.tag];
         }
+        
+        if (self.delegate && [self.delegate respondsToSelector:@selector(backResultDic:)] ) {
+            [_delegate backResultDic:resultDic];
+        }
+
+        
         [self stayBack];
-    }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(backResultDic:)] ) {
-        [_delegate backResultDic:resultDic];
+        
+        
     }
     
 }

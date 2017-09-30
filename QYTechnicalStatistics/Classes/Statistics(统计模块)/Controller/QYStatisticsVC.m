@@ -244,7 +244,9 @@
     [self p_updateStatisticsData];
     
 }
-
+-(void)refreshTime{
+    [_registrationMinView refreshTime];
+}
 
 #pragma mark QYRegistrationMinViewDelegate
 
@@ -342,18 +344,20 @@
     }
     else
     {
-        if ([gameTableDict[gameStatu] isEqualToString:gameContinue]) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"请先暂停比赛" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alert show];
-            
-        }
-        else
-        {
+        if ([gameTableDict[gameStatu] isEqualToString:gamePause] || [gameTableDict[gameStatu] isEqualToString:gameQuarterEnd]) {
+           
             // 跳转换人页面
             QYReplacePlayerVC *vc = [[QYReplacePlayerVC alloc] init];
             vc.delegate = self;
             [self.navigationController pushViewController:
              vc animated:YES];
+            
+        }
+        else
+        {
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"请先暂停比赛" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
             
         }
         
@@ -374,7 +378,6 @@
     }];
     
     [self p_updateStatisticsData];
-    
     
     [self.insertDBDictArray addObject:dic2];
     
@@ -424,7 +427,6 @@
         [calculationTool calculationGuestStageScoreFoulsWithStageCount:OverTime2];
         [calculationTool calculationGuestStageScoreFoulsWithStageCount:OverTime3];
         [calculationTool calculationTimeOutSatgeData];
-        
         
         _registrationTitleView.gameModel = calculationTool.gameModel;
         _registrationMinView.gameModel = calculationTool.gameModel;

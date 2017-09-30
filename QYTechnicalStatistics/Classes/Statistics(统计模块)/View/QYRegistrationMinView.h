@@ -36,4 +36,6 @@
 
 + (instancetype)createRegistrationMinView;
 
+-(void)refreshTime;
+
 @end

@@ -8,6 +8,7 @@
 
 #import "TSCalculationTool.h"
 #import "TSManagerPlayerModel.h"
+
 #import "TSGameModel.h"
 #import "TSPlayerModel.h"
 
@@ -184,6 +185,7 @@
         foulsStageG += foulsPerson;
     }];
     
+    
     self.gameModel.scoreStageG = [NSString stringWithFormat:@"%ld", scoreStageG];
     self.gameModel.foulsStageG = [NSString stringWithFormat:@"%ld", foulsStageG];
     
@@ -319,7 +321,7 @@
     
 //    DDLog(@"guest team scoreStage is:%ld --------- guest team foulsStage is:%ld", scoreStageG, foulsStageG);
 }
-
+// 主队球员本场得分等状态
 - (NSMutableArray *)calculationallHostPlayerFullData {
     NSArray *allPlayerArrayH = [self.tSDBManager getObjectById:TeamCheckID_H fromTable:TSCheckTable];
     NSArray *allPlayerModelArrayH = [TSPlayerModel mj_objectArrayWithKeyValuesArray:allPlayerArrayH];
@@ -332,12 +334,15 @@
         totalPlayerModel.playerName = playerModel.name;
         totalPlayerModel.playerNumber = playerModel.gameNum;
         totalPlayerModel.photo = playerModel.photo;
+        totalPlayerModel.positional = playerModel.positional;
+        totalPlayerModel.allPlayTimes = playerModel.allPlayTimes;
         [allHostPlayerDataModelArray addObject:totalPlayerModel];
     }];
     
     NSMutableArray *allHostPlayerDataArray = [self.tSDBManager getAllHostTeamPlayerData];
     // 把主队有数据统计记录的人员数据转换成TSManagerPlayerModel模型数组
     if (allHostPlayerDataArray.count) {
+        
         NSMutableArray *allPlayerDataedModelArray = [self p_playerFullDataWithAllPlayerDataArray:allHostPlayerDataArray];
         
         [allHostPlayerDataModelArray enumerateObjectsUsingBlock:^(TSManagerPlayerModel *totalPlayerModel, NSUInteger idx1, BOOL * _Nonnull stop) {
@@ -363,7 +368,7 @@
     
     return allHostPlayerDataModelArray;
 }
-
+// 客队球员本场得分等状态
 - (NSMutableArray *)calculationallGuestPlayerFullData {
     NSArray *allPlayerArrayG = [self.tSDBManager getObjectById:TeamCheckID_G fromTable:TSCheckTable];
     NSArray *allPlayerModelArrayG = [TSPlayerModel mj_objectArrayWithKeyValuesArray:allPlayerArrayG];
@@ -376,6 +381,8 @@
         totalPlayerModel.playerName = playerModel.name;
         totalPlayerModel.playerNumber = playerModel.gameNum;
         totalPlayerModel.photo = playerModel.photo;
+        totalPlayerModel.positional = playerModel.positional;
+        totalPlayerModel.allPlayTimes = playerModel.allPlayTimes;
         [allGuestPlayerDataModelArray addObject:totalPlayerModel];
     }];
     
@@ -400,6 +407,7 @@
                     totalPlayerModel.FreeThrowHit = playerDataedModel.FreeThrowHit;
                     totalPlayerModel.TwoPointsHit = playerDataedModel.TwoPointsHit;
                     totalPlayerModel.ThreePointsHit = playerDataedModel.ThreePointsHit;
+                    
                 }
             }];
         }];
@@ -425,6 +433,7 @@
         __block int FreeThrowHit = 0; // 罚篮命中数
         __block int TwoPointsHit = 0; // 2分命中数
         __block int ThreePointsHit = 0; // 3分命中数
+        
         [subDict enumerateKeysAndObjectsUsingBlock:^(NSString *key, id  _Nonnull value, BOOL * _Nonnull stop) {
             if ([value isKindOfClass:[NSDictionary class]]) {
                 // 获取球员各个节次的数据
@@ -442,6 +451,7 @@
                 FreeThrowHit += subPlayerModel.FreeThrowHit.intValue;
                 TwoPointsHit += subPlayerModel.TwoPointsHit.intValue;
                 ThreePointsHit += subPlayerModel.ThreePointsHit.intValue;
+                
             }
         }];
         
@@ -459,6 +469,7 @@
         totalPlayerModel.TwoPointsHit = [NSString stringWithFormat:@"%d", TwoPointsHit];
         totalPlayerModel.ThreePointsHit = [NSString stringWithFormat:@"%d", ThreePointsHit];
         
+        
         // 将所有球员全场的统计数据转成模型，保存到数组中
         totalPlayerModel.playerId = subDict[@"playerId"];
         [allPlayerDataedModelArray addObject:totalPlayerModel];
@@ -466,6 +477,7 @@
     
     return allPlayerDataedModelArray;
 }
+
 
 
 #pragma mark - 获取当前节的时间
@@ -495,5 +507,9 @@
     
     return stageGameTimes;
 }
+
+
+
+
 
 @end

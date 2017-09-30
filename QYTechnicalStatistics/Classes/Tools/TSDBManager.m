@@ -326,6 +326,12 @@
     NSMutableArray *newPlayerCheckArrayH = [NSMutableArray array];
     [playerCheckArrayH enumerateObjectsUsingBlock:^(NSDictionary *subDict, NSUInteger idx, BOOL * _Nonnull stop) {
         NSMutableDictionary *newDict = [subDict mutableCopy];
+        
+        // 计算本场每个球员的上场时间，保存到数据库
+        NSString *allPlayTimes = newDict[allPlayTime];
+        NSString *playingTimes = newDict[@"playingTimes"];
+        allPlayTimes  = [NSString stringWithFormat:@"%d",allPlayTimes.intValue + playingTimes.intValue];
+        newDict[allPlayTime] = allPlayTimes;
         newDict[@"playingTimes"] = @"0";
         [newPlayerCheckArrayH addObject:newDict];
     }];
@@ -335,6 +341,13 @@
     NSMutableArray *newPlayerCheckArrayG = [NSMutableArray array];
     [playerCheckArrayG enumerateObjectsUsingBlock:^(NSDictionary *subDict, NSUInteger idx, BOOL * _Nonnull stop) {
         NSMutableDictionary *newDict = [subDict mutableCopy];
+        
+        // 计算本场每个球员的上场时间，保存到数据库
+        NSString *allPlayTimes = newDict[allPlayTime];
+        NSString *playingTimes = newDict[@"playingTimes"];
+        allPlayTimes  = [NSString stringWithFormat:@"%d",allPlayTimes.intValue + playingTimes.intValue];
+        newDict[allPlayTime] = allPlayTimes;
+        
         newDict[@"playingTimes"] = @"0";
         [newPlayerCheckArrayG addObject:newDict];
     }];
@@ -370,6 +383,9 @@
     NSLog(@"修改球员数据后的数据为:%@", queryPlayerDict);
     successReturnBlock ? successReturnBlock() : nil;
 }
+
+
+
 
 #pragma mark - tools method ****************************************************************
 

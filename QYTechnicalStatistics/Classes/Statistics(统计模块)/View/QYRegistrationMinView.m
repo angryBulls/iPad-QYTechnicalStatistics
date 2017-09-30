@@ -136,4 +136,8 @@
     
 }
 
+-(void)refreshTime{
+    [_midBjView refreshTime];
+}
+
 @end
