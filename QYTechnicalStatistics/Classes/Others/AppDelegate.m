@@ -14,7 +14,6 @@
 #import "QYRegistrationVC.h"
 #import "QYStatisticsVC.h"
 @interface AppDelegate ()
-
 @end
 
 @implementation AppDelegate
@@ -23,9 +22,6 @@
     
     [self p_switchWindowView];
     
-//    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-//    self.window.rootViewController = [QYLoginMovieVC loadLoginMovieWithResourceName:@"LaunchMovie"];
-//    [self.window makeKeyAndVisible];
     
     // 解决控制器跳转隐藏导航条瞬间黑色问题
     self.window.backgroundColor = [UIColor colorWithHexRGB:@"#326BFE" andAlpha:1.0f];
@@ -49,22 +45,26 @@
 }
 
 
-
 - (void)setGuidPageBeRootView {
-    UINavigationController *rootNav = [[UINavigationController alloc] initWithRootViewController:[QYLoginMovieVC loadLoginMovieWithResourceName:@"LaunchMovie"]];
-    rootNav.navigationBar.hidden = YES;
-    [self setCurrentPageBeRootView:rootNav];
-}
-
-
-- (void)setChoosePageRootView{
     
-    UINavigationController *rootNav = [[UINavigationController alloc] initWithRootViewController:[[QYRegistrationVC alloc] init]];
-    rootNav.navigationBar.hidden = YES;
-    [self setCurrentPageBeRootView:rootNav];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL areadlyLoad =  [defaults boolForKey:@"areadlyLoad"];
+    if (areadlyLoad) {
+        UINavigationController *rootNav = [[UINavigationController alloc] initWithRootViewController:[QYLoginViewController createLoginVC]];
+        rootNav.navigationBar.hidden = YES;
+        [self setCurrentPageBeRootView:rootNav];
+            
+    }
+    else
+    {
+        UINavigationController *rootNav = [[UINavigationController alloc] initWithRootViewController:[QYLoginMovieVC loadLoginMovieWithResourceName:@"LaunchMovie"]];
+        rootNav.navigationBar.hidden = YES;
+        [self setCurrentPageBeRootView:rootNav];
+    }
+    [defaults setBool:YES forKey:@"areadlyLoad"];
+    [defaults synchronize];
     
 }
-
 
 - (void)setVoicePageBeRootView {
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[QYStatisticsVC alloc] init]];

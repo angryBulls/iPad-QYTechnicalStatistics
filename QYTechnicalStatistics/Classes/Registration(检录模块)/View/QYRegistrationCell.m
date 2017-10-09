@@ -224,9 +224,9 @@
         
         _matchNumLabel = [[UILabel alloc] init];
         _matchNumLabel.textColor = [UIColor colorWithHexRGB:@"#333333" andAlpha:1.0f];
-        _matchNumLabel.font = kSCALE_FONT(20);
         
-        _matchNumLabel.font = [UIFont systemFontOfSize:scaleX_ByPx(44)];
+        
+        _matchNumLabel.font = [UIFont systemFontOfSize:scaleX_ByPx(40)];
         [self.bjImageView addSubview:_matchNumLabel];
     }
     return _matchNumLabel;
@@ -238,8 +238,8 @@
         
         _modificationNumLabel = [[UITextField alloc] init];
         _modificationNumLabel.textColor = [UIColor colorWithHexRGB:@"#333333" andAlpha:1.0f];
-//        _modificationNumLabel.text = @"4";
         _modificationNumLabel.font = kSCALE_FONT(20);
+        _modificationNumLabel.tag = 999;
         _modificationNumLabel.keyboardType = UIKeyboardTypeNumberPad;
         [self.bjImageView addSubview:_modificationNumLabel];
         _modificationNumLabel.delegate = self;
@@ -248,13 +248,10 @@
 }
 
 -(void)changeNumber{
-    
 
     _matchNumLabel.text = _modificationNumLabel.text;
     _p.gameNum = _matchNumLabel.text;
     _p.playerNumber = _matchNumLabel.text;
-    
-    
     
     if (self.delegate && [_delegate respondsToSelector:@selector(BackPlayerWithPlayer:andSection:andRow:)]) {
         
@@ -264,6 +261,33 @@
 
     
 }
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (textField.tag == 999) {
+        return [self validateNumber:string];
+    }
+    
+    return YES;
+}
+
+
+//设置球员改变号码的键盘只能输入数字
+- (BOOL)validateNumber:(NSString*)number {
+    BOOL res = YES;
+    NSCharacterSet* tmpSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
+    int i = 0;
+    while (i < number.length) {
+        NSString * string = [number substringWithRange:NSMakeRange(i, 1)];
+        NSRange range = [string rangeOfCharacterFromSet:tmpSet];
+        if (range.length == 0) {
+            res = NO;
+            break;
+        }
+        i++;
+    }
+    return res;
+}
+
 
 
 

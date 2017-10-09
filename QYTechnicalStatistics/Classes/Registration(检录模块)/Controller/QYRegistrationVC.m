@@ -509,7 +509,6 @@ static NSString * const registrationCell = @"registrationCell";
     _checkModel.ts02 = _registrationHeaderView.technicalStatisticsNameLabel_02.text;
     
     
-    
 }
 
 

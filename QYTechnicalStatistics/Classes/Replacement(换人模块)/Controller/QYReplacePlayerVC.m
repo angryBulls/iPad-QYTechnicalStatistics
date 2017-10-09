@@ -316,13 +316,16 @@
    }
     
    return secTitleView;
+    
 }
+
 
 #pragma mark - <UIScrollViewDelegate>
 
 #pragma mark - <QYReplacementPlayersViewDelegate>
 
 -(void)backPlaysChangeDic1:(NSMutableDictionary *)insterDic1 AndPlaysChangeDic2:(NSMutableDictionary *)insterDic2{
+    
     self.insterDic1 = insterDic1;
     self.insterDic2 = insterDic2;
     

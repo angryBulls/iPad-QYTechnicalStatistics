@@ -124,7 +124,7 @@
         LoginViewModel *login = [[LoginViewModel alloc] initWithDict:dic];
         [login setBlockWithReturnBlock:^(id returnValue) {
 
-            QYUserInfoModel *userInfo = [QYToolsMethod fetchUserInfoModel];
+            TSUserInfoModelBCBC *userInfo = [TSToolsMethod fetchUserInfoModelBCBC];
             NSLog(@" %@", userInfo.token);
             
         [[UIApplication sharedApplication].keyWindow setRootViewController:[[QYNavigationController alloc] initWithRootViewController:[QYRegistrationVC getRegistrationVC]]];
